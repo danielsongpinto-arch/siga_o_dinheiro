@@ -27,6 +27,7 @@ export default function ArticleDetailScreen() {
   const { isArticleOffline, saveArticleOffline, removeArticleOffline } = useOfflineArticles();
   const { markAsRead } = useReadingHistory();
   const [commentText, setCommentText] = useState("");
+  const [focusMode, setFocusMode] = useState(false);
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -118,7 +119,7 @@ export default function ArticleDetailScreen() {
     >
       <Stack.Screen
         options={{
-          headerShown: true,
+          headerShown: !focusMode,
           title: "",
           headerBackTitle: "Voltar",
           headerRight: () => (
@@ -140,6 +141,9 @@ export default function ArticleDetailScreen() {
               <Pressable onPress={handleShare} style={styles.headerButton}>
                 <IconSymbol name="square.and.arrow.up" size={24} color={textSecondary} />
               </Pressable>
+              <Pressable onPress={() => setFocusMode(true)} style={styles.headerButton}>
+                <IconSymbol name="book.fill" size={24} color={textSecondary} />
+              </Pressable>
             </ThemedView>
           ),
         }}
@@ -152,6 +156,15 @@ export default function ArticleDetailScreen() {
           { paddingBottom: Math.max(insets.bottom, 20) + 16 },
         ]}
       >
+        {focusMode && (
+          <Pressable
+            onPress={() => setFocusMode(false)}
+            style={[styles.focusModeButton, { backgroundColor: tintColor }]}
+          >
+            <IconSymbol name="xmark" size={20} color="#fff" />
+            <ThemedText style={styles.focusModeText}>Sair do Modo Focado</ThemedText>
+          </Pressable>
+        )}
         <ThemedView style={styles.articleHeader}>
           <ThemedText type="title" style={styles.articleTitle}>
             {article.title}
@@ -188,6 +201,8 @@ export default function ArticleDetailScreen() {
           })}
         </ThemedView>
 
+        {!focusMode && (
+          <>
         <ThemedView style={[styles.authorsSection, { backgroundColor: cardBg, borderColor }]}>
           <ThemedText type="subtitle" style={styles.sectionHeader}>
             Autores e Interesses Financeiros
@@ -327,6 +342,8 @@ export default function ArticleDetailScreen() {
             ))}
           </ThemedView>
         </ThemedView>
+          </>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -533,5 +550,28 @@ const styles = StyleSheet.create({
   commentText: {
     fontSize: 14,
     lineHeight: 20,
+  },
+  focusModeButton: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    gap: 8,
+    zIndex: 1000,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  focusModeText: {
+    color: "#fff",
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
   },
 });

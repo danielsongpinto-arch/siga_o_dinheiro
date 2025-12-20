@@ -41,6 +41,9 @@ const MAPPING = {
   "sun.max.fill": "wb-sunny",
   "moon.fill": "nightlight",
   "circle.lefthalf.filled": "brightness-auto",
+  "book.fill": "menu-book",
+  "xmark": "close",
+  "chart.bar.fill": "bar-chart",
 } as IconMapping;
 
 /**

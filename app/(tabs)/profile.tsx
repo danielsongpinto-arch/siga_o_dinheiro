@@ -162,6 +162,22 @@ export default function ProfileScreen() {
 
       <ThemedView style={styles.actionsSection}>
         <Pressable
+          onPress={() => router.push("/statistics" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="chart.bar.fill" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Estatísticas
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
+        <Pressable
           onPress={() => router.push("/highlights" as any)}
           style={({ pressed }) => [
             styles.actionButton,

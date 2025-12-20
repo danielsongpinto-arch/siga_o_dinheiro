@@ -2,6 +2,9 @@ import { useRouter, Stack } from "expo-router";
 import { ScrollView, StyleSheet, Pressable, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
+import { useState } from "react";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -13,6 +16,7 @@ export default function HighlightsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { highlights, removeHighlight } = useHighlights();
+  const [exporting, setExporting] = useState(false);
 
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
@@ -37,6 +41,108 @@ export default function HighlightsScreen() {
     );
   };
 
+  const handleExportPDF = async () => {
+    if (highlights.length === 0) {
+      Alert.alert("Aviso", "Você não tem marcadores para exportar.");
+      return;
+    }
+
+    try {
+      setExporting(true);
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+      // Gerar HTML para o PDF
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                padding: 40px;
+                color: #333;
+              }
+              h1 {
+                color: #D4AF37;
+                border-bottom: 3px solid #D4AF37;
+                padding-bottom: 10px;
+                margin-bottom: 30px;
+              }
+              .highlight {
+                margin-bottom: 30px;
+                padding: 20px;
+                border-left: 4px solid #D4AF37;
+                background-color: #f9f9f9;
+              }
+              .quote {
+                font-style: italic;
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+              }
+              .note {
+                background-color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+                margin-bottom: 10px;
+                font-size: 14px;
+              }
+              .meta {
+                font-size: 12px;
+                color: #666;
+                margin-top: 10px;
+              }
+              .article-title {
+                font-weight: bold;
+                color: #D4AF37;
+              }
+              .date {
+                color: #999;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Meus Marcadores - Siga o Dinheiro</h1>
+            ${highlights
+              .map(
+                (h) => `
+              <div class="highlight">
+                <div class="quote">“${h.text}”</div>
+                ${h.note ? `<div class="note"><strong>Nota:</strong> ${h.note}</div>` : ""}
+                <div class="meta">
+                  <span class="article-title">${h.articleTitle}</span><br>
+                  <span class="date">${new Date(h.createdAt).toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}</span>
+                </div>
+              </div>
+            `
+              )
+              .join("")}
+          </body>
+        </html>
+      `;
+
+      const { uri } = await Print.printToFileAsync({ html: htmlContent });
+
+      await Sharing.shareAsync(uri, {
+        mimeType: "application/pdf",
+        dialogTitle: "Exportar Marcadores",
+        UTI: "com.adobe.pdf",
+      });
+
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      Alert.alert("Erro", "Não foi possível exportar os marcadores.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -56,6 +162,16 @@ export default function HighlightsScreen() {
           headerShown: true,
           title: "Marcadores",
           headerBackTitle: "Voltar",
+          headerRight: () =>
+            highlights.length > 0 ? (
+              <Pressable
+                onPress={handleExportPDF}
+                disabled={exporting}
+                style={{ marginRight: 16, opacity: exporting ? 0.5 : 1 }}
+              >
+                <IconSymbol name="square.and.arrow.up" size={24} color={tintColor} />
+              </Pressable>
+            ) : null,
         }}
       />
       <ScrollView

@@ -123,3 +123,22 @@
 - [x] Adicionar menu de contexto para marcar texto
 - [x] Criar tela de visualização de marcadores salvos
 - [x] Permitir navegação para o artigo original do marcador
+
+## Modo de Leitura Focado
+- [x] Adicionar botão de modo focado no artigo
+- [x] Ocultar tabs e navegação em modo focado
+- [x] Implementar transição suave
+- [x] Adicionar botão de saída do modo focado
+
+## Estatísticas Avançadas
+- [x] Criar componente de gráfico de barras
+- [x] Implementar gráfico de artigos por tema
+- [x] Adicionar gráfico de evolução mensal
+- [x] Criar dashboard de estatísticas no perfil
+- [x] Mostrar tempo médio de leitura
+
+## Exportação de Marcadores
+- [x] Implementar geração de PDF com marcadores
+- [x] Adicionar botão de exportar na tela de marcadores
+- [x] Incluir título, data e notas no PDF
+- [x] Permitir compartilhamento do PDF gerado
