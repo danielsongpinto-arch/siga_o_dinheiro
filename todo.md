@@ -85,3 +85,22 @@
 - [x] Criar sistema de agendamento de notificações
 - [x] Implementar notificação quando novo artigo é adicionado
 - [x] Adicionar preferências de notificação no perfil
+
+## Leitura Offline
+- [x] Criar hook para gerenciar artigos salvos offline
+- [x] Adicionar botão de download nos artigos
+- [x] Implementar indicador de artigos disponíveis offline
+- [x] Criar seção "Salvos Offline" no perfil
+
+## Histórico de Leitura
+- [x] Criar hook para rastrear artigos lidos
+- [x] Adicionar indicador de progresso de leitura
+- [x] Criar tela de histórico de leitura
+- [x] Mostrar tempo estimado de leitura
+- [x] Adicionar estatísticas de leitura no perfil
+
+## Compartilhamento Social Aprimorado
+- [x] Criar componente de card visual para compartilhamento
+- [x] Implementar seleção de citações do artigo
+- [x] Gerar imagem com citação e branding
+- [x] Integrar com Share API nativo

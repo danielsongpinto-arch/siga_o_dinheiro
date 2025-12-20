@@ -33,6 +33,11 @@ const MAPPING = {
   "xmark.circle.fill": "cancel",
   "bell.fill": "notifications",
   "bell": "notifications-none",
+  "arrow.down.circle": "cloud-download",
+  "arrow.down.circle.fill": "cloud-done",
+  "clock.fill": "history",
+  "info.circle": "info",
+  "rectangle.portrait.and.arrow.right": "logout",
 } as IconMapping;
 
 /**

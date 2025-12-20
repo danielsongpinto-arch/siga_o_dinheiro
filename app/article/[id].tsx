@@ -12,6 +12,8 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useComments } from "@/hooks/use-comments";
 import { useAuth } from "@/hooks/use-auth";
+import { useOfflineArticles } from "@/hooks/use-offline-articles";
+import { useReadingHistory } from "@/hooks/use-reading-history";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -21,6 +23,8 @@ export default function ArticleDetailScreen() {
   const { user, isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { comments, addComment } = useComments(id || "");
+  const { isArticleOffline, saveArticleOffline, removeArticleOffline } = useOfflineArticles();
+  const { markAsRead } = useReadingHistory();
   const [commentText, setCommentText] = useState("");
 
   const tintColor = useThemeColor({}, "tint");
@@ -43,7 +47,17 @@ export default function ArticleDetailScreen() {
     await toggleFavorite(article.id);
   };
 
-  const handleShare = async () => {
+  const handleOfflineToggle = async () => {
+    if (!article) return;
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (isArticleOffline(article.id)) {
+      await removeArticleOffline(article.id);
+    } else {
+      await saveArticleOffline(article);
+    }
+  };
+
+  const handleShare = async () =>{
     try {
       await Share.share({
         message: `${article.title}\n\n${article.summary}`,
@@ -113,6 +127,13 @@ export default function ArticleDetailScreen() {
                   name={isFavorite(article.id) ? "heart.fill" : "heart"}
                   size={24}
                   color={isFavorite(article.id) ? tintColor : textSecondary}
+                />
+              </Pressable>
+              <Pressable onPress={handleOfflineToggle} style={styles.headerButton}>
+                <IconSymbol
+                  name={isArticleOffline(article.id) ? "arrow.down.circle.fill" : "arrow.down.circle"}
+                  size={24}
+                  color={isArticleOffline(article.id) ? tintColor : textSecondary}
                 />
               </Pressable>
               <Pressable onPress={handleShare} style={styles.headerButton}>

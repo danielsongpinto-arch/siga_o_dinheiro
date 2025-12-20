@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useAuth } from "@/hooks/use-auth";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
@@ -113,6 +114,22 @@ export default function ProfileScreen() {
 
       <ThemedView style={styles.actionsSection}>
         <Pressable
+          onPress={() => router.push("/reading-history" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="clock.fill" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Histórico de Leitura
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
+        <Pressable
           onPress={handleAbout}
           style={({ pressed }) => [
             styles.actionButton,
@@ -120,7 +137,13 @@ export default function ProfileScreen() {
             pressed && styles.actionButtonPressed,
           ]}
         >
-          <ThemedText type="defaultSemiBold">Sobre o App</ThemedText>
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="info.circle" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Sobre o App
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
         </Pressable>
 
         {isAuthenticated && (
@@ -133,9 +156,12 @@ export default function ProfileScreen() {
               pressed && styles.actionButtonPressed,
             ]}
           >
-            <ThemedText type="defaultSemiBold" style={styles.logoutText}>
-              Sair
-            </ThemedText>
+            <ThemedView style={styles.actionContent}>
+              <IconSymbol name="rectangle.portrait.and.arrow.right" size={24} color="#FF3B30" />
+              <ThemedText type="defaultSemiBold" style={styles.logoutText}>
+                Sair
+              </ThemedText>
+            </ThemedView>
           </Pressable>
         )}
       </ThemedView>
@@ -204,10 +230,21 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   actionButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
+  },
+  actionContent: {
+    flexDirection: "row",
     alignItems: "center",
+    gap: 12,
+  },
+  actionText: {
+    fontSize: 16,
+    lineHeight: 22,
   },
   actionButtonPressed: {
     opacity: 0.7,
