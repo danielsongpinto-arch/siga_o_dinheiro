@@ -9,7 +9,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useNotifications } from "@/hooks/use-notifications";
-import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preference";
+import { useThemePreference } from "@/hooks/use-theme-preference";
+import { useAutoTheme } from "@/hooks/use-auto-theme";
+import type { ThemePreference } from "@/hooks/use-theme-preference";
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -17,7 +19,9 @@ export default function ProfileScreen() {
   const { user, isAuthenticated, logout } = useAuth();
   const { favorites } = useFavorites();
   const { notificationsEnabled, loading: notifLoading, toggleNotifications } = useNotifications();
-  const { preference: themePreference, updatePreference: updateThemePreference } = useThemePreference();
+  const { preference: themePreference, updatePreference: updateThemePreference } =
+    useThemePreference();
+  const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
@@ -158,9 +162,76 @@ export default function ProfileScreen() {
             );
           })}
         </ThemedView>
+        
+        {themePreference === "auto" && (
+          <ThemedView style={[styles.autoThemeCard, { backgroundColor: cardBg, borderColor }]}>
+            <ThemedView style={styles.autoThemeHeader}>
+              <ThemedView>
+                <ThemedText type="defaultSemiBold">Modo Autom\u00e1tico Avan\u00e7ado</ThemedText>
+                <ThemedText style={[styles.autoThemeDescription, { color: borderColor }]}>
+                  Ajusta o tema baseado no nascer/p\u00f4r do sol
+                </ThemedText>
+              </ThemedView>
+              <Pressable
+                onPress={() => toggleAutoTheme(!autoThemeEnabled)}
+                style={[
+                  styles.toggle,
+                  { borderColor },
+                  autoThemeEnabled && { backgroundColor: tintColor, borderColor: tintColor },
+                ]}
+              >
+                <ThemedView
+                  style={[
+                    styles.toggleThumb,
+                    { backgroundColor: autoThemeEnabled ? "#fff" : borderColor },
+                    autoThemeEnabled && styles.toggleThumbActive,
+                  ]}
+                />
+              </Pressable>
+            </ThemedView>
+            {autoThemeEnabled && sunTimes && (
+              <ThemedView style={styles.sunTimesInfo}>
+                <ThemedView style={styles.sunTimeItem}>
+                  <IconSymbol name="sunrise.fill" size={16} color={tintColor} />
+                  <ThemedText style={styles.sunTimeText}>
+                    {sunTimes.sunrise.toLocaleTimeString("pt-BR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </ThemedText>
+                </ThemedView>
+                <ThemedView style={styles.sunTimeItem}>
+                  <IconSymbol name="sunset.fill" size={16} color={tintColor} />
+                  <ThemedText style={styles.sunTimeText}>
+                    {sunTimes.sunset.toLocaleTimeString("pt-BR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </ThemedText>
+                </ThemedView>
+              </ThemedView>
+            )}
+          </ThemedView>
+        )}
       </ThemedView>
 
       <ThemedView style={styles.actionsSection}>
+        <Pressable
+          onPress={() => router.push("/leaderboard" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="chart.line.uptrend.xyaxis" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Ranking
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
         <Pressable
           onPress={() => router.push("/achievements" as any)}
           style={({ pressed }) => [
@@ -417,5 +488,39 @@ const styles = StyleSheet.create({
   },
   toggleThumbActive: {
     alignSelf: "flex-end",
+  },
+  autoThemeCard: {
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginTop: 12,
+  },
+  autoThemeHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  autoThemeDescription: {
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 4,
+  },
+  sunTimesInfo: {
+    flexDirection: "row",
+    gap: 20,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(0, 0, 0, 0.1)",
+  },
+  sunTimeItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  sunTimeText: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
   },
 });

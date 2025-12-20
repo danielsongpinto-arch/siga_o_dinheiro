@@ -10,9 +10,10 @@ interface ArticleCardProps {
   article: Article;
   isFavorite?: boolean;
   onPress: () => void;
+  badge?: string;
 }
 
-export function ArticleCard({ article, isFavorite, onPress }: ArticleCardProps) {
+export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCardProps) {
   const cardBg = useThemeColor({}, "cardBackground");
   const tintColor = useThemeColor({}, "tint");
   const borderColor = useThemeColor({}, "border");
@@ -43,9 +44,16 @@ export function ArticleCard({ article, isFavorite, onPress }: ArticleCardProps) 
           <ThemedText type="defaultSemiBold" style={styles.theme}>
             {theme?.title || "Tema"}
           </ThemedText>
-          {isFavorite && (
-            <IconSymbol name="heart.fill" size={18} color={tintColor} />
-          )}
+          <ThemedView style={styles.headerIcons}>
+            {badge && (
+              <ThemedView style={[styles.badge, { backgroundColor: tintColor }]}>
+                <ThemedText style={styles.badgeText}>{badge}</ThemedText>
+              </ThemedView>
+            )}
+            {isFavorite && (
+              <IconSymbol name="heart.fill" size={18} color={tintColor} />
+            )}
+          </ThemedView>
         </ThemedView>
 
         <ThemedText type="subtitle" style={styles.title} numberOfLines={2}>
@@ -83,6 +91,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 8,
+  },
+  headerIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  badge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  badgeText: {
+    color: "#fff",
+    fontSize: 10,
+    lineHeight: 14,
+    fontWeight: "600",
   },
   theme: {
     fontSize: 12,

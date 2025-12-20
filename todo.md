@@ -163,3 +163,24 @@
 - [x] Adicionar reações (curtir/útil)
 - [x] Criar tela de comunidade
 - [x] Adicionar filtros e ordenação
+
+## Sistema de Ranking e Leaderboard
+- [x] Criar sistema de pontuação
+- [x] Implementar cálculo de ranking
+- [x] Criar tela de leaderboard
+- [x] Adicionar perfil público do usuário
+- [x] Mostrar posição no ranking no perfil
+
+## Recomendações Personalizadas
+- [x] Criar algoritmo de recomendação
+- [x] Implementar análise de histórico de leitura
+- [x] Adicionar seção "Recomendados para Você"
+- [x] Calcular score de relevância
+- [x] Atualizar recomendações dinamicamente
+
+## Modo Noturno Automático
+- [x] Implementar detecção de localização
+- [x] Calcular horário do pôr/nascer do sol
+- [x] Criar agendamento automático de tema
+- [x] Adicionar configuração no perfil
+- [x] Permitir override manual

@@ -53,6 +53,8 @@ const MAPPING = {
   "star.fill": "star",
   "play.fill": "play-arrow",
   "pause.fill": "pause",
+  "chart.line.uptrend.xyaxis": "trending-up",
+  "sunset.fill": "wb-twilight",
 } as IconMapping;
 
 /**

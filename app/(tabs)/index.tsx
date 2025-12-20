@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { ArticleCard } from "@/components/article-card";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useRecommendations } from "@/hooks/use-recommendations";
 import { ARTICLES } from "@/data/mock-data";
 import { useThemeColor } from "@/hooks/use-theme-color";
 
@@ -14,6 +15,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { isFavorite } = useFavorites();
+  const { recommendations, getRecommendationReason } = useRecommendations();
   const [refreshing, setRefreshing] = useState(false);
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -73,6 +75,23 @@ export default function HomeScreen() {
           />
         ))}
       </ThemedView>
+
+      {recommendations.length > 0 && (
+        <ThemedView style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Recomendado para Voc\u00ea
+          </ThemedText>
+          {recommendations.map((article) => (
+            <ArticleCard
+              key={article.id}
+              article={article}
+              onPress={() => router.push(`/article/${article.id}` as any)}
+              isFavorite={isFavorite(article.id)}
+              badge={getRecommendationReason(article)}
+            />
+          ))}
+        </ThemedView>
+      )}
 
       <ThemedView style={styles.cycleSection}>
         <ThemedText type="subtitle" style={styles.sectionTitle}>
