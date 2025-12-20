@@ -11,6 +11,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useThemePreference } from "@/hooks/use-theme-preference";
 import { useAutoTheme } from "@/hooks/use-auto-theme";
+import { useFontSize, type FontSizeOption } from "@/hooks/use-font-size";
 import type { ThemePreference } from "@/hooks/use-theme-preference";
 
 export default function ProfileScreen() {
@@ -22,6 +23,7 @@ export default function ProfileScreen() {
   const { preference: themePreference, updatePreference: updateThemePreference } =
     useThemePreference();
   const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
+  const { fontSize, updateFontSize } = useFontSize();
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
@@ -213,6 +215,48 @@ export default function ProfileScreen() {
             )}
           </ThemedView>
         )}
+      </ThemedView>
+
+      <ThemedView style={[styles.section, { backgroundColor: cardBg, borderColor }]}>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Tamanho da Fonte
+        </ThemedText>
+        <ThemedView style={styles.fontSizeOptions}>
+          {(["small", "medium", "large", "extra-large"] as FontSizeOption[]).map((size) => (
+            <Pressable
+              key={size}
+              onPress={() => updateFontSize(size)}
+              style={[
+                styles.fontSizeButton,
+                { borderColor },
+                fontSize === size && { backgroundColor: tintColor, borderColor: tintColor },
+              ]}
+            >
+              <ThemedText
+                style={[
+                  styles.fontSizeButtonText,
+                  fontSize === size && { color: "#fff" },
+                ]}
+              >
+                {size === "small" && "A"}
+                {size === "medium" && "A"}
+                {size === "large" && "A"}
+                {size === "extra-large" && "A"}
+              </ThemedText>
+              <ThemedText
+                style={[
+                  styles.fontSizeLabel,
+                  fontSize === size && { color: "#fff" },
+                ]}
+              >
+                {size === "small" && "Pequeno"}
+                {size === "medium" && "M\u00e9dio"}
+                {size === "large" && "Grande"}
+                {size === "extra-large" && "Extra"}
+              </ThemedText>
+            </Pressable>
+          ))}
+        </ThemedView>
       </ThemedView>
 
       <ThemedView style={styles.actionsSection}>
@@ -433,6 +477,12 @@ const styles = StyleSheet.create({
   statsSection: {
     marginBottom: 32,
   },
+  section: {
+    padding: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
   sectionTitle: {
     marginBottom: 16,
     fontSize: 20,
@@ -585,6 +635,29 @@ const styles = StyleSheet.create({
   sunTimeText: {
     fontSize: 14,
     lineHeight: 20,
+    fontWeight: "600",
+  },
+  fontSizeOptions: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 16,
+  },
+  fontSizeButton: {
+    flex: 1,
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+  },
+  fontSizeButtonText: {
+    fontSize: 24,
+    lineHeight: 32,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  fontSizeLabel: {
+    fontSize: 11,
+    lineHeight: 16,
     fontWeight: "600",
   },
 });

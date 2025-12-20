@@ -5,6 +5,7 @@ import { IconSymbol } from "./ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Article } from "@/types";
 import { THEMES } from "@/data/mock-data";
+import { calculateReadingTime, formatReadingTime } from "@/utils/reading-time";
 
 interface ArticleCardProps {
   article: Article;
@@ -64,9 +65,17 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
           {article.summary}
         </ThemedText>
 
-        <ThemedText style={[styles.date, { color: secondaryText }]}>
-          {formatDate(article.date)}
-        </ThemedText>
+        <ThemedView style={styles.footer}>
+          <ThemedText style={[styles.date, { color: secondaryText }]}>
+            {formatDate(article.date)}
+          </ThemedText>
+          <ThemedView style={styles.readingTime}>
+            <IconSymbol name="clock.fill" size={14} color={secondaryText} />
+            <ThemedText style={[styles.readingTimeText, { color: secondaryText }]}>
+              {formatReadingTime(calculateReadingTime(article.content))}
+            </ThemedText>
+          </ThemedView>
+        </ThemedView>
       </ThemedView>
     </Pressable>
   );
@@ -122,8 +131,23 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 12,
   },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   date: {
     fontSize: 12,
     lineHeight: 16,
+  },
+  readingTime: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  readingTimeText: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: "600",
   },
 });

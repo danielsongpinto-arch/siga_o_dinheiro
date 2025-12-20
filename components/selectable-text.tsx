@@ -12,9 +12,10 @@ interface SelectableTextProps {
   text: string;
   articleId: string;
   articleTitle: string;
+  fontSize?: number;
 }
 
-export function SelectableText({ text, articleId, articleTitle }: SelectableTextProps) {
+export function SelectableText({ text, articleId, articleTitle, fontSize = 16 }: SelectableTextProps) {
   const [selectedText, setSelectedText] = useState("");
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [note, setNote] = useState("");
@@ -54,7 +55,7 @@ export function SelectableText({ text, articleId, articleTitle }: SelectableText
   return (
     <>
       <Pressable onLongPress={handleTextSelection} delayLongPress={500}>
-        <ThemedText style={styles.text}>{text}</ThemedText>
+        <ThemedText style={[styles.text, { fontSize }]}>{text}</ThemedText>
       </Pressable>
 
       <Modal

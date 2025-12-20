@@ -17,6 +17,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useOfflineArticles } from "@/hooks/use-offline-articles";
 import { useReadingHistory } from "@/hooks/use-reading-history";
 import { useQuiz } from "@/hooks/use-quiz";
+import { useFontSize } from "@/hooks/use-font-size";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -28,7 +29,9 @@ export default function ArticleDetailScreen() {
   const { comments, addComment } = useComments(id || "");
   const { isArticleOffline, saveArticleOffline, removeArticleOffline } = useOfflineArticles();
   const { markAsRead } = useReadingHistory();
-  const { getQuizForArticle, hasCompletedQuiz, getScorePercentage } = useQuiz();
+  const { getQuizForArticle, getScorePercentage, hasCompletedQuiz } = useQuiz();
+  const { getFontSizes } = useFontSize();
+  const fontSizes = getFontSizes();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -224,7 +227,7 @@ export default function ArticleDetailScreen() {
           </Pressable>
         )}
         <ThemedView style={styles.articleHeader}>
-          <ThemedText type="title" style={styles.articleTitle}>
+          <ThemedText type="title" style={[styles.articleTitle, { fontSize: fontSizes.title }]}>
             {article.title}
           </ThemedText>
           <ThemedText style={[styles.articleDate, { color: textSecondary }]}>
@@ -267,14 +270,14 @@ export default function ArticleDetailScreen() {
           {article.content.split("\n\n").map((paragraph, index) => {
             if (paragraph.startsWith("## ")) {
               return (
-                <ThemedText key={index} type="subtitle" style={styles.sectionTitle}>
+                <ThemedText key={index} type="subtitle" style={[styles.sectionTitle, { fontSize: fontSizes.subtitle }]}>
                   {paragraph.replace("## ", "")}
                 </ThemedText>
               );
             }
             if (paragraph.startsWith("### ")) {
               return (
-                <ThemedText key={index} type="defaultSemiBold" style={styles.subsectionTitle}>
+                <ThemedText key={index} type="defaultSemiBold" style={[styles.subsectionTitle, { fontSize: fontSizes.body }]}>
                   {paragraph.replace("### ", "")}
                 </ThemedText>
               );
@@ -285,6 +288,7 @@ export default function ArticleDetailScreen() {
                 text={paragraph}
                 articleId={article.id}
                 articleTitle={article.title}
+                fontSize={fontSizes.body}
               />
             );
           })}
