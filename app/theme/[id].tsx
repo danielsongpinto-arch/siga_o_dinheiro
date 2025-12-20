@@ -5,14 +5,21 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { ArticleCard } from "@/components/article-card";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useComparison } from "@/hooks/use-comparison";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { ARTICLES, THEMES } from "@/data/mock-data";
+import { Pressable } from "react-native";
 
 export default function ThemeArticlesScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { isFavorite } = useFavorites();
+  const { isSelected, toggleArticle, canAddMore } = useComparison();
+  const tintColor = useThemeColor({}, "tint");
+  const borderColor = useThemeColor({}, "border");
 
   const theme = THEMES.find((t) => t.id === id);
   const articles = ARTICLES.filter((a) => a.themeId === id);
@@ -52,12 +59,28 @@ export default function ThemeArticlesScreen() {
 
         <ThemedView style={styles.articlesList}>
           {articles.map((article) => (
-            <ArticleCard
-              key={article.id}
-              article={article}
-              isFavorite={isFavorite(article.id)}
-              onPress={() => router.push(`/article/${article.id}` as any)}
-            />
+            <ThemedView key={article.id} style={styles.articleItem}>
+              <Pressable
+                onPress={() => {
+                  if (!isSelected(article.id) && !canAddMore()) {
+                    return;
+                  }
+                  toggleArticle(article.id);
+                }}
+                style={[styles.checkbox, { borderColor }]}
+              >
+                {isSelected(article.id) && (
+                  <IconSymbol name="checkmark" size={18} color={tintColor} />
+                )}
+              </Pressable>
+              <ThemedView style={styles.articleCardContainer}>
+                <ArticleCard
+                  article={article}
+                  isFavorite={isFavorite(article.id)}
+                  onPress={() => router.push(`/article/${article.id}` as any)}
+                />
+              </ThemedView>
+            </ThemedView>
           ))}
         </ThemedView>
 
@@ -95,6 +118,24 @@ const styles = StyleSheet.create({
   },
   articlesList: {
     marginBottom: 16,
+  },
+  articleItem: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 12,
+    gap: 12,
+  },
+  checkbox: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    borderWidth: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 8,
+  },
+  articleCardContainer: {
+    flex: 1,
   },
   emptyState: {
     paddingVertical: 60,

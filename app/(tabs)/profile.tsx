@@ -249,6 +249,22 @@ export default function ProfileScreen() {
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
         </Pressable>
         <Pressable
+          onPress={() => router.push("/series" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="book.fill" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              S\u00e9ries Tem\u00e1ticas
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
+        <Pressable
           onPress={() => router.push("/statistics" as any)}
           style={({ pressed }) => [
             styles.actionButton,
@@ -276,6 +292,22 @@ export default function ProfileScreen() {
             <IconSymbol name="bookmark.fill" size={24} color={tintColor} />
             <ThemedText type="defaultSemiBold" style={styles.actionText}>
               Marcadores
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
+        <Pressable
+          onPress={() => router.push("/create-report" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="doc.text.fill" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Criar Relat\u00f3rio
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />

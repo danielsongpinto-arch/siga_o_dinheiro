@@ -8,17 +8,24 @@ import { ThemedView } from "@/components/themed-view";
 import { ArticleCard } from "@/components/article-card";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useRecommendations } from "@/hooks/use-recommendations";
+import { useSeriesProgress } from "@/hooks/use-series-progress";
+import { SeriesCard } from "@/components/series-card";
 import { ARTICLES } from "@/data/mock-data";
+import { SERIES } from "@/data/series-data";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Pressable } from "react-native";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { isFavorite } = useFavorites();
   const { recommendations, getRecommendationReason } = useRecommendations();
+  const { getProgressPercentage, isSeriesCompleted } = useSeriesProgress();
   const [refreshing, setRefreshing] = useState(false);
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
+  const borderColor = useThemeColor({}, "border");
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -60,6 +67,34 @@ export default function HomeScreen() {
           ciclo financeiro com início, meio e fim, e compreender esses ciclos nos ajuda a entender
           as verdadeiras motivações por trás dos acontecimentos.
         </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.section}>
+        <ThemedView style={styles.sectionHeader}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            S\u00e9ries Tem\u00e1ticas
+          </ThemedText>
+          <Pressable
+            onPress={() => router.push("/series" as any)}
+            style={({ pressed }) => [
+              styles.viewAllButton,
+              { borderColor },
+              pressed && styles.viewAllButtonPressed,
+            ]}
+          >
+            <ThemedText style={[styles.viewAllText, { color: tintColor }]}>Ver todas</ThemedText>
+            <IconSymbol name="chevron.right" size={16} color={tintColor} />
+          </Pressable>
+        </ThemedView>
+        {SERIES.slice(0, 2).map((series) => (
+          <SeriesCard
+            key={series.id}
+            series={series}
+            progress={getProgressPercentage(series.id)}
+            isCompleted={isSeriesCompleted(series.id)}
+            onPress={() => router.push(`/series/${series.id}` as any)}
+          />
+        ))}
       </ThemedView>
 
       <ThemedView style={styles.section}>
@@ -189,5 +224,28 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     opacity: 0.8,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  viewAllButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  viewAllButtonPressed: {
+    opacity: 0.6,
+  },
+  viewAllText: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
   },
 });

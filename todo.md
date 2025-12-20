@@ -184,3 +184,24 @@
 - [x] Criar agendamento automático de tema
 - [x] Adicionar configuração no perfil
 - [x] Permitir override manual
+
+## Sistema de Séries Temáticas
+- [x] Criar estrutura de séries com múltiplos artigos
+- [x] Implementar indicador de progresso visual
+- [x] Adicionar navegação sequencial entre artigos da série
+- [x] Criar tela de visualização de séries
+- [x] Adicionar badge de conclusão de série
+
+## Modo de Comparação
+- [x] Criar interface de seleção de artigos para comparação
+- [x] Implementar visualização lado a lado
+- [x] Adicionar comparação de autores e interesses
+- [x] Criar gráficos comparativos
+- [x] Permitir exportar comparação
+
+## Exportação de Relatórios Personalizados
+- [x] Criar seletor de artigos para relatório
+- [x] Implementar geração de PDF customizado
+- [x] Incluir notas pessoais no relatório
+- [x] Adicionar marcadores ao relatório
+- [x] Permitir compartilhamento do relatório
