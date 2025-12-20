@@ -38,6 +38,9 @@ const MAPPING = {
   "clock.fill": "history",
   "info.circle": "info",
   "rectangle.portrait.and.arrow.right": "logout",
+  "sun.max.fill": "wb-sunny",
+  "moon.fill": "nightlight",
+  "circle.lefthalf.filled": "brightness-auto",
 } as IconMapping;
 
 /**

@@ -104,3 +104,22 @@
 - [x] Implementar seleção de citações do artigo
 - [x] Gerar imagem com citação e branding
 - [x] Integrar com Share API nativo
+
+## Modo Escuro Aprimorado
+- [x] Criar hook para gerenciar preferência de tema
+- [x] Adicionar seletor de tema no perfil (claro/escuro/automático)
+- [x] Implementar persistência da preferência
+- [x] Atualizar tema em tempo real
+
+## Artigos Relacionados
+- [x] Criar algoritmo de recomendação baseado em tema
+- [x] Adicionar seção "Você também pode gostar" nos artigos
+- [x] Implementar cards de artigos relacionados
+- [x] Limitar a 3-4 sugestões relevantes
+
+## Marcadores de Texto
+- [x] Criar hook para gerenciar highlights
+- [x] Implementar seleção de texto nos artigos
+- [x] Adicionar menu de contexto para marcar texto
+- [x] Criar tela de visualização de marcadores salvos
+- [x] Permitir navegação para o artigo original do marcador

@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useNotifications } from "@/hooks/use-notifications";
+import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preference";
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function ProfileScreen() {
   const { user, isAuthenticated, logout } = useAuth();
   const { favorites } = useFavorites();
   const { notificationsEnabled, loading: notifLoading, toggleNotifications } = useNotifications();
+  const { preference: themePreference, updatePreference: updateThemePreference } = useThemePreference();
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
@@ -112,7 +114,69 @@ export default function ProfileScreen() {
         </ThemedView>
       </ThemedView>
 
+      <ThemedView style={styles.themeSection}>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Aparência
+        </ThemedText>
+        <ThemedView style={[styles.themeCard, { backgroundColor: cardBg, borderColor }]}>
+          {(["light", "dark", "auto"] as ThemePreference[]).map((theme) => {
+            const isSelected = themePreference === theme;
+            const themeLabels = {
+              light: "Claro",
+              dark: "Escuro",
+              auto: "Automático",
+            };
+            const themeIcons = {
+              light: "sun.max.fill",
+              dark: "moon.fill",
+              auto: "circle.lefthalf.filled",
+            };
+
+            return (
+              <Pressable
+                key={theme}
+                onPress={() => updateThemePreference(theme)}
+                style={({ pressed }) => [
+                  styles.themeOption,
+                  { borderColor },
+                  isSelected && { backgroundColor: tintColor, borderColor: tintColor },
+                  pressed && styles.themeOptionPressed,
+                ]}
+              >
+                <IconSymbol
+                  name={themeIcons[theme] as any}
+                  size={24}
+                  color={isSelected ? "#fff" : tintColor}
+                />
+                <ThemedText
+                  type="defaultSemiBold"
+                  style={[styles.themeLabel, isSelected && { color: "#fff" }]}
+                >
+                  {themeLabels[theme]}
+                </ThemedText>
+              </Pressable>
+            );
+          })}
+        </ThemedView>
+      </ThemedView>
+
       <ThemedView style={styles.actionsSection}>
+        <Pressable
+          onPress={() => router.push("/highlights" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="bookmark.fill" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Marcadores
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
         <Pressable
           onPress={() => router.push("/reading-history" as any)}
           style={({ pressed }) => [
@@ -258,6 +322,33 @@ const styles = StyleSheet.create({
   },
   notificationsSection: {
     marginBottom: 32,
+  },
+  themeSection: {
+    marginBottom: 32,
+  },
+  themeCard: {
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 12,
+  },
+  themeOption: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 8,
+  },
+  themeOptionPressed: {
+    opacity: 0.7,
+  },
+  themeLabel: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   notificationCard: {
     padding: 16,

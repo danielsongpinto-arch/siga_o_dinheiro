@@ -8,6 +8,7 @@ import { Share } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { SelectableText } from "@/components/selectable-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useComments } from "@/hooks/use-comments";
@@ -177,9 +178,12 @@ export default function ArticleDetailScreen() {
               );
             }
             return (
-              <ThemedText key={index} style={styles.paragraph}>
-                {paragraph}
-              </ThemedText>
+              <SelectableText
+                key={index}
+                text={paragraph}
+                articleId={article.id}
+                articleTitle={article.title}
+              />
             );
           })}
         </ThemedView>
@@ -224,6 +228,49 @@ export default function ArticleDetailScreen() {
               Fim
             </ThemedText>
             <ThemedText style={styles.cycleText}>{article.financialCycle.fim}</ThemedText>
+          </ThemedView>
+        </ThemedView>
+
+        <ThemedView style={styles.relatedSection}>
+          <ThemedText type="subtitle" style={styles.sectionHeader}>
+            Você também pode gostar
+          </ThemedText>
+          <ThemedView style={styles.relatedArticles}>
+            {ARTICLES.filter(
+              (a) => a.themeId === article.themeId && a.id !== article.id
+            )
+              .slice(0, 3)
+              .map((relatedArticle) => (
+                <Pressable
+                  key={relatedArticle.id}
+                  onPress={() => router.push(`/article/${relatedArticle.id}` as any)}
+                  style={({ pressed }) => [
+                    styles.relatedCard,
+                    { backgroundColor: cardBg, borderColor },
+                    pressed && styles.relatedCardPressed,
+                  ]}
+                >
+                  <ThemedText
+                    type="defaultSemiBold"
+                    style={styles.relatedTitle}
+                    numberOfLines={2}
+                  >
+                    {relatedArticle.title}
+                  </ThemedText>
+                  <ThemedText
+                    style={[styles.relatedSummary, { color: textSecondary }]}
+                    numberOfLines={2}
+                  >
+                    {relatedArticle.summary}
+                  </ThemedText>
+                  <ThemedView style={styles.relatedFooter}>
+                    <ThemedText style={[styles.relatedDate, { color: textSecondary }]}>
+                      {formatDate(relatedArticle.date)}
+                    </ThemedText>
+                    <IconSymbol name="chevron.right" size={16} color={textSecondary} />
+                  </ThemedView>
+                </Pressable>
+              ))}
           </ThemedView>
         </ThemedView>
 
@@ -349,6 +396,39 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     marginBottom: 32,
+  },
+  relatedSection: {
+    marginBottom: 32,
+  },
+  relatedArticles: {
+    gap: 12,
+  },
+  relatedCard: {
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  relatedCardPressed: {
+    opacity: 0.7,
+  },
+  relatedTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+    marginBottom: 6,
+  },
+  relatedSummary: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  relatedFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  relatedDate: {
+    fontSize: 12,
+    lineHeight: 18,
   },
   sectionHeader: {
     fontSize: 20,
