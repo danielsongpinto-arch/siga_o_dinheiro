@@ -193,6 +193,9 @@ export default function ArticleDetailScreen() {
               <Pressable onPress={() => setFocusMode(true)} style={styles.headerButton}>
                 <IconSymbol name="book.fill" size={24} color={textSecondary} />
               </Pressable>
+              <Pressable onPress={() => router.push(`/notes/${article.id}` as any)} style={styles.headerButton}>
+                <IconSymbol name="doc.text.fill" size={24} color={textSecondary} />
+              </Pressable>
               <Pressable
                 onPress={() => router.push(`/discussions/${article.id}` as any)}
                 style={styles.headerButton}

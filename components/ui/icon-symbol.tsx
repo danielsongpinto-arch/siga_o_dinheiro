@@ -59,6 +59,8 @@ const MAPPING = {
   "arrow.clockwise": "refresh",
   "xmark": "close",
   "checkmark": "check",
+  "pencil": "edit",
+  "square.stack.fill": "layers",
 } as IconMapping;
 
 /**

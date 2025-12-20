@@ -297,6 +297,38 @@ export default function ProfileScreen() {
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
         </Pressable>
         <Pressable
+          onPress={() => router.push("/all-notes" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="pencil" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Minhas Notas
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
+        <Pressable
+          onPress={() => router.push("/flashcards" as any)}
+          style={({ pressed }) => [
+            styles.actionButton,
+            { backgroundColor: cardBg, borderColor },
+            pressed && styles.actionButtonPressed,
+          ]}
+        >
+          <ThemedView style={styles.actionContent}>
+            <IconSymbol name="square.stack.fill" size={24} color={tintColor} />
+            <ThemedText type="defaultSemiBold" style={styles.actionText}>
+              Modo de Estudo
+            </ThemedText>
+          </ThemedView>
+          <IconSymbol name="chevron.right" size={20} color={borderColor} />
+        </Pressable>
+        <Pressable
           onPress={() => router.push("/create-report" as any)}
           style={({ pressed }) => [
             styles.actionButton,

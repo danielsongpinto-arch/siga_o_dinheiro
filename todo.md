@@ -214,3 +214,20 @@
 - [x] Adicionar estatísticas de quiz e histórico de resultados
 - [x] Implementar revisão de respostas com explicações
 - [x] Adicionar badges para quiz perfeito
+
+## Sistema de Notas e Anotações
+- [x] Criar tipos para notas vinculadas a artigos
+- [x] Implementar hook para gerenciar notas com AsyncStorage
+- [x] Criar editor de texto para notas com título, conteúdo e tags
+- [x] Adicionar organização por tema
+- [x] Implementar busca em notas
+- [x] Criar tela de visualização de todas as notas
+
+## Modo de Estudo com Flashcards
+- [x] Criar estrutura de flashcards baseados em artigos (18 flashcards)
+- [x] Implementar sistema de revisão espaçada (algoritmo SM-2)
+- [x] Criar interface de estudo com flip de cards e animações
+- [x] Adicionar progresso de memorização
+- [x] Criar estatísticas de estudo (precisão, total, cards devidos)
+
+
