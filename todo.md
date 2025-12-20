@@ -205,3 +205,12 @@
 - [x] Incluir notas pessoais no relatório
 - [x] Adicionar marcadores ao relatório
 - [x] Permitir compartilhamento do relatório
+
+## Sistema de Quiz Interativo
+- [x] Criar estrutura de perguntas e respostas (18 questões cobrindo todos os 6 artigos)
+- [x] Implementar quiz ao final de cada artigo
+- [x] Adicionar sistema de pontuação com feedback detalhado
+- [x] Criar feedback personalizado com explicações
+- [x] Adicionar estatísticas de quiz e histórico de resultados
+- [x] Implementar revisão de respostas com explicações
+- [x] Adicionar badges para quiz perfeito

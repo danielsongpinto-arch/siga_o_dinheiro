@@ -16,6 +16,7 @@ import { useComments } from "@/hooks/use-comments";
 import { useAuth } from "@/hooks/use-auth";
 import { useOfflineArticles } from "@/hooks/use-offline-articles";
 import { useReadingHistory } from "@/hooks/use-reading-history";
+import { useQuiz } from "@/hooks/use-quiz";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -27,6 +28,7 @@ export default function ArticleDetailScreen() {
   const { comments, addComment } = useComments(id || "");
   const { isArticleOffline, saveArticleOffline, removeArticleOffline } = useOfflineArticles();
   const { markAsRead } = useReadingHistory();
+  const { getQuizForArticle, hasCompletedQuiz, getScorePercentage } = useQuiz();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -329,6 +331,41 @@ export default function ArticleDetailScreen() {
             <ThemedText style={styles.cycleText}>{article.financialCycle.fim}</ThemedText>
           </ThemedView>
         </ThemedView>
+
+        {getQuizForArticle(id || "").length > 0 && (
+          <ThemedView style={[styles.quizSection, { backgroundColor: cardBg, borderColor }]}>
+            <ThemedView style={styles.quizHeader}>
+              <ThemedView>
+                <ThemedText type="subtitle" style={styles.sectionHeader}>
+                  Teste seus conhecimentos
+                </ThemedText>
+                <ThemedText style={[styles.quizSubtitle, { color: textSecondary }]}>
+                  {getQuizForArticle(id || "").length} quest\u00f5es sobre este artigo
+                </ThemedText>
+              </ThemedView>
+              <IconSymbol name="checkmark.seal.fill" size={32} color={tintColor} />
+            </ThemedView>
+
+            {hasCompletedQuiz(id || "") && (
+              <ThemedView style={[styles.quizScore, { backgroundColor: borderColor }]}>
+                <IconSymbol name="trophy.fill" size={20} color={tintColor} />
+                <ThemedText style={styles.quizScoreText}>
+                  \u00daltima pontua\u00e7\u00e3o: {getScorePercentage(id || "")}%
+                </ThemedText>
+              </ThemedView>
+            )}
+
+            <Pressable
+              onPress={() => router.push(`/quiz/${id}` as any)}
+              style={[styles.quizButton, { backgroundColor: tintColor }]}
+            >
+              <ThemedText style={styles.quizButtonText}>
+                {hasCompletedQuiz(id || "") ? "Refazer Quiz" : "Iniciar Quiz"}
+              </ThemedText>
+              <IconSymbol name="arrow.right" size={20} color="#fff" />
+            </Pressable>
+          </ThemedView>
+        )}
 
         <ThemedView style={styles.relatedSection}>
           <ThemedText type="subtitle" style={styles.sectionHeader}>
@@ -697,6 +734,51 @@ const styles = StyleSheet.create({
   speedText: {
     fontSize: 14,
     lineHeight: 20,
+    fontWeight: "600",
+  },
+  quizSection: {
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
+  quizHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+  quizSubtitle: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 4,
+  },
+  quizScore: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  quizScoreText: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
+  },
+  quizButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+  },
+  quizButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    lineHeight: 24,
     fontWeight: "600",
   },
 });

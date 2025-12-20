@@ -42,7 +42,6 @@ const MAPPING = {
   "moon.fill": "nightlight",
   "circle.lefthalf.filled": "brightness-auto",
   "book.fill": "menu-book",
-  "xmark": "close",
   "chart.bar.fill": "bar-chart",
   "trophy.fill": "emoji-events",
   "map.fill": "explore",
@@ -55,6 +54,11 @@ const MAPPING = {
   "pause.fill": "pause",
   "chart.line.uptrend.xyaxis": "trending-up",
   "sunset.fill": "wb-twilight",
+  "checkmark.seal.fill": "verified",
+  "arrow.right": "arrow-forward",
+  "arrow.clockwise": "refresh",
+  "xmark": "close",
+  "checkmark": "check",
 } as IconMapping;
 
 /**
