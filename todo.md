@@ -142,3 +142,24 @@
 - [x] Adicionar botão de exportar na tela de marcadores
 - [x] Incluir título, data e notas no PDF
 - [x] Permitir compartilhamento do PDF gerado
+
+## Sistema de Badges e Conquistas
+- [x] Criar tipos e dados de badges
+- [x] Implementar hook para gerenciar conquistas
+- [x] Criar tela de badges e conquistas
+- [x] Adicionar notificações ao desbloquear badges
+- [x] Mostrar progresso de conquistas no perfil
+
+## Modo de Áudio
+- [x] Instalar e configurar expo-speech
+- [x] Adicionar controles de áudio no artigo
+- [x] Implementar play/pause/stop
+- [x] Adicionar controle de velocidade
+- [x] Manter áudio em background
+
+## Comunidade e Discussões
+- [x] Criar estrutura de discussões por artigo
+- [x] Implementar sistema de respostas aninhadas
+- [x] Adicionar reações (curtir/útil)
+- [x] Criar tela de comunidade
+- [x] Adicionar filtros e ordenação

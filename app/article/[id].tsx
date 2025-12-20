@@ -1,9 +1,10 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { ScrollView, StyleSheet, Pressable, TextInput, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
 import { Share } from "react-native";
+import * as Speech from "expo-speech";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -28,6 +29,8 @@ export default function ArticleDetailScreen() {
   const { markAsRead } = useReadingHistory();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [speechRate, setSpeechRate] = useState(1.0);
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -84,6 +87,50 @@ export default function ArticleDetailScreen() {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       Alert.alert("Erro", "Não foi possível adicionar o comentário.");
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
+
+  const handlePlayAudio = async () => {
+    if (!article) return;
+
+    if (isPlaying) {
+      Speech.stop();
+      setIsPlaying(false);
+      return;
+    }
+
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    const textToSpeak = `${article.title}. ${article.content}`;
+
+    Speech.speak(textToSpeak, {
+      language: "pt-BR",
+      rate: speechRate,
+      onStart: () => setIsPlaying(true),
+      onDone: () => setIsPlaying(false),
+      onStopped: () => setIsPlaying(false),
+      onError: () => {
+        setIsPlaying(false);
+        Alert.alert("Erro", "N\u00e3o foi poss\u00edvel reproduzir o \u00e1udio.");
+      },
+    });
+  };
+
+  const handleSpeedChange = () => {
+    const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
+    const currentIndex = speeds.indexOf(speechRate);
+    const nextIndex = (currentIndex + 1) % speeds.length;
+    setSpeechRate(speeds[nextIndex]);
+
+    if (isPlaying) {
+      Speech.stop();
+      setIsPlaying(false);
     }
   };
 
@@ -144,6 +191,12 @@ export default function ArticleDetailScreen() {
               <Pressable onPress={() => setFocusMode(true)} style={styles.headerButton}>
                 <IconSymbol name="book.fill" size={24} color={textSecondary} />
               </Pressable>
+              <Pressable
+                onPress={() => router.push(`/discussions/${article.id}` as any)}
+                style={styles.headerButton}
+              >
+                <IconSymbol name="bubble.left.fill" size={24} color={textSecondary} />
+              </Pressable>
             </ThemedView>
           ),
         }}
@@ -172,6 +225,37 @@ export default function ArticleDetailScreen() {
           <ThemedText style={[styles.articleDate, { color: textSecondary }]}>
             {formatDate(article.date)}
           </ThemedText>
+          
+          {/* Controles de \u00c1udio */}
+          <ThemedView style={[styles.audioControls, { backgroundColor: cardBg, borderColor }]}>
+            <Pressable
+              onPress={handlePlayAudio}
+              style={({ pressed }) => [
+                styles.audioButton,
+                { backgroundColor: tintColor },
+                pressed && styles.audioButtonPressed,
+              ]}
+            >
+              <IconSymbol
+                name={isPlaying ? "pause.fill" : "play.fill"}
+                size={20}
+                color="#fff"
+              />
+              <ThemedText style={styles.audioButtonText}>
+                {isPlaying ? "Pausar \u00c1udio" : "Ouvir Artigo"}
+              </ThemedText>
+            </Pressable>
+            <Pressable
+              onPress={handleSpeedChange}
+              style={({ pressed }) => [
+                styles.speedButton,
+                { borderColor },
+                pressed && { opacity: 0.7 },
+              ]}
+            >
+              <ThemedText style={styles.speedText}>{speechRate}x</ThemedText>
+            </Pressable>
+          </ThemedView>
         </ThemedView>
 
         <ThemedView style={styles.articleContent}>
@@ -570,6 +654,47 @@ const styles = StyleSheet.create({
   },
   focusModeText: {
     color: "#fff",
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
+  },
+  audioControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginTop: 16,
+  },
+  audioButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  audioButtonPressed: {
+    opacity: 0.8,
+  },
+  audioButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
+  },
+  speedButton: {
+    width: 60,
+    height: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  speedText: {
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "600",

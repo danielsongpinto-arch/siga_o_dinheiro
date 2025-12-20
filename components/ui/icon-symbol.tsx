@@ -44,6 +44,15 @@ const MAPPING = {
   "book.fill": "menu-book",
   "xmark": "close",
   "chart.bar.fill": "bar-chart",
+  "trophy.fill": "emoji-events",
+  "map.fill": "explore",
+  "sunrise.fill": "wb-twilight",
+  "moon.stars.fill": "bedtime",
+  "calendar": "calendar-today",
+  "checkmark.circle.fill": "check-circle",
+  "star.fill": "star",
+  "play.fill": "play-arrow",
+  "pause.fill": "pause",
 } as IconMapping;
 
 /**
