@@ -29,6 +29,10 @@ const MAPPING = {
   "arrow.left": "arrow-back",
   "plus": "add",
   "trash.fill": "delete",
+  "magnifyingglass": "search",
+  "xmark.circle.fill": "cancel",
+  "bell.fill": "notifications",
+  "bell": "notifications-none",
 } as IconMapping;
 
 /**

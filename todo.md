@@ -67,3 +67,21 @@
 - [x] Testar funcionalidade de comentários
 - [x] Testar navegação entre todas as telas
 - [x] Verificar responsividade em diferentes tamanhos de tela
+
+## Expansão de Conteúdo
+- [x] Adicionar artigo "Siga o Dinheiro na Crise de 2008"
+- [x] Adicionar artigo "Siga o Dinheiro nas Privatizações no Brasil"
+- [x] Adicionar artigo "Siga o Dinheiro na Indústria Farmacêutica"
+- [x] Criar novos temas correspondentes
+
+## Sistema de Busca
+- [x] Criar tela de busca com campo de pesquisa
+- [x] Implementar lógica de busca por título e conteúdo
+- [x] Adicionar filtro por tema
+- [x] Mostrar resultados em tempo real
+
+## Notificações Push
+- [x] Configurar Expo Notifications
+- [x] Criar sistema de agendamento de notificações
+- [x] Implementar notificação quando novo artigo é adicionado
+- [x] Adicionar preferências de notificação no perfil

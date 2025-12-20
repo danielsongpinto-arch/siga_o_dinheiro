@@ -7,12 +7,14 @@ import { ThemedView } from "@/components/themed-view";
 import { useAuth } from "@/hooks/use-auth";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useNotifications } from "@/hooks/use-notifications";
 
 export default function ProfileScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { user, isAuthenticated, logout } = useAuth();
   const { favorites } = useFavorites();
+  const { notificationsEnabled, loading: notifLoading, toggleNotifications } = useNotifications();
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
@@ -72,6 +74,39 @@ export default function ProfileScreen() {
             <ThemedText style={styles.statLabel}>
               {favorites.length === 1 ? "Artigo Favoritado" : "Artigos Favoritados"}
             </ThemedText>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+
+      <ThemedView style={styles.notificationsSection}>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Notificações
+        </ThemedText>
+        <ThemedView style={[styles.notificationCard, { backgroundColor: cardBg, borderColor }]}>
+          <ThemedView style={styles.notificationRow}>
+            <ThemedView style={styles.notificationInfo}>
+              <ThemedText type="defaultSemiBold">Novos Artigos</ThemedText>
+              <ThemedText style={styles.notificationDesc}>
+                Receba notificações quando novos artigos forem publicados
+              </ThemedText>
+            </ThemedView>
+            <Pressable
+              onPress={() => toggleNotifications(!notificationsEnabled)}
+              disabled={notifLoading}
+              style={[
+                styles.toggle,
+                { borderColor },
+                notificationsEnabled && { backgroundColor: tintColor, borderColor: tintColor },
+              ]}
+            >
+              <ThemedView
+                style={[
+                  styles.toggleThumb,
+                  { backgroundColor: notificationsEnabled ? "#fff" : borderColor },
+                  notificationsEnabled && styles.toggleThumbActive,
+                ]}
+              />
+            </Pressable>
           </ThemedView>
         </ThemedView>
       </ThemedView>
@@ -183,5 +218,44 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: "#FF3B30",
+  },
+  notificationsSection: {
+    marginBottom: 32,
+  },
+  notificationCard: {
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  notificationRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 16,
+  },
+  notificationInfo: {
+    flex: 1,
+  },
+  notificationDesc: {
+    fontSize: 12,
+    lineHeight: 18,
+    opacity: 0.7,
+    marginTop: 4,
+  },
+  toggle: {
+    width: 51,
+    height: 31,
+    borderRadius: 16,
+    borderWidth: 2,
+    padding: 2,
+    justifyContent: "center",
+  },
+  toggleThumb: {
+    width: 27,
+    height: 27,
+    borderRadius: 14,
+  },
+  toggleThumbActive: {
+    alignSelf: "flex-end",
   },
 });
