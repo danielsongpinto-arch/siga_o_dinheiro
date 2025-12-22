@@ -33,3 +33,9 @@
 - [ ] Expandir outros temas (COVID-19, Crise 2008, Banco Master)
 - [ ] Adicionar bibliografia e referências aos artigos
 - [ ] Criar versão PDF dos artigos para download
+
+- [x] Integrar artigo "O Sistema Autoperpetuante" ao aplicativo
+  - [x] Criar tema no mock-data.ts
+  - [x] Converter artigo markdown para JSON (45KB)
+  - [x] Adicionar ao array de artigos
+  - [x] Integração completa

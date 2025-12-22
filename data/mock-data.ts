@@ -1,6 +1,7 @@
 import { Theme, Article } from "@/types";
 import { WW2_ARTICLES } from "./ww2-articles";
 import { ROCKEFELLER_ARTICLES } from "./rockefeller-articles";
+import { SISTEMA_AUTOPERPETUANTE_ARTICLES } from "./sistema-autoperpetuante-articles";
 
 export const THEMES: Theme[] = [
   {
@@ -45,11 +46,18 @@ export const THEMES: Theme[] = [
     description: "Como o homem mais rico da história construiu um império de controle sobre petróleo, medicina, educação e mídia",
     articleCount: 1,
   },
+  {
+    id: "sistema-autoperpetuante",
+    title: "O Sistema Autoperpetuante",
+    description: "Como o sistema monetário moderno foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente",
+    articleCount: 1,
+  },
 ];
 
 export const ARTICLES: Article[] = [
   ...WW2_ARTICLES,
   ...ROCKEFELLER_ARTICLES,
+  ...SISTEMA_AUTOPERPETUANTE_ARTICLES,
   {
     id: "master-001",
     themeId: "master",
