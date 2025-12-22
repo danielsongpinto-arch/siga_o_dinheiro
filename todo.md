@@ -144,3 +144,40 @@
   - [x] Data corrigida: 22/dez/2024
   - [x] Duração: 31 min (7.549 palavras)
   - [x] Arquivo JSON atualizado com conteúdo completo e metadados
+
+- [x] Implementar sistema completo de referências e fontes - FASE 1 E 2 CONCLUÍDAS! ✅
+  
+  **Objetivo:** Dar credibilidade aos artigos mostrando que dados são públicos e verificáveis
+  
+  **Fase 1: Artigo Sistema Autoperpetuante - COMPLETO!**
+  - [x] Adicionar 34 citações numeradas inline para todos os dados factuais
+  - [x] Criar seção "Fontes e Referências" no final do artigo com URLs diretos
+  - [x] Links para: Fed, BIS, FMI, FDIC, Bloomberg, Reuters, FT, Treasury, World Gold Council, CBO, S&P
+  - [x] Dados específicos: $18 trilhões depósitos[20], $120 bi FDIC[19], $4 trilhões Repo[11], $307 tri dívida global[31]
+  - [x] Artigo atualizado: 9.800 palavras com 34 referências verificáveis
+  
+  **Fase 2: Sistema de Notas de Rodapé no App - COMPLETO!**
+  - [x] Criar componente ArticleTextWithReferences
+  - [x] Detectar citações [1], [2], etc. e transformá-las em links clicáveis
+  - [x] Abrir URLs das fontes em navegador externo ao clicar
+  - [x] Componente ReferenceList para renderizar lista formatada
+  - [x] Integrar ao sistema de renderização (app/article/[id].tsx)
+  - [x] Haptic feedback ao clicar
+  
+  **Fase 3: Artigos Arquitetos do Poder - PENDENTE**
+  - [ ] Rockefeller: Standard Oil 90%, $400 bilhões, Relatório Flexner 1910, AMA, escolas médicas
+  - [ ] Morgan: Resgate 1895, Pânico 1907, Jekyll Island 1910, U.S. Steel $1,4 bi, $480 milhões Carnegie
+  - [ ] Carnegie: Homestead 1892 (10 mortos), 2.509 bibliotecas, $350 milhões doados, venda $480 mi
+  - [ ] Conexões: Investigação Pujo 1912 (341 diretorias, 40% capital industrial), Jekyll Island 6 homens
+  
+  **Fontes Utilizadas (Sistema Autoperpetuante):**
+  ✅ Federal Reserve (QE, balanço, reservas)
+  ✅ BIS - Bank for International Settlements (Repo $4 tri)
+  ✅ FMI (dívida global $307 tri, Chipre 2013)
+  ✅ FDIC ($120 bi reservas, $18 tri depósitos)
+  ✅ Bloomberg/Reuters/FT (22/agosto/2023, desdolarização)
+  ✅ Treasury (yield curve, taxas)
+  ✅ FSB/G20 (bail-in 2013)
+  ✅ World Gold Council (preço ouro)
+  ✅ CBO (déficits governo)
+  ✅ S&P Global (vencimentos dívida corporativa)

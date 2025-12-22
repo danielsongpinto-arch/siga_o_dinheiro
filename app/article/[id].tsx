@@ -13,6 +13,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { SelectableText } from "@/components/selectable-text";
+import { ArticleTextWithReferences, ReferenceList } from "@/components/article-text-with-references";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useComments } from "@/hooks/use-comments";
@@ -307,6 +308,20 @@ export default function ArticleDetailScreen() {
                     <ThemedText key={index} type="defaultSemiBold" style={[styles.subsectionTitle, { fontSize: fontSizes.body }]}>
                       {paragraph.replace("### ", "")}
                     </ThemedText>
+                  );
+                }
+                // Se o parágrafo contém referências [1], [2], etc., usar ArticleTextWithReferences
+                if (paragraph.match(/\[\d+\]/)) {
+                  return (
+                    <ArticleTextWithReferences
+                      key={index}
+                      content={paragraph}
+                      style={{ fontSize: fontSizes.body, lineHeight: fontSizes.body * 1.6, marginBottom: 16 }}
+                      onReferencePress={(refNumber) => {
+                        // Scroll para seção de referências (implementação simplificada)
+                        console.log(`Reference ${refNumber} clicked`);
+                      }}
+                    />
                   );
                 }
                 return (
