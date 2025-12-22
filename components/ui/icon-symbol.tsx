@@ -61,6 +61,10 @@ const MAPPING = {
   "checkmark": "check",
   "pencil": "edit",
   "square.stack.fill": "layers",
+  "bookmark": "bookmark-border",
+  "bookmark.fill": "bookmark",
+  "trash": "delete-outline",
+  "tag": "label",
 } as IconMapping;
 
 /**

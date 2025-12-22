@@ -501,3 +501,34 @@ A questão não é se este sistema existe - a evidência histórica é incontest
 *Tempo estimado de leitura: 35 minutos*
 
 *Tempo estimado de áudio: 55 minutos*
+
+
+---
+
+## Fontes e Referências
+
+[1] Library of Congress. "Standard Oil Established." This Month in Business History. https://guides.loc.gov/this-month-in-business-history/january/standard-oil-established
+
+[2] Britannica. "Standard Oil | History, Monopoly, & Breakup." https://www.britannica.com/money/Standard-Oil
+
+[3] History.com. "John D. Rockefeller - Biography, Facts & Children." https://www.history.com/articles/john-d-rockefeller
+
+[4] Yale University Energy History. "Antitrust and Monopoly." https://energyhistory.yale.edu/antitrust-and-monopoly/
+
+[5] U.S. Supreme Court. "Standard Oil Co. of New Jersey v. United States, 221 U.S. 1 (1911)." https://supreme.justia.com/cases/federal/us/221/1/
+
+[6] Britannica. "How Rich Was John D. Rockefeller?" https://www.britannica.com/topic/How-Rich-Was-John-D-Rockefeller
+
+[7] Duffy, T.P. (2011). "The Flexner Report — 100 Years Later." Yale Journal of Biology and Medicine, 84(3), 269-276. https://pmc.ncbi.nlm.nih.gov/articles/PMC3178858/
+
+[8] Carnegie Foundation for the Advancement of Teaching. "Medical Education in the United States and Canada" (Flexner Report, 1910). http://archive.carnegiefoundation.org/publications/pdfs/elibrary/Carnegie_Flexner_Report.pdf
+
+[9] Rockefeller Archive Center. "Early 20th Century Reforms of Medical Education Worldwide." https://resource.rockarch.org/story/early-20th-century-reforms-of-medical-education-worldwide/
+
+[10] Brown, E.R. (1979). "Rockefeller Medicine Men: Medicine and Capitalism in America." University of California Press. https://digitalcommons.rockefeller.edu/the-rockefellers/37/
+
+[11] Bailey, M. (2017). "The Flexner Report: Standardizing Medical Students Through Region-, Gender-, and Race-Based Hierarchies." University of Pittsburgh Bioethics. https://bioethics.pitt.edu/sites/default/files/The%20Flexner%20Report.pdf
+
+[12] Cureus. "Rockefeller, the Flexner Report, and the American Medical Association." https://www.cureus.com/articles/370572-rockefeller-the-flexner-report-and-the-american-medical-association
+
+[13] Columbia University. "The Rockefeller Connection in the Medical Center's Beginnings." https://www.vagelos.columbia.edu/about-us/columbia-medicine-magazine/archives/fall-winter-2017/vp-s-news/rockefeller-connection-medical-centers-beginnings

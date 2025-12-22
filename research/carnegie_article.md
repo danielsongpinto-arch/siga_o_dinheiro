@@ -667,3 +667,34 @@ Carnegie não respondeu esta questão. Mas ele moldou os termos do debate - e n�
 *Tempo estimado de leitura: 38 minutos*
 
 *Tempo estimado de áudio: 65 minutos*
+
+
+---
+
+## Fontes e Referências
+
+[1] Carnegie Corporation. "Andrew Carnegie's Story." https://www.carnegie.org/interactives/foundersstory/
+
+[2] Britannica. "Carnegie Steel Company | Corporation, History." https://www.britannica.com/money/Carnegie-Steel-Company
+
+[3] American Heritage. "The Deal of the Century." https://www.americanheritage.com/deal-century
+
+[4] Wikipedia. "Homestead Strike." https://en.wikipedia.org/wiki/Homestead_strike
+
+[5] PBS American Experience. "The Strike at Homestead Mill." https://www.pbs.org/wgbh/americanexperience/features/carnegie-strike-homestead-mill/
+
+[6] AFL-CIO. "1892 Homestead Strike." https://aflcio.org/about/history/labor-history-events/1892-homestead-strike
+
+[7] Library of Congress. "1892 Homestead Strike - This Month in Business History." https://guides.loc.gov/this-month-in-business-history/july/1892-homestead-strike
+
+[8] History Matters (George Mason University). "An Awful Battle at Homestead, Pa." https://historymatters.gmu.edu/d/6768
+
+[9] Kahan, P. "The Homestead Strike: Labor, Violence, and American Industry." Routledge. https://www.taylorfrancis.com/books/mono/10.4324/9780203081471/homestead-strike-paul-kahan
+
+[10] Wikipedia. "Carnegie Library." https://en.wikipedia.org/wiki/Carnegie_library
+
+[11] Carnegie Libraries Across America. "About the Project." https://carnegie-libraries.carnegie.org/about/
+
+[12] South Dakota Public Broadcasting. "Carnegie Libraries | Dakota Life." https://www.sdpb.org/rural-life-and-history/2024-04-10/carnegie-libraries-dakota-life
+
+[13] NYC Encounters Tours. "The Very First Carnegie Library in NYC." https://www.nycencounterstours.com/post/the-very-first-carnegie-library-in-nyc

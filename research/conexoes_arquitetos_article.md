@@ -557,3 +557,38 @@ A questão não é se esta rede existe. A evidência é incontestável. A quest�
 *Tempo estimado de leitura: 30 minutos*
 
 *Tempo estimado de áudio: 50 minutos*
+
+
+---
+
+## Fontes e Referências
+
+[1] Federal Reserve History. "The Meeting at Jekyll Island." https://www.federalreservehistory.org/essays/jekyll-island-conference
+
+[2] Jekyll Island Museum. "Birth of the Fed." https://www.jekyllisland.com/magazine/birth-of-the-fed/
+
+[3] Richmond Federal Reserve. "Jekyll Island: Where the Fed Began." https://www.richmondfed.org/-/media/richmondfedorg/publications/research/econ_focus/2015/q1/pdf/federal_reserve.pdf
+
+[4] Mises Institute. "Culmination at Jekyll Island." https://mises.org/online-book/case-against-fed/culmination-jekyll-island
+
+[5] Atlanta Federal Reserve. "Jekyll Island and the Creation of the Fed (Educational Lesson)." https://www.atlantafed.org/-/media/documents/education/teach/lessons-and-activities/15-jekyll-island-and-the-creation-of-the-fed.pdf
+
+[6] National Archives. "Congress and the Money Trust." https://www.archives.gov/legislative/resources/education/money-trust
+
+[7] FRASER (Federal Reserve Archive). "Money Trust Investigation, 1912-1913." https://fraser.stlouisfed.org/title/money-trust-investigation-80
+
+[8] FRASER. "Exhibit 134-C: Interlocking Directorates." https://fraser.stlouisfed.org/title/money-trust-investigation-80/exhibit-134-c-interlocking-directorates-23669
+
+[9] Public Intelligence. "Pujo Committee Money Trust Investigation 1912-1913." https://publicintelligence.net/pujo-committee-money-trust-wall-street-banking-cartel-investigation-1912-1913/
+
+[10] Inside FRASER Blog. "Uncurrent Events: The Pujo Committee." https://fraser.stlouisfed.org/blog/2019/08/the-pujo-committee/
+
+[11] University of Texas Press. "J.P. Morgan, The Pujo Committee, and the Money Trust." http://utpressnews.blogspot.com/2016/03/jp-morgan-pujo-committee-and-money-trust.html
+
+[12] Pujo, A.P. (1913). "Report of the Committee Appointed Pursuant to House Resolutions 429 and 504 to Investigate the Concentration of Control of Money and Credit." U.S. Government Printing Office.
+
+[13] Halverson, J.T. (1976). "Interlocking Directorates-Present Anti-Trust Enforcement Interest Placed in Proper Analytical Perspective." Villanova Law Review, 21(3). https://heinonline.org/hol-cgi-bin/get_pdf.cgi?handle=hein.journals/vllalr21&section=17
+
+[14] Mizruchi, M.S. (1996). "What do interlocks do? An analysis, critique, and assessment of research on interlocking directorates." Annual Review of Sociology, 22(1), 271-298.
+
+[15] Halgin, D.S. & Pak, S. (2023). "The significance of social clubs in the economic network of JP Morgan & Co." Revista de Historia Industrial.

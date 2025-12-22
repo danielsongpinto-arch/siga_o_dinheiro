@@ -41,6 +41,7 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editNote, setEditNote] = useState("");
+  const [editTags, setEditTags] = useState<string[]>([]);
 
   useEffect(() => {
     loadBookmarks();
@@ -75,7 +76,7 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
     }
   };
 
-  const saveNote = async (bookmarkId: string, note: string) => {
+  const saveNote = async (bookmarkId: string, note: string, tags: string[]) => {
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       
@@ -83,14 +84,15 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
       if (stored) {
         const allBookmarks: Bookmark[] = JSON.parse(stored);
         const updated = allBookmarks.map((b) =>
-          b.id === bookmarkId ? { ...b, note } : b
+          b.id === bookmarkId ? { ...b, note, tags } : b
         );
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        setBookmarks(bookmarks.map((b) => (b.id === bookmarkId ? { ...b, note } : b)));
+        setBookmarks(bookmarks.map((b) => (b.id === bookmarkId ? { ...b, note, tags } : b)));
       }
       
       setEditingId(null);
       setEditNote("");
+      setEditTags([]);
     } catch (error) {
       console.error("Error saving note:", error);
     }
@@ -99,6 +101,13 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
   const startEditing = (bookmark: Bookmark) => {
     setEditingId(bookmark.id);
     setEditNote(bookmark.note || "");
+    setEditTags(bookmark.tags || []);
+  };
+
+  const toggleTag = (tagId: string) => {
+    setEditTags((prev) =>
+      prev.includes(tagId) ? prev.filter((t) => t !== tagId) : [...prev, tagId]
+    );
   };
 
   return (
@@ -138,6 +147,25 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
                 "{bookmark.excerpt}"
               </ThemedText>
 
+              {bookmark.tags && bookmark.tags.length > 0 && (
+                <View style={styles.tagsContainer}>
+                  {bookmark.tags.map((tagId) => {
+                    const tag = PREDEFINED_TAGS.find((t) => t.id === tagId);
+                    if (!tag) return null;
+                    return (
+                      <View
+                        key={tagId}
+                        style={[styles.tagChip, { backgroundColor: tag.color + "20" }]}
+                      >
+                        <Text style={[styles.tagText, { color: tag.color }]}>
+                          {tag.label}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
+
               {editingId === bookmark.id ? (
                 <View style={styles.noteEditContainer}>
                   <TextInput
@@ -156,18 +184,53 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
                     multiline
                     autoFocus
                   />
+                  
+                  <View style={styles.tagsSection}>
+                    <ThemedText type="defaultSemiBold" style={styles.tagsSectionTitle}>
+                      Tags:
+                    </ThemedText>
+                    <View style={styles.tagsGrid}>
+                      {PREDEFINED_TAGS.map((tag) => {
+                        const isSelected = editTags.includes(tag.id);
+                        return (
+                          <Pressable
+                            key={tag.id}
+                            onPress={() => toggleTag(tag.id)}
+                            style={[
+                              styles.tagSelector,
+                              {
+                                backgroundColor: isSelected ? tag.color : tag.color + "20",
+                                borderColor: tag.color,
+                              },
+                            ]}
+                          >
+                            <Text
+                              style={[
+                                styles.tagSelectorText,
+                                { color: isSelected ? "#fff" : tag.color },
+                              ]}
+                            >
+                              {tag.label}
+                            </Text>
+                          </Pressable>
+                        );
+                      })}
+                    </View>
+                  </View>
+                  
                   <View style={styles.noteActions}>
                     <Pressable
                       onPress={() => {
                         setEditingId(null);
                         setEditNote("");
+                        setEditTags([]);
                       }}
                       style={styles.noteActionButton}
                     >
                       <ThemedText style={{ color: colors.icon }}>Cancelar</ThemedText>
                     </Pressable>
                     <Pressable
-                      onPress={() => saveNote(bookmark.id, editNote)}
+                      onPress={() => saveNote(bookmark.id, editNote, editTags)}
                       style={[styles.noteActionButton, { backgroundColor: colors.tint }]}
                     >
                       <Text style={{ color: "#fff", fontWeight: "600" }}>Salvar</Text>
@@ -309,6 +372,44 @@ const styles = StyleSheet.create({
   timestamp: {
     fontSize: 12,
     marginTop: 8,
+  },
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 12,
+  },
+  tagChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  tagText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  tagsSection: {
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  tagsSectionTitle: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  tagsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  tagSelector: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 16,
+    borderWidth: 1.5,
+  },
+  tagSelectorText: {
+    fontSize: 13,
+    fontWeight: "600",
   },
 });
 

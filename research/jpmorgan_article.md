@@ -456,3 +456,38 @@ A questão não é se este sistema existe - a evidência histórica é incontest
 *Tempo estimado de leitura: 38 minutos*
 
 *Tempo estimado de áudio: 60 minutos*
+
+
+---
+
+## Fontes e Referências
+
+[1] Federal Reserve History. "The Meeting at Jekyll Island." https://www.federalreservehistory.org/essays/jekyll-island-conference
+
+[2] Jekyll Island Museum. "Birth of the Fed." https://www.jekyllisland.com/magazine/birth-of-the-fed/
+
+[3] Richmond Federal Reserve. "Jekyll Island: Where the Fed Began." https://www.richmondfed.org/-/media/richmondfedorg/publications/research/econ_focus/2015/q1/pdf/federal_reserve.pdf
+
+[4] Federal Reserve History. "The Panic of 1907." https://www.federalreservehistory.org/essays/panic-of-1907
+
+[5] Gotham Center for New York City History. "The Panic of 1907: How J.P. Morgan Took Over Wall Street." https://www.gothamcenter.org/blog/the-panic-of-1907-how-jp-morgan-took-over-wall-street
+
+[6] The Morgan Library & Museum. "The Panic of 1907." https://www.themorgan.org/exhibitions/online/guide/stop-23-panic-1907
+
+[7] Kavoussi, B. "The Panic of 1907: A Human-Caused Crisis, or a Natural Disaster?" Harvard University. https://histecon.fas.harvard.edu/crisis-next/1907/docs/Kavoussi-Panic_of_1907.pdf
+
+[8] Business Insider. "Morgan 1895 Crisis & 1862 Gold Loophole." https://www.businessinsider.com/morgan-1895-crisis-and-1862-gold-loophole-2013-1
+
+[9] American Heritage. "The Golden Touch." https://www.americanheritage.com/golden-touch
+
+[10] Forbes. "Bailouts Run In Morgan's Blood." https://www.forbes.com/2008/03/16/morgan-jpmorgan-banks-face-markets-cx_mp_0314autofacescan02.html
+
+[11] National Archives. "Congress and the Money Trust." https://www.archives.gov/legislative/resources/education/money-trust
+
+[12] FRASER (Federal Reserve Archive). "Money Trust Investigation, 1912-1913." https://fraser.stlouisfed.org/title/money-trust-investigation-80
+
+[13] Public Intelligence. "Pujo Committee Money Trust Investigation 1912-1913." https://publicintelligence.net/pujo-committee-money-trust-wall-street-banking-cartel-investigation-1912-1913/
+
+[14] Britannica. "Carnegie Steel Company | Corporation, History." https://www.britannica.com/money/Carnegie-Steel-Company
+
+[15] American Heritage. "The Deal of the Century." https://www.americanheritage.com/deal-century

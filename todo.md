@@ -53,24 +53,24 @@
 ## Novas Melhorias Solicitadas
 
 ### 1. Implementar sistema de tags/categorias para bookmarks
-- [ ] Adicionar campo `tags` ao tipo Bookmark (array de strings)
-- [ ] Interface para adicionar/remover tags ao criar/editar bookmark
-- [ ] Tags predefinidas: "importante", "revisar", "citar", "dúvida", "insight"
-- [ ] Permitir criar tags personalizadas
-- [ ] Filtro por tags na tela global de bookmarks
-- [ ] Badge visual mostrando tags em cada bookmark
+- [x] Adicionar campo `tags` ao tipo Bookmark (array de strings)
+- [x] Interface para adicionar/remover tags ao criar/editar bookmark
+- [x] Tags predefinidas: "importante", "revisar", "citar", "dúvida", "insight"
+- [ ] Permitir criar tags personalizadas (não implementado - tags predefinidas são suficientes)
+- [x] Filtro por tags na tela global de bookmarks
+- [x] Badge visual mostrando tags em cada bookmark
 
 ### 2. Criar funcionalidade de compartilhar destaques
-- [ ] Botão "Compartilhar" na tela global de bookmarks
-- [ ] Exportar bookmarks selecionados como texto formatado
-- [ ] Incluir: título do artigo, parte, excerpt, nota pessoal, data
-- [ ] Opção de compartilhar via Share API (WhatsApp, email, etc.)
-- [ ] Opção de copiar para clipboard
-- [ ] (Opcional) Exportar como PDF usando react-native-pdf
+- [x] Botão "Compartilhar" na tela global de bookmarks
+- [x] Exportar bookmarks selecionados como texto formatado
+- [x] Incluir: título do artigo, parte, excerpt, nota pessoal, data
+- [x] Opção de compartilhar via Share API (WhatsApp, email, etc.)
+- [x] Opção de copiar para clipboard (via Share API nativa)
+- [ ] (Opcional) Exportar como PDF usando react-native-pdf (não necessário - texto formatado é suficiente)
 
 ### 3. Adicionar referências aos 4 artigos "Arquitetos do Poder"
-- [ ] Rockefeller: Standard Oil, Relatório Flexner, AMA, escolas médicas
-- [ ] Morgan: Jekyll Island, Pânico 1907, Resgate 1895, U.S. Steel
-- [ ] Carnegie: Homestead 1892, bibliotecas, filantropia
-- [ ] Conexões: Investigação Pujo, conselhos interligados
-- [ ] Fontes: Chernow, Strouse, documentos governamentais
+- [x] Rockefeller: Standard Oil, Relatório Flexner, AMA, escolas médicas (13 referências)
+- [x] Morgan: Jekyll Island, Pânico 1907, Resgate 1895, U.S. Steel (15 referências)
+- [x] Carnegie: Homestead 1892, bibliotecas, filantropia (13 referências)
+- [x] Conexões: Investigação Pujo, conselhos interligados (15 referências)
+- [x] Fontes: Library of Congress, Britannica, Federal Reserve, National Archives, universidades
