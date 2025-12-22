@@ -1,5 +1,6 @@
 import { Theme, Article } from "@/types";
 import { WW2_ARTICLES } from "./ww2-articles";
+import { ROCKEFELLER_ARTICLES } from "./rockefeller-articles";
 
 export const THEMES: Theme[] = [
   {
@@ -38,10 +39,17 @@ export const THEMES: Theme[] = [
     description: "O modelo de negócios e os interesses financeiros da Big Pharma",
     articleCount: 1,
   },
+  {
+    id: "rockefeller",
+    title: "John D. Rockefeller",
+    description: "Como o homem mais rico da história construiu um império de controle sobre petróleo, medicina, educação e mídia",
+    articleCount: 1,
+  },
 ];
 
 export const ARTICLES: Article[] = [
   ...WW2_ARTICLES,
+  ...ROCKEFELLER_ARTICLES,
   {
     id: "master-001",
     themeId: "master",

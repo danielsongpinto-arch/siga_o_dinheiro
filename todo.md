@@ -20,9 +20,16 @@
   - [x] Integrar visualizações nos artigos do app com galeria interativa
 
 ## Próximas Funcionalidades
+- [ ] Criar artigo sobre Sistema Monetário e Crises Financeiras (O MAIS IMPORTANTE!)
+  - [ ] Compilar material (10 arquivos recebidos + pesquisa Richard Wolff)
+  - [ ] Escrever artigo completo (10 partes: fundamentos, crises, repo, bail-ins, desdolarização, COVID-19, 2026, proteção)
+  - [ ] Criar visualizações (ciclo de 5 fases, transferência de riqueza, derivativos $715 tri)
+  - [ ] Integrar ao aplicativo
+- [x] Criar artigo sobre "Rei do Petróleo" (Rockefeller - CONCLUÍDO!)
+  - [x] Escrever artigo completo (Standard Oil, controle medicina/farmacêutica, influência educação/mídia, banqueiros, legado) - 8.500 palavras
+  - [x] Integrar ao aplicativo
 - [ ] Criar artigo sobre Primeira Guerra Mundial (análise financeira, Tratado de Versalhes, reparações, conexão com Segunda Guerra)
 - [ ] Criar artigo sobre conflito Rússia-Ucrânia (terras raras para EUA, territórios para Rússia, Europa sem participação, reservas russas congeladas)
-- [ ] Adicionar mais artigos sobre outros temas existentes
+- [ ] Expandir outros temas (COVID-19, Crise 2008, Banco Master)
 - [ ] Adicionar bibliografia e referências aos artigos
 - [ ] Criar versão PDF dos artigos para download
-
