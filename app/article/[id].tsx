@@ -8,6 +8,7 @@ import { AudioPlayer } from "@/components/audio-player";
 import { useArticleAudio } from "@/hooks/use-article-audio";
 import { VisualizationGallery } from "@/components/visualization-gallery";
 import { ArticleTableOfContents } from "@/components/article-table-of-contents";
+import { ArticleBookmarks, createBookmark } from "@/components/article-bookmarks";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -41,6 +42,7 @@ export default function ArticleDetailScreen() {
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
   const [summaryMode, setSummaryMode] = useState(false);
   const [scrollViewRef, setScrollViewRef] = useState<ScrollView | null>(null);
+  const [showBookmarks, setShowBookmarks] = useState(false);
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -177,6 +179,9 @@ export default function ArticleDetailScreen() {
                 style={styles.headerButton}
               >
                 <IconSymbol name="bubble.left.fill" size={24} color={textSecondary} />
+              </Pressable>
+              <Pressable onPress={() => setShowBookmarks(true)} style={styles.headerButton}>
+                <IconSymbol name="bookmark.fill" size={24} color={textSecondary} />
               </Pressable>
             </ThemedView>
           ),
@@ -724,6 +729,17 @@ export default function ArticleDetailScreen() {
           onSkipForward={audioHook.skipForward}
           onSkipBackward={audioHook.skipBackward}
         />
+      )}
+
+      {/* Modal de Bookmarks */}
+      {showBookmarks && (
+        <ThemedView style={StyleSheet.absoluteFill}>
+          <ArticleBookmarks
+            articleId={article.id}
+            articleTitle={article.title}
+            onClose={() => setShowBookmarks(false)}
+          />
+        </ThemedView>
       )}
     </KeyboardAvoidingView>
   );
