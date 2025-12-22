@@ -36,6 +36,7 @@ export default function ArticleDetailScreen() {
   const fontSizes = getFontSizes();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
+  const [currentPartIndex, setCurrentPartIndex] = useState(0);
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -223,31 +224,144 @@ export default function ArticleDetailScreen() {
         </ThemedView>
 
         <ThemedView style={styles.articleContent}>
-          {article.content.split("\n\n").map((paragraph, index) => {
-            if (paragraph.startsWith("## ")) {
-              return (
-                <ThemedText key={index} type="subtitle" style={[styles.sectionTitle, { fontSize: fontSizes.subtitle }]}>
-                  {paragraph.replace("## ", "")}
-                </ThemedText>
-              );
+          {(() => {
+            // Dividir artigo em partes baseado em "## Parte"
+            const parts = article.content.split(/(?=## Parte \d+:)/);
+            
+            // Se não houver partes definidas, mostrar todo o conteúdo
+            if (parts.length === 1 || !parts[0].includes("## Parte")) {
+              return article.content.split("\n\n").map((paragraph, index) => {
+                if (paragraph.startsWith("## ")) {
+                  return (
+                    <ThemedText key={index} type="subtitle" style={[styles.sectionTitle, { fontSize: fontSizes.subtitle }]}>
+                      {paragraph.replace("## ", "")}
+                    </ThemedText>
+                  );
+                }
+                if (paragraph.startsWith("### ")) {
+                  return (
+                    <ThemedText key={index} type="defaultSemiBold" style={[styles.subsectionTitle, { fontSize: fontSizes.body }]}>
+                      {paragraph.replace("### ", "")}
+                    </ThemedText>
+                  );
+                }
+                return (
+                  <SelectableText
+                    key={index}
+                    text={paragraph}
+                    articleId={article.id}
+                    articleTitle={article.title}
+                    fontSize={fontSizes.body}
+                  />
+                );
+              });
             }
-            if (paragraph.startsWith("### ")) {
-              return (
-                <ThemedText key={index} type="defaultSemiBold" style={[styles.subsectionTitle, { fontSize: fontSizes.body }]}>
-                  {paragraph.replace("### ", "")}
-                </ThemedText>
-              );
-            }
+
+            // Filtrar partes vazias
+            const validParts = parts.filter(p => p.trim().length > 0);
+            const currentPart = validParts[currentPartIndex] || validParts[0];
+            const totalParts = validParts.length;
+
             return (
-              <SelectableText
-                key={index}
-                text={paragraph}
-                articleId={article.id}
-                articleTitle={article.title}
-                fontSize={fontSizes.body}
-              />
+              <>
+                {/* Indicador de Progresso */}
+                {totalParts > 1 && (
+                  <ThemedView style={[styles.partIndicator, { backgroundColor: cardBg, borderColor }]}>
+                    <ThemedText style={[styles.partIndicatorText, { color: textSecondary }]}>
+                      Parte {currentPartIndex + 1} de {totalParts}
+                    </ThemedText>
+                    <ThemedView style={styles.partDots}>
+                      {validParts.map((_, index) => (
+                        <Pressable
+                          key={index}
+                          onPress={() => {
+                            setCurrentPartIndex(index);
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                          }}
+                          style={[
+                            styles.partDot,
+                            {
+                              backgroundColor: index === currentPartIndex ? tintColor : borderColor,
+                            },
+                          ]}
+                        />
+                      ))}
+                    </ThemedView>
+                  </ThemedView>
+                )}
+
+                {/* Conteúdo da Parte Atual */}
+                {currentPart.split("\n\n").map((paragraph, index) => {
+                  if (paragraph.startsWith("## ")) {
+                    return (
+                      <ThemedText key={index} type="subtitle" style={[styles.sectionTitle, { fontSize: fontSizes.subtitle }]}>
+                        {paragraph.replace("## ", "")}
+                      </ThemedText>
+                    );
+                  }
+                  if (paragraph.startsWith("### ")) {
+                    return (
+                      <ThemedText key={index} type="defaultSemiBold" style={[styles.subsectionTitle, { fontSize: fontSizes.body }]}>
+                        {paragraph.replace("### ", "")}
+                      </ThemedText>
+                    );
+                  }
+                  return (
+                    <SelectableText
+                      key={index}
+                      text={paragraph}
+                      articleId={article.id}
+                      articleTitle={article.title}
+                      fontSize={fontSizes.body}
+                    />
+                  );
+                })}
+
+                {/* Botões de Navegação */}
+                {totalParts > 1 && (
+                  <ThemedView style={styles.partNavigation}>
+                    <Pressable
+                      onPress={() => {
+                        if (currentPartIndex > 0) {
+                          setCurrentPartIndex(currentPartIndex - 1);
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                        }
+                      }}
+                      disabled={currentPartIndex === 0}
+                      style={[
+                        styles.partNavButton,
+                        { backgroundColor: currentPartIndex === 0 ? borderColor : tintColor },
+                      ]}
+                    >
+                      <IconSymbol name="chevron.left" size={20} color="#fff" />
+                      <ThemedText style={styles.partNavButtonText}>
+                        {currentPartIndex === 0 ? "Início" : "Anterior"}
+                      </ThemedText>
+                    </Pressable>
+
+                    <Pressable
+                      onPress={() => {
+                        if (currentPartIndex < totalParts - 1) {
+                          setCurrentPartIndex(currentPartIndex + 1);
+                          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                        }
+                      }}
+                      disabled={currentPartIndex === totalParts - 1}
+                      style={[
+                        styles.partNavButton,
+                        { backgroundColor: currentPartIndex === totalParts - 1 ? borderColor : tintColor },
+                      ]}
+                    >
+                      <ThemedText style={styles.partNavButtonText}>
+                        {currentPartIndex === totalParts - 1 ? "Fim" : "Próxima"}
+                      </ThemedText>
+                      <IconSymbol name="chevron.right" size={20} color="#fff" />
+                    </Pressable>
+                  </ThemedView>
+                )}
+              </>
             );
-          })}
+          })()}
         </ThemedView>
 
         {/* Galeria de Visualizações para artigos da Segunda Guerra */}
@@ -790,6 +904,52 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   quizButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "600",
+  },
+  partIndicator: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 20,
+  },
+  partIndicatorText: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
+  },
+  partDots: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  partDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  partNavigation: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+    marginTop: 32,
+    marginBottom: 16,
+  },
+  partNavButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+  },
+  partNavButtonText: {
     color: "#fff",
     fontSize: 16,
     lineHeight: 24,

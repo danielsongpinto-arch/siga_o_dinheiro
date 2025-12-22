@@ -54,3 +54,10 @@
   - [x] Escrever artigo completo (ascensão, monopólio do aço, Homestead 1892, venda para Morgan 1901, filantropia estratégica, Evangelho da Riqueza, conexões, legado) - 9.500 palavras
   - [x] Integrar ao aplicativo como 4º artigo da série
   - [x] Atualizar contagem de artigos do tema para 4
+
+- [x] 🐛 BUG CRÍTICO: Navegação entre partes dos artigos - RESOLVIDO!
+  - [x] Investigar código da tela de artigo
+  - [x] Implementar botões "Anterior" e "Próxima" no final de cada parte
+  - [x] Adicionar indicador de progresso (Parte X de Y) com dots clicáveis
+  - [x] Sistema detecta automaticamente artigos com "## Parte X:" e divide
+  - [x] Artigos sem partes definidas mostram conteúdo completo (comportamento original)
