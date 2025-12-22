@@ -1,11 +1,12 @@
 import { Theme, Article } from "@/types";
+import { WW2_ARTICLES } from "./ww2-articles";
 
 export const THEMES: Theme[] = [
   {
     id: "ww2",
     title: "Segunda Guerra Mundial",
     description: "Análise dos interesses financeiros por trás do maior conflito do século XX",
-    articleCount: 1,
+    articleCount: 2,
   },
   {
     id: "master",
@@ -40,73 +41,7 @@ export const THEMES: Theme[] = [
 ];
 
 export const ARTICLES: Article[] = [
-  {
-    id: "ww2-001",
-    themeId: "ww2",
-    title: "Siga o Dinheiro na Segunda Guerra Mundial",
-    date: "2024-12-20",
-    summary: "Uma análise profunda dos interesses financeiros que moldaram o maior conflito do século XX, revelando como decisões aparentemente políticas tinham motivações econômicas subjacentes.",
-    content: `A Segunda Guerra Mundial é frequentemente apresentada como um conflito puramente ideológico entre democracia e totalitarismo. No entanto, uma análise mais profunda revela uma complexa rede de interesses financeiros que moldaram decisões cruciais durante o conflito.
-
-## O Complexo Industrial-Militar
-
-Antes mesmo do início oficial da guerra em 1939, grandes corporações americanas e europeias já mantinham relações comerciais com a Alemanha nazista. Empresas como IBM, Ford e General Motors tinham subsidiárias operando em território alemão, fornecendo tecnologia e equipamentos que seriam posteriormente utilizados no esforço de guerra.
-
-A IBM, por exemplo, forneceu sistemas de tabulação que foram utilizados para organizar dados populacionais, incluindo informações que facilitaram a identificação e deportação de grupos perseguidos. A motivação? Contratos lucrativos que geravam milhões de dólares em receita.
-
-## O Financiamento do Rearmamento Alemão
-
-O rearmamento alemão nos anos 1930 não teria sido possível sem o apoio financeiro de bancos internacionais. Instituições financeiras americanas e britânicas concederam empréstimos substanciais à Alemanha, mesmo após a ascensão do regime nazista ao poder.
-
-Esses bancos argumentavam que estavam apoiando a "recuperação econômica" alemã após a crise de 1929, mas na prática estavam financiando a construção da máquina de guerra que devastaria a Europa.
-
-## A Indústria Petrolífera
-
-O petróleo foi o combustível literal da Segunda Guerra Mundial. Empresas petrolíferas americanas mantiveram relações comerciais com ambos os lados do conflito através de subsidiárias e acordos de licenciamento de tecnologia.
-
-A Standard Oil, por exemplo, tinha acordos de compartilhamento de patentes com a IG Farben alemã, que produzia combustível sintético essencial para o esforço de guerra nazista. Mesmo durante a guerra, essas relações comerciais continuaram através de países neutros.
-
-## O Papel dos Bancos Suíços
-
-A Suíça manteve sua neutralidade durante a guerra, mas seus bancos desempenharam um papel crucial ao aceitar depósitos de ouro saqueado pelos nazistas, incluindo ouro confiscado de vítimas do Holocausto. Essa "neutralidade" era, na verdade, uma posição altamente lucrativa que permitiu aos bancos suíços acumular fortunas enquanto a Europa ardia.
-
-## A Reconstrução Pós-Guerra
-
-O ciclo financeiro não terminou com a vitória dos Aliados em 1945. A reconstrução da Europa através do Plano Marshall representou uma oportunidade de negócios massiva para empresas americanas. Bilhões de dólares em empréstimos e subsídios fluíram para a Europa, mas grande parte desse dinheiro retornou aos Estados Unidos na forma de contratos para empresas americanas.
-
-## Conclusão
-
-A Segunda Guerra Mundial demonstra claramente como interesses financeiros podem influenciar eventos históricos de magnitude global. Decisões que afetaram milhões de vidas foram, em muitos casos, motivadas por considerações econômicas tanto quanto por ideologia ou estratégia militar.
-
-Compreender esses interesses financeiros não diminui a importância dos aspectos políticos e ideológicos do conflito, mas adiciona uma camada essencial de compreensão sobre como e por que certos eventos se desenrolaram da maneira que fizeram.`,
-    authors: [
-      {
-        name: "Corporações Industriais",
-        role: "Fornecedores de tecnologia e equipamentos",
-        financialInterest: "Contratos lucrativos com ambos os lados do conflito, gerando milhões em receita",
-      },
-      {
-        name: "Bancos Internacionais",
-        role: "Financiadores do rearmamento",
-        financialInterest: "Empréstimos de alto rendimento e taxas de juros sobre dívidas de guerra",
-      },
-      {
-        name: "Indústria Petrolífera",
-        role: "Fornecedores de combustível",
-        financialInterest: "Vendas massivas de petróleo e tecnologia de combustível sintético",
-      },
-      {
-        name: "Bancos Suíços",
-        role: "Depositários de ativos",
-        financialInterest: "Taxas sobre depósitos de ouro e ativos saqueados",
-      },
-    ],
-    financialCycle: {
-      inicio: "Anos 1930 - Financiamento do rearmamento alemão através de empréstimos internacionais e investimentos corporativos em subsidiárias alemãs. Estabelecimento de relações comerciais lucrativas.",
-      meio: "1939-1945 - Manutenção de relações comerciais através de subsidiárias e países neutros. Acumulação de lucros através de contratos militares e depósitos bancários de ativos saqueados.",
-      fim: "Pós-1945 - Reconstrução da Europa através do Plano Marshall, gerando novos contratos e oportunidades de negócios. Muitas empresas que lucraram durante a guerra continuaram prosperando na reconstrução.",
-    },
-  },
+  ...WW2_ARTICLES,
   {
     id: "master-001",
     themeId: "master",
