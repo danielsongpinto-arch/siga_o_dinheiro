@@ -11,8 +11,18 @@
   - [x] Adicionar botão de áudio na tela de leitura
   - [x] Implementar controle de reprodução com navegação de parágrafos
   - [x] Criar testes automatizados (12 testes passando)
+- [x] Criar gráficos e visualizações para artigos da Segunda Guerra Mundial
+  - [x] Fluxograma do saque nazista (países → Alemanha → gastos militares)
+  - [x] Gráfico de déficit final (414 bi gastos vs 121 bi saqueados = 293 bi déficit)
+  - [x] Linha do tempo com valores por ano (1933-1945)
+  - [x] Mapa da Europa com valores saqueados por país
+  - [x] Gráfico de comparação: produção alemã vs aliados
+  - [x] Integrar visualizações nos artigos do app com galeria interativa
 
 ## Próximas Funcionalidades
 - [ ] Criar artigo sobre Primeira Guerra Mundial (análise financeira, Tratado de Versalhes, reparações, conexão com Segunda Guerra)
 - [ ] Criar artigo sobre conflito Rússia-Ucrânia (terras raras para EUA, territórios para Rússia, Europa sem participação, reservas russas congeladas)
 - [ ] Adicionar mais artigos sobre outros temas existentes
+- [ ] Adicionar bibliografia e referências aos artigos
+- [ ] Criar versão PDF dos artigos para download
+

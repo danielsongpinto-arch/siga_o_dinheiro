@@ -1,0 +1,149 @@
+{
+  "saque_por_pais": {
+    "Austria": {
+      "ouro_toneladas": 90,
+      "moeda_local": "1.4 bilhões de xelins",
+      "dolares": "28 milhões",
+      "ano": 1938
+    },
+    "Tchecoslovaquia": {
+      "ouro_toneladas": 32,
+      "moeda_local": "625 milhões de coroas",
+      "equipamento_militar": "469 tanques, 1500 aviões, 43000 metralhadoras, 90 canhões",
+      "ano": 1939
+    },
+    "Polonia": {
+      "ouro_toneladas": 80,
+      "tributos_1940": "600 milhões de marcos",
+      "tributos_1941": "625 milhões de marcos",
+      "requisicoes_colheita": "20%",
+      "ano": 1939
+    },
+    "Franca": {
+      "ouro_toneladas": 400,
+      "tributos_diarios": "400 milhões de francos",
+      "tributos_anuais": "6.3 bilhões de marcos",
+      "trabalhadores_forcados": 650000,
+      "ano": 1940
+    },
+    "Belgica": {
+      "tributos_mensais": "1 bilhão de francos (50 milhões de marcos)",
+      "ano": 1940
+    },
+    "Holanda": {
+      "tributos_mensais": "125 milhões de florins (60 milhões de marcos)",
+      "trabalhadores_forcados": 500000,
+      "ano": 1940
+    }
+  },
+  "balanco_final": {
+    "gastos_militares_total": 414,
+    "saque_total": 121,
+    "deficit": 293,
+    "unidade": "bilhões de marcos"
+  },
+  "linha_tempo": [
+    {
+      "ano": 1933,
+      "evento": "Hitler assume poder",
+      "valor": 0,
+      "descricao": "Início do rearmamento secreto"
+    },
+    {
+      "ano": 1936,
+      "evento": "Contas Mefo atingem limite",
+      "valor": 12,
+      "descricao": "12 bilhões de marcos em dívida oculta"
+    },
+    {
+      "ano": 1938,
+      "evento": "Anschluss (Áustria)",
+      "valor": 90,
+      "descricao": "90 toneladas de ouro saqueadas"
+    },
+    {
+      "ano": 1939,
+      "evento": "Invasão da Polônia",
+      "valor": 80,
+      "descricao": "Início da Segunda Guerra Mundial"
+    },
+    {
+      "ano": 1940,
+      "evento": "Conquista da Europa Ocidental",
+      "valor": 400,
+      "descricao": "França: 400 toneladas de ouro"
+    },
+    {
+      "ano": 1941,
+      "evento": "Operação Barbarossa",
+      "valor": -8,
+      "descricao": "Frente Oriental: 8 bilhões de gastos vs 1 bilhão de retorno"
+    },
+    {
+      "ano": 1942,
+      "evento": "Reunião de março - Déficit revelado",
+      "valor": -32,
+      "descricao": "Déficit de produção: 32 milhões de toneladas"
+    },
+    {
+      "ano": 1943,
+      "evento": "Stalingrado e Kursk",
+      "valor": -50,
+      "descricao": "Colapso do esquema Ponzi"
+    },
+    {
+      "ano": 1944,
+      "evento": "Dia D e Frente Oriental",
+      "valor": -100,
+      "descricao": "Bombardeio de fábricas alemãs"
+    },
+    {
+      "ano": 1945,
+      "evento": "Rendição",
+      "valor": -293,
+      "descricao": "Déficit final: 293 bilhões de marcos"
+    }
+  ],
+  "producao_comparada": {
+    "alemanha": {
+      "tanques": 49777,
+      "avioes": 119307,
+      "navios": 1156
+    },
+    "urss": {
+      "tanques": 105251,
+      "avioes": 157261,
+      "navios": 434
+    },
+    "eua": {
+      "tanques": 88410,
+      "avioes": 324750,
+      "navios": 8800
+    },
+    "reino_unido": {
+      "tanques": 27896,
+      "avioes": 131549,
+      "navios": 1045
+    }
+  },
+  "trabalho_escravo": {
+    "total": 6000000,
+    "empresas": {
+      "IG_Farben": {
+        "trabalhadores": 83000,
+        "local": "Auschwitz",
+        "produto": "Borracha sintética, Zyklon B"
+      },
+      "Siemens": {
+        "trabalhadores": "dezenas de milhares",
+        "local": "Ravensbrück",
+        "produto": "Equipamentos elétricos"
+      },
+      "Krupp": {
+        "trabalhadores": "dezenas de milhares",
+        "local": "Essen",
+        "produto": "Armamentos"
+      }
+    }
+  }
+}

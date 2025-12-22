@@ -6,6 +6,7 @@ import * as Haptics from "expo-haptics";
 import { Share } from "react-native";
 import { AudioPlayer } from "@/components/audio-player";
 import { useArticleAudio } from "@/hooks/use-article-audio";
+import { VisualizationGallery } from "@/components/visualization-gallery";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -248,6 +249,44 @@ export default function ArticleDetailScreen() {
             );
           })}
         </ThemedView>
+
+        {/* Galeria de Visualizações para artigos da Segunda Guerra */}
+        {!focusMode && (article.id === "ww2-001" || article.id === "ww2-prewar" || article.id === "ww2-postwar") && (
+          <VisualizationGallery
+            visualizations={[
+              {
+                id: "fluxograma",
+                title: "Sistema de Saque Nazista",
+                description: "Fluxograma mostrando como recursos fluíam dos países conquistados para a máquina de guerra alemã",
+                image: require("@/assets/images/wwii-saque-fluxograma.png"),
+              },
+              {
+                id: "producao",
+                title: "Produção Militar Comparada",
+                description: "Comparação da produção de tanques, aviões e navios entre Alemanha e Aliados (1939-1945)",
+                image: require("@/assets/images/wwii-producao-comparada.png"),
+              },
+              {
+                id: "timeline",
+                title: "Linha do Tempo Financeira",
+                description: "Trajetória financeira da Alemanha nazista de 1933 a 1945, mostrando ganhos e perdas",
+                image: require("@/assets/images/wwii-linha-tempo.png"),
+              },
+              {
+                id: "mapa",
+                title: "Mapa do Saque na Europa",
+                description: "Geografia do saque nazista com valores saqueados por país",
+                image: require("@/assets/images/wwii-mapa-europa.png"),
+              },
+              {
+                id: "balanco",
+                title: "Balanço Final",
+                description: "Déficit de 293 bilhões de marcos: gastos militares vs recursos saqueados",
+                image: require("@/assets/images/wwii-balanco-final.png"),
+              },
+            ]}
+          />
+        )}
 
         {!focusMode && (
           <>
