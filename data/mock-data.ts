@@ -6,7 +6,7 @@ export const THEMES: Theme[] = [
     id: "ww2",
     title: "Segunda Guerra Mundial",
     description: "Análise dos interesses financeiros por trás do maior conflito do século XX",
-    articleCount: 2,
+    articleCount: 3,
   },
   {
     id: "master",

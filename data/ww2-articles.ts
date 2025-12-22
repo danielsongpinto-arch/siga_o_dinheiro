@@ -1,6 +1,8 @@
 import { Article } from "@/types";
+import prewarArticle from "./ww2_prewar_article.json";
 
 export const WW2_ARTICLES: Article[] = [
+  prewarArticle as Article,
   {
     id: "ww2-001",
     themeId: "ww2",
