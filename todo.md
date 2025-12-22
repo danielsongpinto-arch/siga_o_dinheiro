@@ -44,3 +44,8 @@
   - [x] Escrever artigo completo (ascensão, controle bancário, resgates do governo 1895/1907, Federal Reserve, consolidação industrial, legado) - 9.200 palavras
   - [x] Integrar ao aplicativo
   - [x] Criar tema "Arquitetos do Poder" com 2 artigos (Rockefeller + Morgan)
+
+- [x] Criar artigo "Conexões dos Arquitetos do Poder"
+  - [x] Escrever artigo completo (Jekyll Island, conselhos interligados, colaborações, fluxo de poder/dinheiro) - 7.500 palavras
+  - [x] Integrar ao aplicativo como 3º artigo da série Arquitetos do Poder
+  - [x] Atualizar contagem de artigos do tema para 3

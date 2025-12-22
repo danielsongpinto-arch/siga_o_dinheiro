@@ -51,7 +51,7 @@ export const THEMES: Theme[] = [
     id: "arquitetos-do-poder",
     title: "Arquitetos do Poder",
     description: "Série sobre os homens que construíram os sistemas de controle financeiro e industrial que moldam o mundo moderno",
-    articleCount: 2,
+    articleCount: 3,
   },
 ];
 
