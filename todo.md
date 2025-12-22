@@ -181,3 +181,29 @@
   ✅ World Gold Council (preço ouro)
   ✅ CBO (déficits governo)
   ✅ S&P Global (vencimentos dívida corporativa)
+
+## Melhorias em Andamento (Solicitação do Usuário)
+
+- [ ] 1. Adicionar referências aos 4 artigos "Arquitetos do Poder"
+  - [ ] Rockefeller: Standard Oil 90%, $400 bilhões, Relatório Flexner 1910, AMA, escolas médicas destruídas
+  - [ ] Morgan: Jekyll Island 1910, Pânico 1907, Resgate governo 1895, U.S. Steel $1,4 bi, compra Carnegie $480 mi
+  - [ ] Carnegie: Homestead 1892 (10 mortos), 2.509 bibliotecas, $350 milhões doados, venda para Morgan
+  - [ ] Conexões: Investigação Pujo 1912 (341 diretorias, 112 corporações, 40% capital industrial)
+  - [ ] Fontes: livros históricos (Chernow, Strouse), documentos governamentais, arquivos históricos
+
+- [ ] 2. Criar artigo completo sobre BRICS e Desdolarização
+  - [ ] Cúpula de Kazan 2024 (expansão BRICS+, novos membros)
+  - [ ] Petróleo em yuan (China-Arábia Saudita)
+  - [ ] Sistema SWIFT alternativo (CIPS chinês, SPFS russo)
+  - [ ] Acordo petrodólar expirado (junho 2024)
+  - [ ] Ouro como reserva (bancos centrais comprando)
+  - [ ] Conexão com "O Sistema Autoperpetuante"
+  - [ ] Adicionar referências verificáveis
+
+- [ ] 3. Implementar sistema de bookmarks/destaques
+  - [ ] Permitir usuário marcar trechos do artigo
+  - [ ] Salvar posição (parte, parágrafo)
+  - [ ] Adicionar notas pessoais aos destaques
+  - [ ] Lista de bookmarks salvos
+  - [ ] Sincronização com AsyncStorage
+  - [ ] Navegação rápida para trechos marcados

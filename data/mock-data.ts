@@ -45,7 +45,7 @@ export const THEMES: Theme[] = [
     id: "sistema-autoperpetuante",
     title: "O Sistema Autoperpetuante",
     description: "Como o sistema monetário moderno foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente",
-    articleCount: 1,
+    articleCount: 2,
   },
   {
     id: "arquitetos-do-poder",
