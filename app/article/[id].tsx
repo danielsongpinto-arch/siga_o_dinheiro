@@ -364,6 +364,58 @@ export default function ArticleDetailScreen() {
           })()}
         </ThemedView>
 
+        {/* Galeria de Visualizações para O Sistema Autoperpetuante */}
+        {!focusMode && article.id === "sistema-001" && (
+          <VisualizationGallery
+            visualizations={[
+              {
+                id: "ciclo",
+                title: "O Ciclo Autoperpetuante",
+                description: "Como o sistema se renova através de 5 fases: Expansão → Euforia → Crise → Transferência → Renovação",
+                image: require("@/assets/images/visualizations/ciclo-autoperpetuante.png"),
+              },
+              {
+                id: "timeline-crises",
+                title: "Linha do Tempo das Crises",
+                description: "Histórico de crises financeiras de 1929 a 2026: padrão repetitivo de transferência de riqueza",
+                image: require("@/assets/images/visualizations/linha-tempo-crises.png"),
+              },
+              {
+                id: "multiplicador",
+                title: "Multiplicador Bancário",
+                description: "Como $1 se transforma em $10 através do sistema de reservas fracionárias",
+                image: require("@/assets/images/visualizations/multiplicador-bancario.png"),
+              },
+              {
+                id: "transferencia",
+                title: "Transferência de Riqueza",
+                description: "Tabela detalhada: quanto os 1% ganharam e os 99% perderam em cada crise",
+                image: require("@/assets/images/visualizations/transferencia-riqueza.png"),
+              },
+            ]}
+          />
+        )}
+
+        {/* Galeria de Visualizações para Arquitetos do Poder */}
+        {!focusMode && (article.themeId === "arquitetos-do-poder" || article.id === "rockefeller-001" || article.id === "morgan-001" || article.id === "carnegie-001" || article.id === "conexoes-001") && (
+          <VisualizationGallery
+            visualizations={[
+              {
+                id: "jekyll-island",
+                title: "Rede Jekyll Island",
+                description: "Novembro 1910: 6 homens controlando 1/4 da riqueza mundial criaram o Federal Reserve",
+                image: require("@/assets/images/visualizations/jekyll-island-network.png"),
+              },
+              {
+                id: "timeline-arquitetos",
+                title: "Linha do Tempo Integrada",
+                description: "1870-2024: Como Rockefeller, Morgan e Carnegie construíram sistemas que persistem hoje",
+                image: require("@/assets/images/visualizations/arquitetos-timeline.png"),
+              },
+            ]}
+          />
+        )}
+
         {/* Galeria de Visualizações para artigos da Segunda Guerra */}
         {!focusMode && (article.id === "ww2-001" || article.id === "ww2-prewar" || article.id === "ww2-postwar") && (
           <VisualizationGallery

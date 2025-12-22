@@ -61,3 +61,40 @@
   - [x] Adicionar indicador de progresso (Parte X de Y) com dots clicáveis
   - [x] Sistema detecta automaticamente artigos com "## Parte X:" e divide
   - [x] Artigos sem partes definidas mostram conteúdo completo (comportamento original)
+
+- [x] Criar visualizações para TODOS os artigos (gráficos, tabelas, infográficos)
+  
+  **O Sistema Autoperpetuante:**
+  - [x] Gráfico do Ciclo de 5 Fases (circular): Expansão → Euforia → Crise → Transferência → Renovação (433KB)
+  - [x] Linha do Tempo de Crises: 1929, 1987, 2000, 2008, 2020, 2023, 2026 (previsão) (681KB)
+  - [x] Infográfico do Multiplicador Bancário: $1 → $10 (reservas fracionárias) (510KB)
+  - [x] Tabela de Transferência de Riqueza por crise (971KB)
+  
+  **Rockefeller - O Rei do Petróleo:**
+  - [ ] Gráfico de consolidação: % controle petróleo (1870-1911)
+  - [ ] Linha do tempo: Standard Oil (1870 → dissolução 1911 → ExxonMobil hoje)
+  - [ ] Fluxograma: Controle sistêmico (petróleo → medicina → educação → mídia)
+  - [ ] Tabela: Fortuna vs. PIB americano ao longo do tempo
+  
+  **J.P. Morgan - O Senhor das Finanças:**
+  - [ ] Diagrama: Resgate do governo 1895 (fluxo de ouro)
+  - [ ] Gráfico: Pânico de 1907 (quem sobreviveu vs. quem morreu)
+  - [ ] Infográfico: Jekyll Island 1910 (6 homens, % riqueza mundial)
+  - [ ] Tabela: Consolidações industriais (U.S. Steel, GE, ferrovias)
+  
+  **Carnegie - O Barão do Aço:**
+  - [ ] Gráfico: Ascensão ($1,20/semana → $480 milhões)
+  - [ ] Infográfico: Homestead 1892 (batalha, mortos, repressão)
+  - [ ] Tabela: Filantropia (2.509 bibliotecas, universidades, $350 milhões)
+  - [ ] Comparação: Modelo Carnegie vs. Gates/Buffett/Bezos
+  
+  **Conexões - A Rede Invisível:**
+  - [x] Diagrama de rede: Jekyll Island (6 participantes, conexões, instituições) (741KB)
+  - [x] Linha do tempo integrada: 1870-2024 (eventos-chave dos 3 Arquitetos) (460KB)
+  - [ ] Fluxograma: Conselhos interligados (341 diretorias, 112 corporações) - PENDENTE
+  - [ ] Tabela: Legado moderno (ExxonMobil, JPMorgan Chase, Carnegie Corp) - PENDENTE
+  
+  - [x] Integrar 6 visualizações principais ao aplicativo (3.8MB total)
+  - [x] Sistema Autoperpetuante: 4 visualizações
+  - [x] Arquitetos do Poder: 2 visualizações (compartilhadas entre todos os artigos da série)
+  - [ ] Testar renderização e responsividade
