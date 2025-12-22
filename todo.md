@@ -98,3 +98,10 @@
   - [x] Sistema Autoperpetuante: 4 visualizações
   - [x] Arquitetos do Poder: 2 visualizações (compartilhadas entre todos os artigos da série)
   - [ ] Testar renderização e responsividade
+
+- [x] 🐛 BUG CRÍTICO RESOLVIDO: Usuário agora consegue ler artigos completos na web
+  - [x] Botões de navegação não apareciam na versão web
+  - [x] Artigo parava na Parte 1, antes das visualizações
+  - [x] SOLUÇÃO IMPLEMENTADA: Desabilitada divisão por partes na web (Platform.OS === 'web')
+  - [x] Web: artigo completo com scroll contínuo
+  - [x] Mobile: mantida divisão por partes com botões de navegação (melhor UX)

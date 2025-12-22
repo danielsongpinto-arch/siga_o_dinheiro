@@ -228,8 +228,12 @@ export default function ArticleDetailScreen() {
             // Dividir artigo em partes baseado em "## Parte"
             const parts = article.content.split(/(?=## Parte \d+:)/);
             
-            // Se não houver partes definidas, mostrar todo o conteúdo
-            if (parts.length === 1 || !parts[0].includes("## Parte")) {
+            // Na versão web, SEMPRE mostrar artigo completo (sem divisão por partes)
+            // No mobile, usar divisão por partes para melhor UX
+            const shouldShowFullArticle = Platform.OS === 'web' || parts.length === 1 || !parts[0].includes("## Parte");
+            
+            // Se não houver partes definidas OU estiver na web, mostrar todo o conteúdo
+            if (shouldShowFullArticle) {
               return article.content.split("\n\n").map((paragraph, index) => {
                 if (paragraph.startsWith("## ")) {
                   return (
