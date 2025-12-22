@@ -39,3 +39,8 @@
   - [x] Converter artigo markdown para JSON (45KB)
   - [x] Adicionar ao array de artigos
   - [x] Integração completa
+
+- [x] Criar artigo sobre J.P. Morgan - "O Senhor das Finanças" (Série Arquitetos do Poder)
+  - [x] Escrever artigo completo (ascensão, controle bancário, resgates do governo 1895/1907, Federal Reserve, consolidação industrial, legado) - 9.200 palavras
+  - [x] Integrar ao aplicativo
+  - [x] Criar tema "Arquitetos do Poder" com 2 artigos (Rockefeller + Morgan)

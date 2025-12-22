@@ -1,6 +1,6 @@
 import { Theme, Article } from "@/types";
 import { WW2_ARTICLES } from "./ww2-articles";
-import { ROCKEFELLER_ARTICLES } from "./rockefeller-articles";
+import { ARQUITETOS_DO_PODER_ARTICLES } from "./arquitetos-do-poder-articles";
 import { SISTEMA_AUTOPERPETUANTE_ARTICLES } from "./sistema-autoperpetuante-articles";
 
 export const THEMES: Theme[] = [
@@ -40,23 +40,24 @@ export const THEMES: Theme[] = [
     description: "O modelo de negócios e os interesses financeiros da Big Pharma",
     articleCount: 1,
   },
-  {
-    id: "rockefeller",
-    title: "John D. Rockefeller",
-    description: "Como o homem mais rico da história construiu um império de controle sobre petróleo, medicina, educação e mídia",
-    articleCount: 1,
-  },
+
   {
     id: "sistema-autoperpetuante",
     title: "O Sistema Autoperpetuante",
     description: "Como o sistema monetário moderno foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente",
     articleCount: 1,
   },
+  {
+    id: "arquitetos-do-poder",
+    title: "Arquitetos do Poder",
+    description: "Série sobre os homens que construíram os sistemas de controle financeiro e industrial que moldam o mundo moderno",
+    articleCount: 2,
+  },
 ];
 
 export const ARTICLES: Article[] = [
   ...WW2_ARTICLES,
-  ...ROCKEFELLER_ARTICLES,
+  ...ARQUITETOS_DO_PODER_ARTICLES,
   ...SISTEMA_AUTOPERPETUANTE_ARTICLES,
   {
     id: "master-001",
