@@ -49,3 +49,8 @@
   - [x] Escrever artigo completo (Jekyll Island, conselhos interligados, colaborações, fluxo de poder/dinheiro) - 7.500 palavras
   - [x] Integrar ao aplicativo como 3º artigo da série Arquitetos do Poder
   - [x] Atualizar contagem de artigos do tema para 3
+
+- [x] Criar artigo sobre Andrew Carnegie - "O Barão do Aço" (Série Arquitetos do Poder)
+  - [x] Escrever artigo completo (ascensão, monopólio do aço, Homestead 1892, venda para Morgan 1901, filantropia estratégica, Evangelho da Riqueza, conexões, legado) - 9.500 palavras
+  - [x] Integrar ao aplicativo como 4º artigo da série
+  - [x] Atualizar contagem de artigos do tema para 4
