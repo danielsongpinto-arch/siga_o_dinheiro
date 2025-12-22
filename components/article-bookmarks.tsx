@@ -14,8 +14,17 @@ export interface Bookmark {
   partTitle: string;
   excerpt: string;
   note?: string;
+  tags?: string[];
   createdAt: string;
 }
+
+export const PREDEFINED_TAGS = [
+  { id: "importante", label: "Importante", color: "#FF3B30" },
+  { id: "revisar", label: "Revisar", color: "#FF9500" },
+  { id: "citar", label: "Citar", color: "#007AFF" },
+  { id: "duvida", label: "Dúvida", color: "#5856D6" },
+  { id: "insight", label: "Insight", color: "#34C759" },
+];
 
 interface ArticleBookmarksProps {
   articleId: string;
