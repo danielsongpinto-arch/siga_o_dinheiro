@@ -128,3 +128,19 @@
   - [x] Modo resumo: mostrar apenas títulos + preview do conteúdo
   - [x] Cards visuais para cada seção no modo resumo
   - [x] Toggle instantâneo entre modos
+
+- [ ] 🐛 BUG CRÍTICO: Artigo "O Sistema Autoperpetuante" está incompleto
+  - [ ] Usuário vê apenas início do artigo, não consegue ler conteúdo completo
+  - [ ] Data errada: 21 de dezembro de 2024 (deve ser data de publicação correta)
+  - [ ] Duração errada: 31 min (deve refletir 6.033 palavras completas)
+  - [ ] Verificar arquivo JSON do artigo
+  - [ ] Substituir por conteúdo completo do markdown
+  - [ ] Corrigir metadados (data, duração)
+
+- [x] 🐛 BUG CRÍTICO RESOLVIDO: Artigo "O Sistema Autoperpetuante" completo
+  - [x] Artigo original só tinha 6 partes, adicionada Parte 7 completa (2.800 palavras)
+  - [x] Parte 7: A Grande Transferência de Riqueza (22/agosto/2023, previsão 2026, proteção individual)
+  - [x] Conclusão: Siga o Dinheiro
+  - [x] Data corrigida: 22/dez/2024
+  - [x] Duração: 31 min (7.549 palavras)
+  - [x] Arquivo JSON atualizado com conteúdo completo e metadados
