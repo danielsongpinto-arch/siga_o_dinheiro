@@ -7,6 +7,7 @@ import { Share } from "react-native";
 import { AudioPlayer } from "@/components/audio-player";
 import { useArticleAudio } from "@/hooks/use-article-audio";
 import { VisualizationGallery } from "@/components/visualization-gallery";
+import { ArticleTableOfContents } from "@/components/article-table-of-contents";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -37,6 +38,8 @@ export default function ArticleDetailScreen() {
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
+  const [summaryMode, setSummaryMode] = useState(false);
+  const [scrollViewRef, setScrollViewRef] = useState<ScrollView | null>(null);
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -223,6 +226,39 @@ export default function ArticleDetailScreen() {
           </Pressable>
         </ThemedView>
 
+        {/* Botão Modo Resumo */}
+        {!focusMode && (
+          <Pressable
+            onPress={() => {
+              setSummaryMode(!summaryMode);
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }}
+            style={[styles.summaryModeButton, { backgroundColor: summaryMode ? tintColor : cardBg, borderColor }]}
+          >
+            <IconSymbol
+              name={summaryMode ? "doc.text.fill" : "doc.plaintext"}
+              size={20}
+              color={summaryMode ? "#fff" : tintColor}
+            />
+            <ThemedText style={[styles.summaryModeText, { color: summaryMode ? "#fff" : tintColor }]}>
+              {summaryMode ? "Ver Artigo Completo" : "Modo Resumo"}
+            </ThemedText>
+          </Pressable>
+        )}
+
+        {/* Índice Clicável */}
+        {!focusMode && !summaryMode && (
+          <ArticleTableOfContents
+            content={article.content}
+            onSectionPress={(sectionIndex) => {
+              // Scroll para a seção selecionada
+              // Nota: implementação simplificada - em produção usaria refs para scroll preciso
+              setCurrentPartIndex(sectionIndex);
+            }}
+            currentSection={currentPartIndex}
+          />
+        )}
+
         <ThemedView style={styles.articleContent}>
           {(() => {
             // Dividir artigo em partes baseado em "## Parte"
@@ -231,6 +267,30 @@ export default function ArticleDetailScreen() {
             // Na versão web, SEMPRE mostrar artigo completo (sem divisão por partes)
             // No mobile, usar divisão por partes para melhor UX
             const shouldShowFullArticle = Platform.OS === 'web' || parts.length === 1 || !parts[0].includes("## Parte");
+            
+            // MODO RESUMO: Mostrar apenas títulos + primeiro parágrafo de cada parte
+            if (summaryMode && parts.length > 1) {
+              return parts.map((part, partIndex) => {
+                const paragraphs = part.split("\n\n");
+                const title = paragraphs.find(p => p.startsWith("## Parte"));
+                const firstParagraph = paragraphs.find(p => !p.startsWith("##") && !p.startsWith("###") && p.trim().length > 0);
+                
+                return (
+                  <ThemedView key={partIndex} style={[styles.summarySection, { backgroundColor: cardBg, borderColor }]}>
+                    {title && (
+                      <ThemedText type="subtitle" style={[styles.sectionTitle, { fontSize: fontSizes.subtitle }]}>
+                        {title.replace("## ", "")}
+                      </ThemedText>
+                    )}
+                    {firstParagraph && (
+                      <ThemedText style={[styles.summaryText, { fontSize: fontSizes.body, color: textSecondary }]}>
+                        {firstParagraph.substring(0, 200)}...
+                      </ThemedText>
+                    )}
+                  </ThemedView>
+                );
+              });
+            }
             
             // Se não houver partes definidas OU estiver na web, mostrar todo o conteúdo
             if (shouldShowFullArticle) {
@@ -1010,5 +1070,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     fontWeight: "600",
+  },
+  summaryModeButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginVertical: 16,
+    borderWidth: 1,
+  },
+  summaryModeText: {
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: "600",
+  },
+  summarySection: {
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 16,
+  },
+  summaryText: {
+    marginTop: 8,
+    lineHeight: 22,
   },
 });

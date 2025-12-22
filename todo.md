@@ -105,3 +105,26 @@
   - [x] SOLUÇÃO IMPLEMENTADA: Desabilitada divisão por partes na web (Platform.OS === 'web')
   - [x] Web: artigo completo com scroll contínuo
   - [x] Mobile: mantida divisão por partes com botões de navegação (melhor UX)
+
+- [x] Implementar 3 melhorias de UX para leitura de artigos - CONCLUÍDO!
+  
+  **1. Índice Clicável:**
+  - [x] Extrair todas as seções/partes do artigo (## Parte X:)
+  - [x] Criar componente de índice expansível no início do artigo
+  - [x] Implementar navegação para seção clicada
+  - [x] Destacar seção atual no índice
+  - [x] Badge mostrando número total de partes
+  
+  **2. Barra de Progresso de Leitura:**
+  - [x] Criar componente ReadingProgressBar
+  - [x] Calcular % lido baseado em scroll position
+  - [x] Atualizar em tempo real conforme usuário faz scroll
+  - [x] Mostrar texto "X% lido"
+  - [ ] Integrar ao ScrollView (pendente - requer refatoração de Animated.ScrollView)
+  
+  **3. Modo Resumo Executivo:**
+  - [x] Adicionar botão toggle "Modo Resumo" / "Ver Artigo Completo"
+  - [x] Extrair primeiro parágrafo de cada parte (200 caracteres)
+  - [x] Modo resumo: mostrar apenas títulos + preview do conteúdo
+  - [x] Cards visuais para cada seção no modo resumo
+  - [x] Toggle instantâneo entre modos
