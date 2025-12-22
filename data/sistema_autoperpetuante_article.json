@@ -8,10 +8,15 @@
   "readingTime": 31,
   "wordCount": 7549,
   "authors": [
-    "Equipe Siga o Dinheiro"
+    {
+      "name": "Equipe Siga o Dinheiro",
+      "role": "Analistas Financeiros",
+      "financialInterest": "Educação financeira e transparência sistêmica"
+    }
   ],
   "financialCycle": {
-    "phase": "Crise e Transferência",
-    "description": "Análise do ciclo autoperpetuante do sistema monetário moderno, com foco na transferência de riqueza iniciada em 22/agosto/2023 e previsão para 2026"
+    "inicio": "Expansão monetária pós-2008 (QE, juros baixos, inflação de ativos)",
+    "meio": "Aperto monetário 2022-2023 (juros altos, estresse no sistema, 22/agosto/2023)",
+    "fim": "Previsão 2026 (vencimentos de dívida, bail-ins, consolidação de poder)"
   }
 }
