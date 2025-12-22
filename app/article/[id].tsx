@@ -4,7 +4,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
 import { Share } from "react-native";
-import * as Speech from "expo-speech";
+import { AudioPlayer } from "@/components/audio-player";
+import { useArticleAudio } from "@/hooks/use-article-audio";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -34,8 +35,6 @@ export default function ArticleDetailScreen() {
   const fontSizes = getFontSizes();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [speechRate, setSpeechRate] = useState(1.0);
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -43,6 +42,7 @@ export default function ArticleDetailScreen() {
   const textSecondary = useThemeColor({}, "textSecondary");
 
   const article = ARTICLES.find((a) => a.id === id);
+  const audioHook = useArticleAudio(article?.content || "");
 
   if (!article) {
     return (
@@ -97,46 +97,13 @@ export default function ArticleDetailScreen() {
 
   useEffect(() => {
     return () => {
-      Speech.stop();
+      audioHook.stop();
     };
   }, []);
 
   const handlePlayAudio = async () => {
-    if (!article) return;
-
-    if (isPlaying) {
-      Speech.stop();
-      setIsPlaying(false);
-      return;
-    }
-
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-
-    const textToSpeak = `${article.title}. ${article.content}`;
-
-    Speech.speak(textToSpeak, {
-      language: "pt-BR",
-      rate: speechRate,
-      onStart: () => setIsPlaying(true),
-      onDone: () => setIsPlaying(false),
-      onStopped: () => setIsPlaying(false),
-      onError: () => {
-        setIsPlaying(false);
-        Alert.alert("Erro", "N\u00e3o foi poss\u00edvel reproduzir o \u00e1udio.");
-      },
-    });
-  };
-
-  const handleSpeedChange = () => {
-    const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
-    const currentIndex = speeds.indexOf(speechRate);
-    const nextIndex = (currentIndex + 1) % speeds.length;
-    setSpeechRate(speeds[nextIndex]);
-
-    if (isPlaying) {
-      Speech.stop();
-      setIsPlaying(false);
-    }
+    audioHook.play();
   };
 
   const formatDate = (dateString: string) => {
@@ -234,36 +201,24 @@ export default function ArticleDetailScreen() {
             {formatDate(article.date)}
           </ThemedText>
           
-          {/* Controles de \u00c1udio */}
-          <ThemedView style={[styles.audioControls, { backgroundColor: cardBg, borderColor }]}>
-            <Pressable
-              onPress={handlePlayAudio}
-              style={({ pressed }) => [
-                styles.audioButton,
-                { backgroundColor: tintColor },
-                pressed && styles.audioButtonPressed,
-              ]}
-            >
-              <IconSymbol
-                name={isPlaying ? "pause.fill" : "play.fill"}
-                size={20}
-                color="#fff"
-              />
-              <ThemedText style={styles.audioButtonText}>
-                {isPlaying ? "Pausar \u00c1udio" : "Ouvir Artigo"}
-              </ThemedText>
-            </Pressable>
-            <Pressable
-              onPress={handleSpeedChange}
-              style={({ pressed }) => [
-                styles.speedButton,
-                { borderColor },
-                pressed && { opacity: 0.7 },
-              ]}
-            >
-              <ThemedText style={styles.speedText}>{speechRate}x</ThemedText>
-            </Pressable>
-          </ThemedView>
+           {/* Botão de Áudio */}
+          <Pressable
+            onPress={handlePlayAudio}
+            style={({ pressed }) => [
+              styles.audioButton,
+              { backgroundColor: tintColor },
+              pressed && styles.audioButtonPressed,
+            ]}
+          >
+            <IconSymbol
+              name="play.fill"
+              size={20}
+              color="#fff"
+            />
+            <ThemedText style={styles.audioButtonText}>
+              Ouvir Artigo
+            </ThemedText>
+          </Pressable>
         </ThemedView>
 
         <ThemedView style={styles.articleContent}>
@@ -473,6 +428,19 @@ export default function ArticleDetailScreen() {
           </>
         )}
       </ScrollView>
+
+      {/* Player de Áudio Flutuante */}
+      {(audioHook.audioState.isPlaying || audioHook.audioState.isPaused) && (
+        <AudioPlayer
+          audioState={audioHook.audioState}
+          onPlay={audioHook.play}
+          onPause={audioHook.pause}
+          onStop={audioHook.stop}
+          onRateChange={audioHook.setRate}
+          onSkipForward={audioHook.skipForward}
+          onSkipBackward={audioHook.skipBackward}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 }
