@@ -3,7 +3,7 @@ import { useColorScheme as useSystemColorScheme } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const THEME_PREFERENCE_KEY = "@siga_o_dinheiro:theme_preference";
-const AUTO_THEME_ENABLED_KEY = "@siga_o_dinheiro:auto_theme_enabled";
+// const AUTO_THEME_ENABLED_KEY = "@siga_o_dinheiro:auto_theme_enabled"; // REMOVIDO
 
 export type ThemePreference = "light" | "dark" | "auto";
 
@@ -11,7 +11,7 @@ export function useThemePreference() {
   const systemColorScheme = useSystemColorScheme();
   const [preference, setPreference] = useState<ThemePreference>("auto");
   const [loading, setLoading] = useState(true);
-  const [autoThemeEnabled, setAutoThemeEnabled] = useState(false);
+  // const [autoThemeEnabled, setAutoThemeEnabled] = useState(false); // REMOVIDO
 
   useEffect(() => {
     loadPreference();
@@ -24,9 +24,7 @@ export function useThemePreference() {
         setPreference(stored as ThemePreference);
       }
       
-      // Verificar se Tema Automático (Nascer/Pôr do Sol) está ativo
-      const autoEnabled = await AsyncStorage.getItem(AUTO_THEME_ENABLED_KEY);
-      setAutoThemeEnabled(autoEnabled === "true");
+      // Tema Automático (Nascer/Pôr do Sol) REMOVIDO
     } catch (error) {
       console.error("Error loading theme preference:", error);
     } finally {
@@ -36,7 +34,7 @@ export function useThemePreference() {
 
   const updatePreference = async (newPreference: ThemePreference) => {
     console.log("[useThemePreference] updatePreference CHAMADO com:", newPreference);
-    console.log("[useThemePreference] Estado atual - preference:", preference, "autoThemeEnabled:", autoThemeEnabled);
+    console.log("[useThemePreference] Estado atual - preference:", preference);
     
     try {
       // Forçar atualização de estado ANTES de salvar (para feedback imediato)
@@ -47,13 +45,7 @@ export function useThemePreference() {
       await AsyncStorage.setItem(THEME_PREFERENCE_KEY, newPreference);
       console.log("[useThemePreference] Salvo no AsyncStorage:", newPreference);
       
-      // Se o usuário escolher manualmente "light" ou "dark", desativar Tema Automático
-      if (newPreference !== "auto") {
-        console.log("[useThemePreference] Desativando Tema Automático...");
-        await AsyncStorage.setItem(AUTO_THEME_ENABLED_KEY, "false");
-        setAutoThemeEnabled(false);
-        console.log("[useThemePreference] Tema Automático desativado!");
-      }
+      // Tema Automático (Nascer/Pôr do Sol) REMOVIDO
       
       console.log("[useThemePreference] updatePreference CONCLUÍDO com sucesso!");
     } catch (error) {
@@ -79,9 +71,9 @@ export function useThemePreference() {
   useEffect(() => {
     console.log("[useThemePreference] preference:", preference);
     console.log("[useThemePreference] systemColorScheme:", systemColorScheme);
-    console.log("[useThemePreference] autoThemeEnabled:", autoThemeEnabled);
+    // console.log("[useThemePreference] autoThemeEnabled:", autoThemeEnabled); // REMOVIDO
     console.log("[useThemePreference] effectiveTheme:", effectiveTheme);
-  }, [preference, systemColorScheme, autoThemeEnabled, effectiveTheme]);
+  }, [preference, systemColorScheme, effectiveTheme]);
 
   return {
     preference,

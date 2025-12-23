@@ -12,6 +12,7 @@
 - [x] Botão "Começar" (página 5) volta para página 1 em vez de entrar no app - adicionado estado completed + setTimeout para forçar navegação
 
 #### Bugs de Tema (menos críticos)
+- [x] Remover "Tema Automático (Nascer/Pôr do Sol)" que está impedindo modo manual funcionar - REMOVIDO completamente
 - [x] Corrigir seletor de tema - modo escuro não funciona (usuário não consegue forçar tema escuro)
 - [x] Corrigir onboarding - trava ao clicar "Próximo" para segunda página (adicionados logs para debug)
 - [x] Modo escuro não funciona na versão WEB (computador) - adicionado forçar tema no DOM

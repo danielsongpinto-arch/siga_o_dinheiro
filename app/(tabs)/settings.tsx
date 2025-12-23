@@ -15,7 +15,7 @@ import { useReadingReminders } from "@/hooks/use-reading-reminders";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOnboarding } from "@/hooks/use-onboarding";
 import { useReviewReminders } from "@/hooks/use-review-reminders";
-import { useAutoTheme } from "@/hooks/use-auto-theme";
+// import { useAutoTheme } from "@/hooks/use-auto-theme"; // REMOVIDO - conflitava com tema manual
 import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useDataSaver } from "@/hooks/use-data-saver";
 import { useSmartSync } from "@/hooks/use-smart-sync";
@@ -42,7 +42,7 @@ export default function SettingsScreen() {
   const { goal, createGoal, deleteGoal } = useReadingGoals();
   const { resetOnboarding } = useOnboarding();
   const { settings: reviewSettings, loading: reviewLoading, enableReminders, disableReminders, updateFrequency, updateIntervals } = useReviewReminders();
-  const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
+  // const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme(); // REMOVIDO
   const { cacheIndex, clearCache, getCacheSizeFormatted } = useOfflineCache();
   const { settings: dataSaverSettings, isOnCellular, toggleDataSaver, toggleImages, toggleAudio } = useDataSaver();
   const { scheduledDownloads, cancelScheduledDownload } = useScheduledDownloads();
@@ -761,31 +761,7 @@ export default function SettingsScreen() {
             })}
           </View>
 
-          {/* Tema Automático por Nascer/Pôr do Sol */}
-          <View style={[styles.card, { backgroundColor: colors.cardBg, marginTop: 16, borderColor: colors.border }]}>
-            <View style={styles.settingRow}>
-              <View style={styles.settingInfo}>
-                <ThemedText type="defaultSemiBold">Tema Automático (Nascer/Pôr do Sol)</ThemedText>
-                <ThemedText style={[styles.settingDescription, { color: colors.icon }]}>
-                  Alterna automaticamente entre claro e escuro baseado no horário do nascer e pôr do sol da sua localização
-                </ThemedText>
-                {autoThemeEnabled && sunTimes && (
-                  <ThemedText style={[styles.sunTimesInfo, { color: colors.tint }]}>
-                    Nascer: {sunTimes.sunrise.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} | Pôr: {sunTimes.sunset.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
-                  </ThemedText>
-                )}
-              </View>
-              <Switch
-                value={autoThemeEnabled}
-                onValueChange={async (value) => {
-                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  toggleAutoTheme(value);
-                }}
-                trackColor={{ false: colors.border, true: colors.tint }}
-                thumbColor="#fff"
-              />
-            </View>
-          </View>
+          {/* Tema Automático (Nascer/Pôr do Sol) REMOVIDO - conflitava com tema manual */}
         </View>
 
         {/* Gerenciamento de Cache Offline */}
