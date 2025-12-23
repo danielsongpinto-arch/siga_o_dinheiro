@@ -49,6 +49,7 @@ export default function OnboardingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [completed, setCompleted] = useState(false);
   const colors = {
     text: useThemeColor({}, "text"),
     background: useThemeColor({}, "background"),
@@ -60,17 +61,37 @@ export default function OnboardingScreen() {
   // Componente wrapper para garantir cliques na web
   const WebClickable = ({ children, onPress, style }: any) => {
     if (Platform.OS === "web") {
+      const flatStyle = StyleSheet.flatten(style);
       return (
-        <div
-          onClick={onPress}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            console.log("[WebClickable] Button clicked!");
+            onPress();
+          }}
           style={{
-            ...StyleSheet.flatten(style),
+            ...flatStyle,
             cursor: "pointer",
             userSelect: "none",
+            border: "none",
+            outline: "none",
+            padding: flatStyle.paddingVertical || flatStyle.padding || 0,
+            paddingLeft: flatStyle.paddingHorizontal || flatStyle.paddingLeft || flatStyle.padding || 0,
+            paddingRight: flatStyle.paddingHorizontal || flatStyle.paddingRight || flatStyle.padding || 0,
+            paddingTop: flatStyle.paddingVertical || flatStyle.paddingTop || flatStyle.padding || 0,
+            paddingBottom: flatStyle.paddingVertical || flatStyle.paddingBottom || flatStyle.padding || 0,
+            margin: 0,
+            font: "inherit",
+            color: "inherit",
+            textAlign: "inherit",
+            display: "flex",
+            alignItems: flatStyle.alignItems || "center",
+            justifyContent: flatStyle.justifyContent || "center",
+            flexDirection: flatStyle.flexDirection || "row",
           }}
         >
           {children}
-        </div>
+        </button>
       );
     }
     return (
@@ -109,15 +130,27 @@ export default function OnboardingScreen() {
       console.log("[Onboarding] currentIndex atualizado para", nextIndex);
     } else {
       console.log("[Onboarding] Último slide, completando onboarding...");
+      setCompleted(true);
       await AsyncStorage.setItem(ONBOARDING_KEY, "true");
       console.log("[Onboarding] Salvou onboarding_completed=true");
       console.log("[Onboarding] Navegando para /(tabs)...");
-      router.replace("/(tabs)");
+      
+      // Forçar navegação com timeout para garantir que AsyncStorage foi salvo
+      setTimeout(() => {
+        console.log("[Onboarding] Executando router.replace...");
+        router.replace("/(tabs)");
+      }, 100);
+      
       console.log("[Onboarding] handleNext CONCLUÍDO");
     }
   };
 
   const currentSlide = slides[currentIndex];
+
+  // Se completou, não renderizar nada (aguardando navegação)
+  if (completed) {
+    return null;
+  }
 
   return (
     <ThemedView

@@ -8,6 +8,8 @@
 - [x] Botão "Começar" na última página do onboarding NÃO FUNCIONA - trocado Pressable por WebClickable
 - [x] Botão "Pular Tour" NÃO FUNCIONA - trocado Pressable por WebClickable
 - [x] NINGUÉM CONSEGUE ENTRAR NO APP - CORRIGIDO com WebClickable + logs detalhados
+- [x] Botão "Próximo" não avança para próxima página - trocado div por button no WebClickable (div não preserva estado React)
+- [x] Botão "Começar" (página 5) volta para página 1 em vez de entrar no app - adicionado estado completed + setTimeout para forçar navegação
 
 #### Bugs de Tema (menos críticos)
 - [x] Corrigir seletor de tema - modo escuro não funciona (usuário não consegue forçar tema escuro)
