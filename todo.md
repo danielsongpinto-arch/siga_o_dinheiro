@@ -2,7 +2,14 @@
 
 ## Tarefas em Andamento (Solicitação Atual do Usuário)
 
-### Bugs Críticos Reportados pelo Usuário
+### Bugs CRÍTICOS Reportados pelo Usuário
+
+#### BUG CRÍTICO - ONBOARDING BLOQUEADO
+- [x] Botão "Começar" na última página do onboarding NÃO FUNCIONA - trocado Pressable por WebClickable
+- [x] Botão "Pular Tour" NÃO FUNCIONA - trocado Pressable por WebClickable
+- [x] NINGUÉM CONSEGUE ENTRAR NO APP - CORRIGIDO com WebClickable + logs detalhados
+
+#### Bugs de Tema (menos críticos)
 - [x] Corrigir seletor de tema - modo escuro não funciona (usuário não consegue forçar tema escuro)
 - [x] Corrigir onboarding - trava ao clicar "Próximo" para segunda página (adicionados logs para debug)
 - [x] Modo escuro não funciona na versão WEB (computador) - adicionado forçar tema no DOM

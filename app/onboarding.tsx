@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable, Dimensions } from "react-native";
+import { View, StyleSheet, Pressable, Dimensions, Platform, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -57,24 +57,63 @@ export default function OnboardingScreen() {
     border: useThemeColor({ light: "#E5E5E5", dark: "#2C2C2E" }, "background"),
   };
 
+  // Componente wrapper para garantir cliques na web
+  const WebClickable = ({ children, onPress, style }: any) => {
+    if (Platform.OS === "web") {
+      return (
+        <div
+          onClick={onPress}
+          style={{
+            ...StyleSheet.flatten(style),
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+        >
+          {children}
+        </div>
+      );
+    }
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={style}>
+        {children}
+      </TouchableOpacity>
+    );
+  };
+
   const handleSkip = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    console.log("[Onboarding] handleSkip CHAMADO");
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch (e) {
+      // Haptics pode falhar na web
+    }
+    console.log("[Onboarding] Salvando onboarding_completed=true...");
     await AsyncStorage.setItem(ONBOARDING_KEY, "true");
+    console.log("[Onboarding] Navegando para /(tabs)...");
     router.replace("/(tabs)");
+    console.log("[Onboarding] handleSkip CONCLUÍDO");
   };
 
   const handleNext = async () => {
-    console.log("[Onboarding] handleNext chamado. currentIndex:", currentIndex, "slides.length:", slides.length);
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    console.log("[Onboarding] handleNext CHAMADO. currentIndex:", currentIndex, "slides.length:", slides.length);
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch (e) {
+      // Haptics pode falhar na web
+    }
     
     if (currentIndex < slides.length - 1) {
       const nextIndex = currentIndex + 1;
       console.log("[Onboarding] Avançando para slide", nextIndex);
       setCurrentIndex(nextIndex);
+      console.log("[Onboarding] currentIndex atualizado para", nextIndex);
     } else {
-      console.log("[Onboarding] Último slide, completando onboarding");
+      console.log("[Onboarding] Último slide, completando onboarding...");
       await AsyncStorage.setItem(ONBOARDING_KEY, "true");
+      console.log("[Onboarding] Salvou onboarding_completed=true");
+      console.log("[Onboarding] Navegando para /(tabs)...");
       router.replace("/(tabs)");
+      console.log("[Onboarding] handleNext CONCLUÍDO");
     }
   };
 
@@ -92,9 +131,9 @@ export default function OnboardingScreen() {
     >
       {/* Skip Button */}
       <View style={styles.header}>
-        <Pressable onPress={handleSkip} style={styles.skipButton}>
+        <WebClickable onPress={handleSkip} style={styles.skipButton}>
           <ThemedText style={[styles.skipText, { color: colors.tint }]}>Pular Tour</ThemedText>
-        </Pressable>
+        </WebClickable>
       </View>
 
       {/* Content */}
@@ -134,7 +173,7 @@ export default function OnboardingScreen() {
         </View>
 
         {/* Next Button */}
-        <Pressable
+        <WebClickable
           onPress={handleNext}
           style={[styles.nextButton, { backgroundColor: colors.tint }]}
         >
@@ -142,7 +181,7 @@ export default function OnboardingScreen() {
             {currentIndex === slides.length - 1 ? "Começar" : "Próximo"}
           </ThemedText>
           <IconSymbol name="chevron.right" size={20} color="#fff" />
-        </Pressable>
+        </WebClickable>
       </View>
     </ThemedView>
   );
