@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, ScrollView, Pressable, StyleSheet, Switch, Alert, Platform } from "react-native";
+import { View, ScrollView, Pressable, TouchableOpacity, StyleSheet, Switch, Alert, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -73,8 +73,11 @@ export default function SettingsScreen() {
     ];
 
   const handleThemeChange = async (newTheme: ThemePreference) => {
+    console.log("[handleThemeChange] Clicou em:", newTheme);
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    console.log("[handleThemeChange] Chamando updatePreference...");
     await updatePreference(newTheme);
+    console.log("[handleThemeChange] Preferência atualizada!");
   };
 
   return (
@@ -680,9 +683,10 @@ export default function SettingsScreen() {
               const isLast = index === themeOptions.length - 1;
 
               return (
-                <Pressable
+                <TouchableOpacity
                   key={option.value}
                   onPress={() => handleThemeChange(option.value)}
+                  activeOpacity={0.7}
                   style={[
                     styles.optionItem,
                     { borderBottomColor: colors.border },
@@ -726,7 +730,7 @@ export default function SettingsScreen() {
                   {isSelected && (
                     <IconSymbol name="checkmark.circle.fill" size={24} color={colors.tint} />
                   )}
-                </Pressable>
+                </TouchableOpacity>
               );
             })}
           </View>
@@ -1349,6 +1353,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     borderBottomWidth: 1,
+    cursor: "pointer" as any,
   },
   optionFirst: {
     borderTopLeftRadius: 12,
