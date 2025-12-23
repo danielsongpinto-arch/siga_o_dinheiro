@@ -64,10 +64,15 @@ export default function OnboardingScreen() {
   };
 
   const handleNext = async () => {
+    console.log("[Onboarding] handleNext chamado. currentIndex:", currentIndex, "slides.length:", slides.length);
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
     if (currentIndex < slides.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      const nextIndex = currentIndex + 1;
+      console.log("[Onboarding] Avançando para slide", nextIndex);
+      setCurrentIndex(nextIndex);
     } else {
+      console.log("[Onboarding] Último slide, completando onboarding");
       await AsyncStorage.setItem(ONBOARDING_KEY, "true");
       router.replace("/(tabs)");
     }

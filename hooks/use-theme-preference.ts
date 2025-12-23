@@ -38,7 +38,7 @@ export function useThemePreference() {
   };
 
   // Determinar o tema efetivo baseado na preferência
-  const effectiveTheme = preference === "auto" ? systemColorScheme : preference;
+  const effectiveTheme = preference === "auto" ? (systemColorScheme || "light") : preference;
 
   return {
     preference,

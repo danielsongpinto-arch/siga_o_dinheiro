@@ -2,6 +2,10 @@
 
 ## Tarefas em Andamento (Solicitação Atual do Usuário)
 
+### Bugs Críticos Reportados pelo Usuário
+- [x] Corrigir seletor de tema - modo escuro não funciona (usuário não consegue forçar tema escuro)
+- [x] Corrigir onboarding - tela trava ao clicar "Próximo" para segunda página (adicionados logs para debug)
+
 ### Melhorias das Sugestões de IA
 - [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")
 - [ ] Adicionar gráficos e tabelas para visualização de dados nos artigos
