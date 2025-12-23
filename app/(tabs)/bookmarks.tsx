@@ -19,6 +19,7 @@ interface ArticleComment {
 import { exportBookmarksToPDF } from "@/lib/export-pdf";
 import { QuoteImageGenerator } from "@/components/quote-image-generator";
 import { useReviewTracking } from "@/hooks/use-review-tracking";
+import { useShareTracking } from "@/hooks/use-share-tracking";
 
 export default function BookmarksScreen() {
   const router = useRouter();
@@ -39,6 +40,7 @@ export default function BookmarksScreen() {
   const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
   const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month" | "old">("all");
   const { trackBookmarkView } = useReviewTracking();
+  const { trackShare } = useShareTracking();
 
   useEffect(() => {
     loadBookmarks();
@@ -71,12 +73,12 @@ export default function BookmarksScreen() {
     }
   };
 
-  const navigateToArticle = async (articleId: string, bookmarkCreatedAt?: string) => {
+  const navigateToArticle = async (articleId: string, articleTitle: string, bookmarkText: string, bookmarkCreatedAt?: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
     // Rastrear visualização de destaque antigo
     if (bookmarkCreatedAt) {
-      const wasTracked = await trackBookmarkView(bookmarkCreatedAt);
+      const wasTracked = await trackBookmarkView(bookmarkCreatedAt, articleId, articleTitle, bookmarkText);
       if (wasTracked) {
         console.log("[ReviewTracking] Visualização de destaque antigo registrada");
       }
@@ -85,12 +87,14 @@ export default function BookmarksScreen() {
     router.push(`/article/${articleId}` as any);
   };
 
-  const shareAsImage = (bookmark: Bookmark) => {
+  const shareAsImage = async (bookmark: Bookmark) => {
     setSelectedBookmark(bookmark);
     setGeneratingImage(true);
+    await trackShare();
   };
 
   const shareBookmarkText = async (bookmark: Bookmark) => {
+    await trackShare();
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
@@ -178,6 +182,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
   const shareBookmarks = async () => {
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      await trackShare();
       
       if (filteredBookmarks.length === 0) {
         Alert.alert("Nenhum destaque", "Não há destaques para compartilhar.");
@@ -571,7 +576,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             <ThemedView key={key} style={styles.section}>
               {groupBy === "article" && (
                 <Pressable
-                  onPress={() => navigateToArticle(items[0].articleId, items[0].createdAt)}
+                  onPress={() => navigateToArticle(items[0].articleId, items[0].articleTitle, items[0].excerpt, items[0].createdAt)}
                   style={styles.sectionHeader}
                 >
                   <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -587,7 +592,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                   style={[styles.bookmarkCard, { borderColor: colors.border }]}
                 >
                   <Pressable
-                    onPress={() => navigateToArticle(bookmark.articleId, bookmark.createdAt)}
+                    onPress={() => navigateToArticle(bookmark.articleId, bookmark.articleTitle, bookmark.excerpt, bookmark.createdAt)}
                     style={styles.bookmarkContent}
                   >
                     <ThemedText type="defaultSemiBold" style={styles.partTitle}>

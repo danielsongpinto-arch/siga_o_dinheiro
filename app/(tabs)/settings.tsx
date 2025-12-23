@@ -17,25 +17,25 @@ import { useReviewReminders } from "@/hooks/use-review-reminders";
 import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const colors = {
     text: useThemeColor({}, "text"),
     background: useThemeColor({}, "background"),
     tint: useThemeColor({}, "tint"),
     icon: useThemeColor({}, "icon"),
-    border: useThemeColor({ light: "#E5E5E5", dark: "#2C2C2E" }, "background"),
-    cardBg: useThemeColor({ light: "#F9F9F9", dark: "#1C1C1E" }, "background"),
+    cardBg: useThemeColor({ light: "#fff", dark: "#1C1C1E" }, "background"),
+    border: useThemeColor({ light: "#E5E5EA", dark: "#38383A" }, "text"),
   };
 
-  const { preference, updatePreference } = useThemePreference();
-  const { isAuthenticated } = useAuth();
+  const { preference: themePreference, updatePreference } = useThemePreference();
   const { syncEnabled, isSyncing, lastSyncTime, toggleSync, performSync } = useBookmarkSync();
+  const { user, isAuthenticated } = useAuth();
   const { isNightMode, autoModeEnabled, hasManualOverride, toggleAutoMode, setManualMode, clearManualOverride } = useNightMode();
   const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
   const { goal, createGoal, deleteGoal } = useReadingGoals();
   const { resetOnboarding } = useOnboarding();
-  const { settings: reviewSettings, enableReminders, disableReminders, updateFrequency } = useReviewReminders();
-  const router = useRouter();
+  const { settings: reviewSettings, loading: reviewLoading, enableReminders, disableReminders, updateFrequency, updateIntervals } = useReviewReminders();
 
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -426,59 +426,115 @@ export default function SettingsScreen() {
 
             {/* Configurar Frequência */}
             {reviewSettings.enabled && (
-              <Pressable
-                onPress={async () => {
-                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  Alert.alert(
-                    "Frequência dos Lembretes",
-                    "Com que frequência deseja receber lembretes?",
-                    [
-                      {
-                        text: "Semanal",
-                        onPress: async () => {
-                          await updateFrequency("weekly");
-                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+              <>
+                <Pressable
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    Alert.alert(
+                      "Frequência dos Lembretes",
+                      "Com que frequência deseja receber lembretes?",
+                      [
+                        {
+                          text: "Semanal",
+                          onPress: async () => {
+                            await updateFrequency("weekly");
+                            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                          },
                         },
-                      },
-                      {
-                        text: "Quinzenal",
-                        onPress: async () => {
-                          await updateFrequency("biweekly");
-                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        {
+                          text: "Quinzenal",
+                          onPress: async () => {
+                            await updateFrequency("biweekly");
+                            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                          },
                         },
-                      },
-                      {
-                        text: "Mensal",
-                        onPress: async () => {
-                          await updateFrequency("monthly");
-                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        {
+                          text: "Mensal",
+                          onPress: async () => {
+                            await updateFrequency("monthly");
+                            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                          },
                         },
-                      },
-                      { text: "Cancelar", style: "cancel" },
-                    ]
-                  );
-                }}
-                style={({ pressed }) => [
-                  styles.toggleItem,
-                  styles.toggleItemLast,
-                  pressed && styles.pressed,
-                ]}
-              >
-                <View style={styles.toggleLeft}>
-                  <IconSymbol name="calendar" size={24} color={colors.icon} />
-                  <View style={styles.toggleText}>
-                    <ThemedText type="defaultSemiBold">Frequência</ThemedText>
-                    <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
-                      {reviewSettings.frequency === "weekly"
-                        ? "Semanal"
-                        : reviewSettings.frequency === "biweekly"
-                          ? "Quinzenal"
-                          : "Mensal"}
-                    </ThemedText>
+                        { text: "Cancelar", style: "cancel" },
+                      ]
+                    );
+                  }}
+                  style={({ pressed }) => [
+                    styles.toggleItem,
+                    { borderBottomColor: colors.border },
+                    pressed && styles.pressed,
+                  ]}
+                >
+                  <View style={styles.toggleLeft}>
+                    <IconSymbol name="calendar" size={24} color={colors.icon} />
+                    <View style={styles.toggleText}>
+                      <ThemedText type="defaultSemiBold">Frequência</ThemedText>
+                      <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                        {reviewSettings.frequency === "weekly"
+                          ? "Semanal"
+                          : reviewSettings.frequency === "biweekly"
+                            ? "Quinzenal"
+                            : "Mensal"}
+                      </ThemedText>
+                    </View>
                   </View>
-                </View>
-                <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-              </Pressable>
+                  <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+                </Pressable>
+
+                {/* Configurar Intervalos */}
+                <Pressable
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    
+                    const availableIntervals = [30, 60, 90, 120];
+                    const currentIntervals = reviewSettings.intervals;
+                    
+                    Alert.alert(
+                      "Intervalos de Revisão",
+                      "Selecione os intervalos para receber lembretes (pode escolher múltiplos)",
+                      [
+                        ...availableIntervals.map((interval) => ({
+                          text: `${interval} dias ${currentIntervals.includes(interval) ? "✓" : ""}`,
+                          onPress: async () => {
+                            let newIntervals: number[];
+                            if (currentIntervals.includes(interval)) {
+                              // Remover intervalo
+                              newIntervals = currentIntervals.filter((i) => i !== interval);
+                              // Garantir que sempre tenha pelo menos um intervalo
+                              if (newIntervals.length === 0) {
+                                Alert.alert("Erro", "Você precisa ter pelo menos um intervalo ativo");
+                                return;
+                              }
+                            } else {
+                              // Adicionar intervalo
+                              newIntervals = [...currentIntervals, interval].sort((a, b) => a - b);
+                            }
+                            await updateIntervals(newIntervals);
+                            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                          },
+                        })),
+                        { text: "Fechar", style: "cancel" },
+                      ]
+                    );
+                  }}
+                  style={({ pressed }) => [
+                    styles.toggleItem,
+                    styles.toggleItemLast,
+                    pressed && styles.pressed,
+                  ]}
+                >
+                  <View style={styles.toggleLeft}>
+                    <IconSymbol name="clock.fill" size={24} color={colors.icon} />
+                    <View style={styles.toggleText}>
+                      <ThemedText type="defaultSemiBold">Intervalos</ThemedText>
+                      <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                        {reviewSettings.intervals.join(", ")} dias
+                      </ThemedText>
+                    </View>
+                  </View>
+                  <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+                </Pressable>
+              </>
             )}
           </View>
         </View>
@@ -608,7 +664,7 @@ export default function SettingsScreen() {
 
           <View style={[styles.optionsContainer, { backgroundColor: colors.cardBg }]}>
             {themeOptions.map((option, index) => {
-              const isSelected = preference === option.value;
+              const isSelected = themePreference === option.value;
               const isFirst = index === 0;
               const isLast = index === themeOptions.length - 1;
 

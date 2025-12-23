@@ -112,4 +112,20 @@ export const BADGES: Badge[] = [
     requirement: 10,
     type: "special",
   },
+  {
+    id: "influencer",
+    title: "Influenciador",
+    description: "Compartilhe 10 destaques ou comentários",
+    icon: "square.and.arrow.up.fill",
+    requirement: 10,
+    type: "engagement",
+  },
+  {
+    id: "broadcaster",
+    title: "Divulgador",
+    description: "Compartilhe 50 destaques ou comentários",
+    icon: "megaphone.fill",
+    requirement: 50,
+    type: "engagement",
+  },
 ];

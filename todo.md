@@ -390,3 +390,38 @@
 - [x] Ícone: square.and.arrow.up (cor tint)
 - [x] Posicionar ao lado dos botões editar/deletar (primeiro na ordem)
 - [x] Arquivo share-comment.ts criado com funções shareCommentAsText e shareCommentAsImage
+
+
+## Melhorias Finais - Décima Terceira Rodada
+
+### 37. Lembretes personalizados de revisão
+- [x] Adicionar opção de intervalos customizados nas Configurações
+- [x] Opções: 30 dias (padrão), 60 dias, 90 dias, 120 dias
+- [x] Permitir múltiplos intervalos ativos simultaneamente (seleção com ✓)
+- [x] Notificações específicas por intervalo: "X destaques de Y+ dias atrás"
+- [x] Persistir configurações em AsyncStorage (campo intervals no ReviewRemindersSettings)
+- [x] Atualizar hook useReviewReminders para suportar múltiplos intervalos
+- [x] Função updateIntervals adicionada ao hook
+- [x] Notificações agendadas para cada intervalo configurado (notificationIds: Record<number, string>)
+
+### 38. Histórico de revisões
+- [x] Criar seção "Histórico de Revisões" na tela Estatísticas
+- [x] Mostrar lista de revisões: data, artigo, destaque revisado (excerpt)
+- [x] Ordenar por data (mais recente primeiro - array já ordenado no hook)
+- [x] Indicador visual: ícone clock.fill roxo + data formatada (dd MMM yyyy HH:mm)
+- [x] Limite de 20 revisões mais recentes (slice(0, 20))
+- [x] Design: lista com cards compactos, scroll vertical (dentro do ScrollView principal)
+- [x] Interface ReviewEntry adicionada ao hook useReviewTracking
+- [x] Função addReviewEntry criada para gerenciar histórico
+- [x] trackBookmarkView atualizado para passar articleTitle e bookmarkText
+
+### 39. Badges de compartilhamento
+- [x] Adicionar badge "Influenciador" (10 compartilhamentos)
+- [x] Adicionar badge "Divulgador" (50 compartilhamentos)
+- [x] Criar hook useShareTracking para rastrear compartilhamentos
+- [x] Incrementar contador ao compartilhar destaques ou comentários
+- [x] Integrar com sistema de conquistas existente (useAchievements)
+- [x] Ícones: square.and.arrow.up.fill (Influenciador), megaphone.fill (Divulgador)
+- [x] trackShare adicionado em: shareAsImage, shareBookmarkText, shareBookmarks, handleExportComments, handleShareComment
+- [x] Badges tipo "engagement" adicionados ao arquivo badges.ts
+- [x] Função getBadgeProgress atualizada para incluir progresso de compartilhamentosdos badges na tela Estatísticas

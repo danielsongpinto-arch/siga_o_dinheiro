@@ -9,7 +9,7 @@ import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useAchievements } from "@/hooks/use-achievements";
 import { useReadingPatterns } from "@/hooks/use-reading-patterns";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
-import { useReviewTracking } from "@/hooks/use-review-tracking";
+import { useReviewTracking, type ReviewEntry } from "@/hooks/use-review-tracking";
 import { HeatmapChart } from "@/components/heatmap-chart";
 import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
@@ -41,7 +41,7 @@ export default function StatsScreen() {
   const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
   const { getHeatmapData, getPeakTime, getTotalActivities } = useReadingPatterns();
   const { goal, history: goalsHistory, getProgress, getDaysRemaining } = useReadingGoals();
-  const { reviewCount } = useReviewTracking();
+  const { reviewCount, history: reviewHistory } = useReviewTracking();
 
   useEffect(() => {
     loadBookmarks();
@@ -366,6 +366,51 @@ export default function StatsScreen() {
                 ) : null;
               })()}
             </View>
+
+            {/* Histórico de Revisões */}
+            {reviewHistory.length > 0 && (
+              <View style={styles.section}>
+                <ThemedText type="subtitle" style={styles.sectionTitle}>
+                  Histórico de Revisões
+                </ThemedText>
+                <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+                  {reviewHistory.slice(0, 20).map((entry, index) => (
+                    <View
+                      key={entry.id}
+                      style={[
+                        styles.listItem,
+                        { borderBottomColor: colors.border },
+                        index === Math.min(reviewHistory.length, 20) - 1 && styles.listItemLast,
+                      ]}
+                    >
+                      <View style={styles.listItemLeft}>
+                        <IconSymbol name="clock.fill" size={20} color="#8B5CF6" />
+                        <View style={{ flex: 1 }}>
+                          <ThemedText type="defaultSemiBold" numberOfLines={1}>
+                            {entry.articleTitle}
+                          </ThemedText>
+                          <ThemedText
+                            style={[styles.reviewHistoryExcerpt, { color: colors.icon }]}
+                            numberOfLines={2}
+                          >
+                            {entry.bookmarkText}
+                          </ThemedText>
+                          <ThemedText style={[styles.reviewHistoryDate, { color: colors.icon }]}>
+                            {new Date(entry.reviewedAt).toLocaleDateString("pt-BR", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </ThemedText>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
 
             {/* Artigos Mais Comentados */}
             {topCommentedArticles.length > 0 && (
@@ -1110,5 +1155,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: "center",
     fontWeight: "500",
+  },
+  reviewHistoryExcerpt: {
+    fontSize: 13,
+    marginTop: 4,
+    lineHeight: 18,
+  },
+  reviewHistoryDate: {
+    fontSize: 12,
+    marginTop: 4,
   },
 });

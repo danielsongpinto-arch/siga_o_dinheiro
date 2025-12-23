@@ -3,13 +3,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const STORAGE_KEY = "review_tracking";
 
+export interface ReviewEntry {
+  id: string;
+  articleId: string;
+  articleTitle: string;
+  bookmarkText: string;
+  reviewedAt: string;
+}
+
 export interface ReviewTrackingData {
   reviewCount: number; // Contador de revisões de destaques antigos
   lastReviewDate?: string; // Data da última revisão
+  history: ReviewEntry[]; // Histórico de revisões (máximo 20)
 }
 
 const DEFAULT_DATA: ReviewTrackingData = {
   reviewCount: 0,
+  history: [],
 };
 
 export function useReviewTracking() {
@@ -42,12 +52,28 @@ export function useReviewTracking() {
     }
   };
 
-  // Incrementar contador de revisões
-  const incrementReviewCount = async () => {
+  // Incrementar contador de revisões e adicionar ao histórico
+  const addReviewEntry = async (entry: Omit<ReviewEntry, "id" | "reviewedAt">) => {
+    const newEntry: ReviewEntry = {
+      ...entry,
+      id: Date.now().toString(),
+      reviewedAt: new Date().toISOString(),
+    };
+    
+    // Adicionar nova entrada no início do histórico
+    const newHistory = [newEntry, ...data.history];
+    
+    // Limitar a 20 entradas mais recentes
+    if (newHistory.length > 20) {
+      newHistory.splice(20);
+    }
+    
     const newData: ReviewTrackingData = {
       reviewCount: data.reviewCount + 1,
-      lastReviewDate: new Date().toISOString(),
+      lastReviewDate: newEntry.reviewedAt,
+      history: newHistory,
     };
+    
     await saveData(newData);
   };
 
@@ -60,9 +86,13 @@ export function useReviewTracking() {
   };
 
   // Registrar visualização de destaque antigo
-  const trackBookmarkView = async (createdAt: string) => {
+  const trackBookmarkView = async (createdAt: string, articleId: string, articleTitle: string, bookmarkText: string) => {
     if (isOldBookmark(createdAt)) {
-      await incrementReviewCount();
+      await addReviewEntry({
+        articleId,
+        articleTitle,
+        bookmarkText,
+      });
       return true; // Retorna true se foi contado como revisão
     }
     return false;
@@ -71,6 +101,7 @@ export function useReviewTracking() {
   return {
     reviewCount: data.reviewCount,
     lastReviewDate: data.lastReviewDate,
+    history: data.history,
     loading,
     trackBookmarkView,
     isOldBookmark,

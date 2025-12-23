@@ -8,12 +8,15 @@ const STORAGE_KEY = "review_reminders_settings";
 export interface ReviewRemindersSettings {
   enabled: boolean;
   frequency: "weekly" | "biweekly" | "monthly";
-  notificationId?: string;
+  intervals: number[]; // Intervalos em dias (ex: [30, 60, 90])
+  notificationIds: Record<number, string>; // Map de intervalo -> notificationId
 }
 
 const DEFAULT_SETTINGS: ReviewRemindersSettings = {
   enabled: false,
   frequency: "weekly",
+  intervals: [30], // Padrão: apenas 30 dias
+  notificationIds: {},
 };
 
 export function useReviewReminders() {
@@ -71,9 +74,13 @@ export function useReviewReminders() {
         return null;
       }
 
-      // Cancelar notificação anterior se existir
-      if (settings.notificationId) {
-        await Notifications.cancelScheduledNotificationAsync(settings.notificationId);
+      // Cancelar notificações anteriores se existirem
+      for (const notifId of Object.values(settings.notificationIds)) {
+        try {
+          await Notifications.cancelScheduledNotificationAsync(notifId);
+        } catch (error) {
+          console.error("Error canceling notification:", error);
+        }
       }
 
       // Calcular intervalo em segundos
@@ -92,30 +99,32 @@ export function useReviewReminders() {
           intervalSeconds = 7 * 24 * 60 * 60;
       }
 
-      // Contar destaques antigos (30+ dias)
-      const oldBookmarks = await getOldBookmarks(30);
-      const count = oldBookmarks.length;
+      // Agendar notificações para cada intervalo configurado
+      const newNotificationIds: Record<number, string> = {};
+      
+      for (const interval of settings.intervals) {
+        const oldBookmarks = await getOldBookmarks(interval);
+        const count = oldBookmarks.length;
 
-      if (count === 0) {
-        console.log("No old bookmarks to review");
-        return null;
+        if (count > 0) {
+          const notificationId = await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "📚 Hora de Revisar seus Destaques",
+              body: `Você tem ${count} ${count === 1 ? "destaque" : "destaques"} de ${interval}+ dias atrás para revisar`,
+              data: { type: "review_reminder", interval },
+            },
+            trigger: {
+              type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+              seconds: intervalSeconds,
+              repeats: true,
+            } as Notifications.TimeIntervalTriggerInput,
+          });
+          
+          newNotificationIds[interval] = notificationId;
+        }
       }
 
-      // Agendar notificação recorrente
-      const notificationId = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "📚 Hora de Revisar seus Destaques",
-          body: `Você tem ${count} ${count === 1 ? "destaque" : "destaques"} de mais de 30 dias atrás para revisar`,
-          data: { type: "review_reminder" },
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: intervalSeconds,
-          repeats: true,
-        } as Notifications.TimeIntervalTriggerInput,
-      });
-
-      return notificationId;
+      return newNotificationIds;
     } catch (error) {
       console.error("Error scheduling notification:", error);
       return null;
@@ -123,22 +132,23 @@ export function useReviewReminders() {
   };
 
   const enableReminders = async (frequency: "weekly" | "biweekly" | "monthly") => {
-    const notificationId = await scheduleNotification();
+    const notificationIds = await scheduleNotification();
     
     const newSettings: ReviewRemindersSettings = {
       enabled: true,
       frequency,
-      notificationId: notificationId || undefined,
+      intervals: settings.intervals,
+      notificationIds: notificationIds || {},
     };
 
     await saveSettings(newSettings);
   };
 
   const disableReminders = async () => {
-    // Cancelar notificação agendada
-    if (settings.notificationId) {
+    // Cancelar notificações agendadas
+    for (const notifId of Object.values(settings.notificationIds)) {
       try {
-        await Notifications.cancelScheduledNotificationAsync(settings.notificationId);
+        await Notifications.cancelScheduledNotificationAsync(notifId);
       } catch (error) {
         console.error("Error canceling notification:", error);
       }
@@ -147,6 +157,8 @@ export function useReviewReminders() {
     const newSettings: ReviewRemindersSettings = {
       enabled: false,
       frequency: settings.frequency,
+      intervals: settings.intervals,
+      notificationIds: {},
     };
 
     await saveSettings(newSettings);
@@ -160,7 +172,8 @@ export function useReviewReminders() {
       const newSettings: ReviewRemindersSettings = {
         enabled: true,
         frequency,
-        notificationId: notificationId || settings.notificationId,
+        intervals: settings.intervals,
+        notificationIds: notificationId || settings.notificationIds,
       };
 
       await saveSettings(newSettings);
@@ -173,16 +186,37 @@ export function useReviewReminders() {
     }
   };
 
-  const getOldBookmarksCounts = async () => {
-    const thirtyDays = await getOldBookmarks(30);
-    const sixtyDays = await getOldBookmarks(60);
-    const ninetyDays = await getOldBookmarks(90);
+  const updateIntervals = async (intervals: number[]) => {
+    if (settings.enabled) {
+      // Reagendar com novos intervalos
+      const notificationIds = await scheduleNotification();
+      
+      const newSettings: ReviewRemindersSettings = {
+        enabled: true,
+        frequency: settings.frequency,
+        intervals,
+        notificationIds: notificationIds || {},
+      };
 
-    return {
-      thirtyDays: thirtyDays.length,
-      sixtyDays: sixtyDays.length,
-      ninetyDays: ninetyDays.length,
-    };
+      await saveSettings(newSettings);
+    } else {
+      // Apenas atualizar intervalos sem agendar
+      await saveSettings({
+        ...settings,
+        intervals,
+      });
+    }
+  };
+
+  const getOldBookmarksCounts = async () => {
+    const counts: Record<number, number> = {};
+    
+    for (const interval of settings.intervals) {
+      const bookmarks = await getOldBookmarks(interval);
+      counts[interval] = bookmarks.length;
+    }
+
+    return counts;
   };
 
   return {
@@ -191,6 +225,7 @@ export function useReviewReminders() {
     enableReminders,
     disableReminders,
     updateFrequency,
+    updateIntervals,
     getOldBookmarksCounts,
   };
 }

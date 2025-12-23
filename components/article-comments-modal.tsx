@@ -9,6 +9,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { useArticleComments, ArticleComment } from "@/hooks/use-article-comments";
 import { exportCommentsToPDF, shareCommentsAsText } from "@/lib/export-comments";
 import { shareCommentAsText, shareCommentAsImage } from "@/lib/share-comment";
+import { useShareTracking } from "@/hooks/use-share-tracking";
 
 interface ArticleCommentsModalProps {
   visible: boolean;
@@ -40,6 +41,7 @@ export function ArticleCommentsModal({
   };
 
   const { comments, addComment, updateComment, deleteComment } = useArticleComments(articleId);
+  const { trackShare } = useShareTracking();
 
   // Filtrar comentários por busca e data
   const filteredComments = comments.filter((comment) => {
@@ -112,6 +114,7 @@ export function ArticleCommentsModal({
           text: "PDF",
           onPress: async () => {
             try {
+              await trackShare();
               await exportCommentsToPDF();
               await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             } catch (error) {
@@ -123,6 +126,7 @@ export function ArticleCommentsModal({
           text: "Texto",
           onPress: async () => {
             try {
+              await trackShare();
               await shareCommentsAsText();
               await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             } catch (error) {
@@ -144,6 +148,7 @@ export function ArticleCommentsModal({
           text: "Imagem",
           onPress: async () => {
             try {
+              await trackShare();
               await shareCommentAsImage({
                 ...comment,
                 articleTitle,
@@ -158,6 +163,7 @@ export function ArticleCommentsModal({
           text: "Texto",
           onPress: async () => {
             try {
+              await trackShare();
               await shareCommentAsText({
                 ...comment,
                 articleTitle,

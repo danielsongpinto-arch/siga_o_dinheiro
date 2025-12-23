@@ -9,6 +9,7 @@ import { useComments } from "./use-comments";
 import { useHighlights } from "./use-highlights";
 import { useFavorites } from "./use-favorites";
 import { useReviewTracking } from "./use-review-tracking";
+import { useShareTracking } from "./use-share-tracking";
 import { ARTICLES, THEMES } from "@/data/mock-data";
 
 const UNLOCKED_BADGES_KEY = "@siga_o_dinheiro:unlocked_badges";
@@ -20,6 +21,7 @@ export function useAchievements() {
   const { highlights } = useHighlights();
   const { favorites } = useFavorites();
   const { reviewCount } = useReviewTracking();
+  const { shareCount } = useShareTracking();
 
   useEffect(() => {
     loadUnlockedBadges();
@@ -29,7 +31,7 @@ export function useAchievements() {
     if (!loading) {
       checkAchievements();
     }
-  }, [history, highlights, favorites, reviewCount, loading]);
+  }, [history, highlights, favorites, reviewCount, shareCount, loading]);
 
   const loadUnlockedBadges = async () => {
     try {
@@ -131,6 +133,14 @@ export function useAchievements() {
     if (reviewCount >= 10 && !unlockedBadges.includes("reviewer")) {
       await unlockBadge("reviewer");
     }
+
+    // Compartilhamentos
+    if (shareCount >= 10 && !unlockedBadges.includes("influencer")) {
+      await unlockBadge("influencer");
+    }
+    if (shareCount >= 50 && !unlockedBadges.includes("broadcaster")) {
+      await unlockBadge("broadcaster");
+    }
   };
 
   const getBadgeProgress = (badge: Badge): number => {
@@ -172,6 +182,10 @@ export function useAchievements() {
       
       case "reviewer":
         return Math.min(reviewCount, badge.requirement);
+      
+      case "influencer":
+      case "broadcaster":
+        return Math.min(shareCount, badge.requirement);
       
       default:
         return 0;
