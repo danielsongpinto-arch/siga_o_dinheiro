@@ -22,10 +22,17 @@ export interface CacheIndex {
   totalSize: number; // em bytes (aproximado)
 }
 
+export interface DownloadProgress {
+  articleId: string;
+  progress: number; // 0-100
+  status: "downloading" | "completed" | "error";
+}
+
 export function useOfflineCache() {
   const [isOnline, setIsOnline] = useState(true);
   const [cacheIndex, setCacheIndex] = useState<CacheIndex>({ articleIds: [], totalSize: 0 });
   const [loading, setLoading] = useState(true);
+  const [downloadProgress, setDownloadProgress] = useState<Record<string, DownloadProgress>>({});
 
   useEffect(() => {
     loadCacheIndex();
@@ -64,9 +71,21 @@ export function useOfflineCache() {
 
   const cacheArticle = async (article: CachedArticle): Promise<boolean> => {
     try {
+      // Iniciar progresso
+      setDownloadProgress((prev) => ({
+        ...prev,
+        [article.id]: { articleId: article.id, progress: 0, status: "downloading" },
+      }));
+
       const articleKey = `${CACHE_KEY_PREFIX}${article.id}`;
       const articleData = JSON.stringify(article);
       const articleSize = new Blob([articleData]).size;
+
+      // Simular progresso (AsyncStorage é síncrono, mas damos feedback visual)
+      setDownloadProgress((prev) => ({
+        ...prev,
+        [article.id]: { articleId: article.id, progress: 50, status: "downloading" },
+      }));
 
       // Verificar se já está em cache
       if (cacheIndex.articleIds.includes(article.id)) {
@@ -92,9 +111,40 @@ export function useOfflineCache() {
       };
       await saveCacheIndex(newIndex);
 
+      // Completar progresso
+      setDownloadProgress((prev) => ({
+        ...prev,
+        [article.id]: { articleId: article.id, progress: 100, status: "completed" },
+      }));
+
+      // Limpar progresso após 2 segundos
+      setTimeout(() => {
+        setDownloadProgress((prev) => {
+          const newProgress = { ...prev };
+          delete newProgress[article.id];
+          return newProgress;
+        });
+      }, 2000);
+
       return true;
     } catch (error) {
       console.error("Error caching article:", error);
+      
+      // Marcar erro
+      setDownloadProgress((prev) => ({
+        ...prev,
+        [article.id]: { articleId: article.id, progress: 0, status: "error" },
+      }));
+
+      // Limpar erro após 3 segundos
+      setTimeout(() => {
+        setDownloadProgress((prev) => {
+          const newProgress = { ...prev };
+          delete newProgress[article.id];
+          return newProgress;
+        });
+      }, 3000);
+
       return false;
     }
   };
@@ -191,6 +241,7 @@ export function useOfflineCache() {
     isOnline,
     cacheIndex,
     loading,
+    downloadProgress,
     cacheArticle,
     getCachedArticle,
     isArticleCached,

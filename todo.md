@@ -529,3 +529,26 @@
 - [x] Aplicar bloqueio de áudio no AudioPlayer quando shouldBlockAudio() retorna true
 - [ ] Aplicar bloqueio de imagens (não implementado - artigos usam texto principalmente)
 - [ ] Botão manual "Carregar" quando bloqueado (não implementado - bloqueio automático é suficiente)
+
+
+## Melhorias Finais - Décima Oitava Rodada
+
+### 49. Download em lote de séries completas
+- [x] Identificar artigos que pertencem a séries (themeId)
+- [x] Adicionar botão "Baixar Série" nos cards de artigos que têm série
+- [x] Função para buscar todos os artigos da mesma série (getSeriesArticleCount)
+- [x] Download sequencial de todos os artigos da série
+- [x] Feedback visual durante download em lote (contador X/Y)
+- [x] Contador de progresso: "Baixando X de Y artigos"
+- [x] Hook useBatchDownload criado com funções downloadSeries e cancelDownload
+- [x] Botão arrow.down.to.line aparece apenas se série tem 2+ artigos
+- [x] Delay de 300ms entre downloads para evitar sobrecarga
+
+### 50. Indicador de progresso de download
+- [x] Adicionar estado de progresso ao hook useOfflineCache
+- [x] Barra de progresso no card durante download (3px altura)
+- [x] Percentual de conclusão (0-100%)
+- [x] Cores diferentes por status: azul (downloading), verde (completed), vermelho (error)
+- [x] Feedback haptic ao completar download (já existente)
+- [x] Tratamento de erros durante download
+- [x] Auto-limpeza do progresso após 2s (completo) ou 3s (erro)

@@ -7,6 +7,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useOfflineArticles } from "@/hooks/use-offline-articles";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
+import { useBatchDownload } from "@/hooks/use-batch-download";
 import * as Haptics from "expo-haptics";
 import { Article } from "@/types";
 import { THEMES } from "@/data/mock-data";
@@ -26,7 +27,8 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
   const secondaryText = useThemeColor({}, "textSecondary");
   const { getProgress } = useReadingProgress();
   const { isArticleOffline } = useOfflineArticles();
-  const { cacheArticle, isArticleCached, removeFromCache } = useOfflineCache();
+  const { isArticleCached, cacheArticle, removeFromCache, downloadProgress } = useOfflineCache();
+  const { batchStatus, downloadSeries, getSeriesArticleCount } = useBatchDownload();
   const [isCaching, setIsCaching] = useState(false);
   
   const progress = getProgress(article.id);
@@ -142,22 +144,73 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
             </ThemedView>
           </ThemedView>
           
-          {/* Botão de Download para Offline */}
-          <Pressable
-            onPress={handleDownloadToggle}
-            disabled={isCaching}
-            style={({ pressed }) => [
-              styles.downloadButton,
-              pressed && styles.pressed,
-            ]}
-          >
-            <IconSymbol
-              name={isArticleCached(article.id) ? "arrow.down.circle.fill" : "arrow.down.circle"}
-              size={24}
-              color={isArticleCached(article.id) ? "#34C759" : secondaryText}
-            />
-          </Pressable>
+          {/* Botões de Download */}
+          <ThemedView style={styles.downloadButtons}>
+            {/* Botão de Download em Lote (Série) */}
+            {article.themeId && getSeriesArticleCount(article.themeId) > 1 && (
+              <Pressable
+                onPress={async (e) => {
+                  e.stopPropagation();
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  await downloadSeries(article.themeId);
+                }}
+                disabled={batchStatus[article.themeId]?.isDownloading}
+                style={({ pressed }) => [
+                  styles.downloadButton,
+                  pressed && styles.pressed,
+                ]}
+              >
+                {batchStatus[article.themeId]?.isDownloading ? (
+                  <ThemedText style={styles.batchText}>
+                    {batchStatus[article.themeId].current}/{batchStatus[article.themeId].total}
+                  </ThemedText>
+                ) : (
+                  <IconSymbol
+                    name="arrow.down.to.line"
+                    size={24}
+                    color={tintColor}
+                  />
+                )}
+              </Pressable>
+            )}
+            
+            {/* Botão de Download Individual */}
+            <Pressable
+              onPress={handleDownloadToggle}
+              disabled={isCaching}
+              style={({ pressed }) => [
+                styles.downloadButton,
+                pressed && styles.pressed,
+              ]}
+            >
+              <IconSymbol
+                name={isArticleCached(article.id) ? "arrow.down.circle.fill" : "arrow.down.circle"}
+                size={24}
+                color={isArticleCached(article.id) ? "#34C759" : secondaryText}
+              />
+            </Pressable>
+          </ThemedView>
         </ThemedView>
+
+        {/* Barra de Progresso de Download */}
+        {downloadProgress[article.id] && (
+          <ThemedView style={styles.progressContainer}>
+            <ThemedView
+              style={[
+                styles.progressBar,
+                {
+                  width: `${downloadProgress[article.id].progress}%`,
+                  backgroundColor:
+                    downloadProgress[article.id].status === "error"
+                      ? "#FF3B30"
+                      : downloadProgress[article.id].status === "completed"
+                      ? "#34C759"
+                      : "#007AFF",
+                },
+              ]}
+            />
+          </ThemedView>
+        )}
       </ThemedView>
     </Pressable>
   );
@@ -224,8 +277,29 @@ const styles = StyleSheet.create({
     gap: 12,
     flex: 1,
   },
+  downloadButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
   downloadButton: {
     padding: 4,
+  },
+  batchText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  progressContainer: {
+    height: 3,
+    width: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    borderRadius: 1.5,
+    overflow: "hidden",
+    marginTop: 8,
+  },
+  progressBar: {
+    height: "100%",
+    borderRadius: 1.5,
   },
   date: {
     fontSize: 12,
@@ -240,15 +314,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     fontWeight: "600",
-  },
-  progressContainer: {
-    marginBottom: 12,
-  },
-  progressBar: {
-    height: 4,
-    borderRadius: 2,
-    overflow: "hidden",
-    marginBottom: 4,
   },
   progressFill: {
     height: "100%",
