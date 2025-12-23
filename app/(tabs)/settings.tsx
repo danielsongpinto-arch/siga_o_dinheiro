@@ -13,6 +13,7 @@ import { useNightMode } from "@/hooks/use-night-mode";
 import { useReadingReminders } from "@/hooks/use-reading-reminders";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOnboarding } from "@/hooks/use-onboarding";
+import { useReviewReminders } from "@/hooks/use-review-reminders";
 import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
@@ -33,6 +34,7 @@ export default function SettingsScreen() {
   const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
   const { goal, createGoal, deleteGoal } = useReadingGoals();
   const { resetOnboarding } = useOnboarding();
+  const { settings: reviewSettings, enableReminders, disableReminders, updateFrequency } = useReviewReminders();
   const router = useRouter();
 
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -353,6 +355,125 @@ export default function SettingsScreen() {
                     <ThemedText type="defaultSemiBold">Horário</ThemedText>
                     <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
                       {`${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`}
+                    </ThemedText>
+                  </View>
+                </View>
+                <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+              </Pressable>
+            )}
+          </View>
+        </View>
+
+        {/* Seção de Lembretes de Revisão */}
+        <View style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Lembretes de Revisão
+          </ThemedText>
+          <ThemedText style={[styles.sectionDescription, { color: colors.icon }]}>
+            Receba lembretes para revisar seus destaques antigos
+          </ThemedText>
+
+          <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+            {/* Toggle Ativar Lembretes de Revisão */}
+            <Pressable
+              onPress={async () => {
+                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (reviewSettings.enabled) {
+                  await disableReminders();
+                  await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                } else {
+                  await enableReminders(reviewSettings.frequency);
+                  await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                }
+              }}
+              style={({ pressed }) => [
+                styles.toggleItem,
+                { borderBottomColor: colors.border },
+                pressed && styles.pressed,
+              ]}
+            >
+              <View style={styles.toggleLeft}>
+                <IconSymbol name="clock.fill" size={24} color="#0284c7" />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Ativar Lembretes de Revisão</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    {reviewSettings.enabled
+                      ? `Lembrete ${
+                          reviewSettings.frequency === "weekly"
+                            ? "semanal"
+                            : reviewSettings.frequency === "biweekly"
+                              ? "quinzenal"
+                              : "mensal"
+                        }`
+                      : "Desativado"}
+                  </ThemedText>
+                </View>
+              </View>
+              <Switch
+                value={reviewSettings.enabled}
+                onValueChange={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  if (reviewSettings.enabled) {
+                    await disableReminders();
+                  } else {
+                    await enableReminders(reviewSettings.frequency);
+                  }
+                  await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                }}
+                trackColor={{ false: colors.border, true: "#0284c7" }}
+              />
+            </Pressable>
+
+            {/* Configurar Frequência */}
+            {reviewSettings.enabled && (
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  Alert.alert(
+                    "Frequência dos Lembretes",
+                    "Com que frequência deseja receber lembretes?",
+                    [
+                      {
+                        text: "Semanal",
+                        onPress: async () => {
+                          await updateFrequency("weekly");
+                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        },
+                      },
+                      {
+                        text: "Quinzenal",
+                        onPress: async () => {
+                          await updateFrequency("biweekly");
+                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        },
+                      },
+                      {
+                        text: "Mensal",
+                        onPress: async () => {
+                          await updateFrequency("monthly");
+                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        },
+                      },
+                      { text: "Cancelar", style: "cancel" },
+                    ]
+                  );
+                }}
+                style={({ pressed }) => [
+                  styles.toggleItem,
+                  styles.toggleItemLast,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <View style={styles.toggleLeft}>
+                  <IconSymbol name="calendar" size={24} color={colors.icon} />
+                  <View style={styles.toggleText}>
+                    <ThemedText type="defaultSemiBold">Frequência</ThemedText>
+                    <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                      {reviewSettings.frequency === "weekly"
+                        ? "Semanal"
+                        : reviewSettings.frequency === "biweekly"
+                          ? "Quinzenal"
+                          : "Mensal"}
                     </ThemedText>
                   </View>
                 </View>

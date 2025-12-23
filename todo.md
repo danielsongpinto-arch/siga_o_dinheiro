@@ -306,3 +306,31 @@
 - [x] Combinar com filtros existentes (tags, busca)
 - [x] Indicador visual de filtro ativo (chip selecionado com cor tint)
 - [x] Contador dinâmico reflete filtros aplicados
+
+
+## Melhorias Finais - Décima Rodada
+
+### 28. Exportar comentários junto com destaques
+- [x] Modificar exportBookmarksToPDF para incluir comentários do artigo
+- [x] Adicionar seção "Comentários do Artigo" no PDF exportado
+- [x] Modificar shareBookmarks para incluir comentários no texto formatado
+- [x] Formatar comentários: data, texto, separadores visuais
+- [x] Função loadArticleComments criada e integrada
+
+### 29. Estatísticas de comentários
+- [x] Adicionar card "Total de Comentários" na tela Estatísticas
+- [x] Adicionar seção "Artigos Mais Comentados" (top 5 com ranking)
+- [x] Adicionar gráfico de atividade mensal de comentários (últimos 6 meses)
+- [x] Integrar com dados carregados de AsyncStorage
+- [x] Design consistente com estatísticas de destaques (cores azuis para comentários)
+
+### 30. Notificação de revisão periódica
+- [x] Criar hook useReviewReminders
+- [x] Detectar destaques antigos (30+ dias)
+- [x] Configuração: ativar/desativar lembretes de revisão
+- [x] Configuração: frequência (semanal/quinzenal/mensal)
+- [x] Agendar notificação recorrente com expo-notifications
+- [x] Mensagem: "Você tem X destaques de mais de 30 dias atrás para revisar"
+- [x] Persistir configurações em AsyncStorage
+- [x] Seção completa nas Configurações com toggle e seletor de frequência
+- [ ] Ao tocar notificação: abrir tela Destaques (não implementado - requer deep linking)

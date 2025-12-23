@@ -12,6 +12,15 @@ import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { HeatmapChart } from "@/components/heatmap-chart";
 import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface ArticleComment {
+  id: string;
+  articleId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function StatsScreen() {
   const insets = useSafeAreaInsets();
@@ -25,6 +34,7 @@ export default function StatsScreen() {
   };
 
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [comments, setComments] = useState<ArticleComment[]>([]);
   const [loading, setLoading] = useState(true);
   const { getAllProgress, getCompletedCount } = useReadingProgress();
   const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
@@ -39,6 +49,13 @@ export default function StatsScreen() {
     try {
       const allBookmarks = await getAllBookmarks();
       setBookmarks(allBookmarks);
+      
+      // Carregar comentários
+      const stored = await AsyncStorage.getItem("article_comments");
+      if (stored) {
+        const allComments: ArticleComment[] = JSON.parse(stored);
+        setComments(allComments);
+      }
     } catch (error) {
       console.error("Error loading bookmarks:", error);
     } finally {
@@ -100,6 +117,45 @@ export default function StatsScreen() {
   // Destaques com notas
   const bookmarksWithNotes = bookmarks.filter((b) => b.note && b.note.trim().length > 0).length;
   const notesPercentage = totalBookmarks > 0 ? (bookmarksWithNotes / totalBookmarks) * 100 : 0;
+
+  // Estatísticas de comentários
+  const totalComments = comments.length;
+  
+  // Comentários por artigo
+  const commentsByArticle: Record<string, { title: string; count: number }> = {};
+  comments.forEach((comment) => {
+    if (!commentsByArticle[comment.articleId]) {
+      // Encontrar título do artigo a partir dos bookmarks
+      const bookmark = bookmarks.find((b) => b.articleId === comment.articleId);
+      commentsByArticle[comment.articleId] = {
+        title: bookmark?.articleTitle || "Artigo Desconhecido",
+        count: 0,
+      };
+    }
+    commentsByArticle[comment.articleId].count++;
+  });
+  const topCommentedArticles = Object.values(commentsByArticle)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  // Comentários por mês (últimos 6 meses)
+  const monthlyCommentsData: Record<string, number> = {};
+  for (let i = 5; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = date.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
+    monthlyCommentsData[key] = 0;
+  }
+
+  comments.forEach((comment) => {
+    const date = new Date(comment.createdAt);
+    const key = date.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
+    if (monthlyCommentsData[key] !== undefined) {
+      monthlyCommentsData[key]++;
+    }
+  });
+
+  const monthlyCommentsChartData = Object.entries(monthlyCommentsData);
+  const maxMonthlyCommentsCount = Math.max(...Object.values(monthlyCommentsData), 1);
 
   return (
     <ThemedView style={styles.container}>
@@ -244,6 +300,78 @@ export default function StatsScreen() {
               </View>
             </View>
 
+            {/* Card de Comentários */}
+            {totalComments > 0 && (
+              <View style={[styles.commentsCard, { backgroundColor: colors.cardBg, borderColor: "#0284c7" }]}>
+                <View style={styles.commentsHeader}>
+                  <IconSymbol name="bubble.left.fill" size={28} color="#0284c7" />
+                  <ThemedText type="subtitle" style={{ color: "#0284c7" }}>
+                    Comentários
+                  </ThemedText>
+                </View>
+                <ThemedText type="title" style={{ fontSize: 48, color: "#0284c7" }}>
+                  {totalComments}
+                </ThemedText>
+                <ThemedText style={[styles.commentsSubtitle, { color: colors.icon }]}>
+                  {totalComments === 1 ? "comentário" : "comentários"} em artigos
+                </ThemedText>
+              </View>
+            )}
+
+            {/* Artigos Mais Comentados */}
+            {topCommentedArticles.length > 0 && (
+              <View style={styles.section}>
+                <ThemedText type="subtitle" style={styles.sectionTitle}>
+                  Artigos Mais Comentados
+                </ThemedText>
+                <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+                  {topCommentedArticles.map((article, index) => (
+                    <View
+                      key={article.title}
+                      style={[
+                        styles.listItem,
+                        { borderBottomColor: colors.border },
+                        index === topCommentedArticles.length - 1 && styles.listItemLast,
+                      ]}
+                    >
+                      <View style={styles.listItemLeft}>
+                        <View
+                          style={[
+                            styles.rankBadge,
+                            {
+                              backgroundColor:
+                                index === 0
+                                  ? "#0284c7"
+                                  : index === 1
+                                    ? "#0ea5e9"
+                                    : index === 2
+                                      ? "#38bdf8"
+                                      : colors.border,
+                            },
+                          ]}
+                        >
+                          <ThemedText
+                            style={[
+                              styles.rankText,
+                              { color: index < 3 ? "#fff" : colors.text },
+                            ]}
+                          >
+                            {index + 1}
+                          </ThemedText>
+                        </View>
+                        <ThemedText style={styles.listItemTitle} numberOfLines={2}>
+                          {article.title}
+                        </ThemedText>
+                      </View>
+                      <ThemedText type="defaultSemiBold" style={{ color: "#0284c7" }}>
+                        {article.count} 💬
+                      </ThemedText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+
             {/* Artigos Mais Destacados */}
             {topArticles.length > 0 && (
               <View style={styles.section}>
@@ -341,6 +469,45 @@ export default function StatsScreen() {
                       </View>
                     );
                   })}
+                </View>
+              </View>
+            )}
+
+            {/* Gráfico Mensal de Comentários */}
+            {totalComments > 0 && (
+              <View style={styles.section}>
+                <ThemedText type="subtitle" style={styles.sectionTitle}>
+                  Atividade de Comentários (Últimos 6 Meses)
+                </ThemedText>
+                <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+                  <View style={styles.chartContainer}>
+                    {monthlyCommentsChartData.map(([month, count]) => (
+                      <View key={month} style={styles.chartBar}>
+                        <View style={styles.chartBarContainer}>
+                          <View
+                            style={[
+                              styles.chartBarFill,
+                              {
+                                backgroundColor: "#0284c7",
+                                height: `${(count / maxMonthlyCommentsCount) * 100}%`,
+                              },
+                            ]}
+                          />
+                        </View>
+                        <ThemedText
+                          style={[styles.chartLabel, { color: colors.icon }]}
+                          numberOfLines={1}
+                        >
+                          {month.split(" ")[0]}
+                        </ThemedText>
+                        <ThemedText
+                          style={[styles.chartValue, { color: colors.text }]}
+                        >
+                          {count}
+                        </ThemedText>
+                      </View>
+                    ))}
+                  </View>
                 </View>
               </View>
             )}
@@ -832,5 +999,22 @@ const styles = StyleSheet.create({
   goalProgress: {
     fontSize: 13,
     textAlign: "center",
+  },
+  commentsCard: {
+    padding: 24,
+    borderRadius: 12,
+    marginBottom: 24,
+    alignItems: "center",
+    borderWidth: 2,
+  },
+  commentsHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 16,
+  },
+  commentsSubtitle: {
+    fontSize: 14,
+    marginTop: 8,
   },
 });

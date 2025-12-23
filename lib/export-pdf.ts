@@ -1,6 +1,28 @@
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface ArticleComment {
+  id: string;
+  articleId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+async function loadArticleComments(articleId: string): Promise<ArticleComment[]> {
+  try {
+    const stored = await AsyncStorage.getItem("article_comments");
+    if (!stored) return [];
+    
+    const allComments: ArticleComment[] = JSON.parse(stored);
+    return allComments.filter((c) => c.articleId === articleId);
+  } catch (error) {
+    console.error("Error loading comments for export:", error);
+    return [];
+  }
+}
 
 export async function exportBookmarksToPDF(bookmarks: Bookmark[]): Promise<void> {
   if (bookmarks.length === 0) {
@@ -15,6 +37,12 @@ export async function exportBookmarksToPDF(bookmarks: Bookmark[]): Promise<void>
     }
     grouped[bookmark.articleId].push(bookmark);
   });
+
+  // Carregar comentários de todos os artigos
+  const articleComments: Record<string, ArticleComment[]> = {};
+  for (const articleId of Object.keys(grouped)) {
+    articleComments[articleId] = await loadArticleComments(articleId);
+  }
 
   const now = new Date();
   const dateStr = now.toLocaleDateString("pt-BR", {
@@ -190,6 +218,47 @@ export async function exportBookmarksToPDF(bookmarks: Bookmark[]): Promise<void>
     .tag-duvida { background: #e0e7ff; color: #6366f1; }
     .tag-insight { background: #dcfce7; color: #16a34a; }
     
+    .comments-section {
+      margin-top: 32px;
+      padding: 20px;
+      background: #f0f9ff;
+      border-left: 4px solid #0284c7;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+    
+    .comments-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0284c7;
+      margin-bottom: 16px;
+    }
+    
+    .comment {
+      margin-bottom: 16px;
+      padding: 12px;
+      background: white;
+      border-radius: 4px;
+      border-left: 2px solid #0284c7;
+    }
+    
+    .comment:last-child {
+      margin-bottom: 0;
+    }
+    
+    .comment-text {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    
+    .comment-date {
+      font-size: 11px;
+      color: #999;
+      text-align: right;
+    }
+    
     .timestamp {
       font-size: 12px;
       color: #999;
@@ -293,6 +362,30 @@ export async function exportBookmarksToPDF(bookmarks: Bookmark[]): Promise<void>
       `,
         )
         .join("")}
+      
+      ${articleComments[articleId] && articleComments[articleId].length > 0 ? `
+        <div class="comments-section">
+          <div class="comments-title">💬 Comentários do Artigo (${articleComments[articleId].length})</div>
+          ${articleComments[articleId]
+            .map(
+              (comment) => `
+            <div class="comment">
+              <div class="comment-text">${comment.text}</div>
+              <div class="comment-date">
+                ${new Date(comment.createdAt).toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      ` : ""}
     </div>
   `,
     )

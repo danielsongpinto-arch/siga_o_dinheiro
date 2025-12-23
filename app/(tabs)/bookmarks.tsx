@@ -8,6 +8,14 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface ArticleComment {
+  id: string;
+  articleId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+}
 import { exportBookmarksToPDF } from "@/lib/export-pdf";
 import { QuoteImageGenerator } from "@/components/quote-image-generator";
 
@@ -143,6 +151,19 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
     }
   };
 
+  const loadArticleComments = async (articleId: string): Promise<ArticleComment[]> => {
+    try {
+      const stored = await AsyncStorage.getItem("article_comments");
+      if (!stored) return [];
+      
+      const allComments: ArticleComment[] = JSON.parse(stored);
+      return allComments.filter((c) => c.articleId === articleId);
+    } catch (error) {
+      console.error("Error loading comments:", error);
+      return [];
+    }
+  };
+
   const shareBookmarks = async () => {
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -166,7 +187,13 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
         grouped[bookmark.articleId].push(bookmark);
       });
 
-      Object.entries(grouped).forEach(([_, items], index) => {
+      // Carregar comentários de todos os artigos
+      const articleCommentsMap: Record<string, ArticleComment[]> = {};
+      for (const articleId of Object.keys(grouped)) {
+        articleCommentsMap[articleId] = await loadArticleComments(articleId);
+      }
+
+      Object.entries(grouped).forEach(([articleId, items], index) => {
         if (index > 0) shareText += `\n───────────────────────────────\n\n`;
         
         shareText += `📄 ${items[0].articleTitle}\n\n`;
@@ -189,6 +216,21 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           
           shareText += `\n`;
         });
+        
+        // Adicionar comentários do artigo
+        if (articleCommentsMap[articleId] && articleCommentsMap[articleId].length > 0) {
+          shareText += `\n💬 Comentários do Artigo (${articleCommentsMap[articleId].length})\n\n`;
+          articleCommentsMap[articleId].forEach((comment, i) => {
+            shareText += `${i + 1}. "${comment.text}"\n`;
+            shareText += `   🗓️ ${new Date(comment.createdAt).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}\n\n`;
+          });
+        }
       });
 
       shareText += `═══════════════════════════════\n`;
