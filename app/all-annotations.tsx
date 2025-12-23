@@ -63,7 +63,7 @@ export default function AllAnnotationsScreen() {
         if (!article) continue;
 
         exportText += `## ${article.title}\n\n`;
-        exportText += `**Autor:** ${article.authors[0]?.name || "Desconhecido"}\n`;
+        exportText += `**Autor:** ${article.articleAuthor || "DGP"}\n`;
         exportText += `**Data:** ${new Date(article.date).toLocaleDateString("pt-BR")}\n\n`;
 
         notes.forEach((note, index) => {
@@ -262,7 +262,7 @@ export default function AllAnnotationsScreen() {
                       {article.title}
                     </ThemedText>
                     <ThemedText style={[styles.articleMeta, { color: colors.icon }]}>
-                      {article.authors[0]?.name || "Desconhecido"} • {formatDate(article.date)}
+                      {article.articleAuthor || "DGP"} • {formatDate(article.date)}
                     </ThemedText>
                   </View>
                   <IconSymbol name="chevron.right" size={20} color={colors.icon} />

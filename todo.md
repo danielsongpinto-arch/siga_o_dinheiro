@@ -739,3 +739,41 @@
 - [x] Ranking de leitores (se autenticado)
 - [x] Persistir conquistas em AsyncStorage
 - [x] Botão "Conquistas" nas Configurações
+
+
+## Funcionalidades Avançadas de Engajamento - Vigésima Quarta Rodada
+
+### 66. Corrigir autor dos artigos
+- [x] Definir "DGP" como autor padrão em todos os artigos
+- [x] Atualizar tipo Article para usar author (string) ao invés de authors (array)
+- [x] Corrigir referências a article.authors em todo o código
+- [x] Verificar exibição do autor nas telas de artigo
+
+### 67. Integração com calendário
+- [ ] Criar hook useCalendarIntegration
+- [ ] Botão "Adicionar ao Calendário" nas Configurações (seção Lembretes)
+- [ ] Exportar lembretes de leitura como eventos recorrentes
+- [ ] Exportar metas como eventos com alarmes
+- [ ] Usar expo-calendar para iOS/Android
+- [ ] Fallback para .ics file para web
+- [ ] Solicitar permissões de calendário
+- [ ] Sincronizar com Google Calendar e Apple Calendar
+
+### 68. Modo comparação lado a lado
+- [ ] Criar tela app/compare.tsx com split-screen
+- [ ] Seletor de 2 artigos para comparar
+- [ ] Layout responsivo: vertical em portrait, horizontal em landscape
+- [ ] Scroll sincronizado (opcional: toggle)
+- [ ] Botão "Comparar" nos cards de artigo
+- [ ] Sugestões automáticas de artigos relacionados para comparar
+- [ ] Destacar diferenças de perspectiva (manual: notas do usuário)
+
+### 69. Sistema de recompensas tangíveis
+- [ ] Criar hook useRewards para gerenciar recompensas
+- [ ] Definir marcos: 10 artigos, 30 dias consecutivos, 5 séries completas
+- [ ] Conteúdo exclusivo: artigos bônus, infográficos premium, resumos PDF
+- [ ] Tela de recompensas (app/rewards.tsx)
+- [ ] Notificação ao desbloquear recompensa
+- [ ] Badge visual de "Conteúdo Exclusivo" nos artigos bônus
+- [ ] Persistir recompensas desbloqueadas em AsyncStorage
+- [ ] Botão "Recompensas" nas Configurações

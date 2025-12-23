@@ -24,7 +24,8 @@ export interface Article {
   title: string;
   date: string;
   content: string;
-  authors: Author[];
+  articleAuthor?: string; // Autor do artigo (ex: "DGP")
+  authors: Author[]; // Atores financeiros da história
   financialCycle: FinancialCycle;
   summary: string;
 }

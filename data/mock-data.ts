@@ -1,7 +1,8 @@
-import { Theme, Article } from "@/types";
+import { Article, Theme } from "@/types";
 import { WW2_ARTICLES } from "./ww2-articles";
 import { ARQUITETOS_DO_PODER_ARTICLES } from "./arquitetos-do-poder-articles";
 import { SISTEMA_AUTOPERPETUANTE_ARTICLES } from "./sistema-autoperpetuante-articles";
+import { addDGPAuthorToAll } from "@/utils/add-dgp-author";
 
 export const THEMES: Theme[] = [
   {
@@ -55,7 +56,7 @@ export const THEMES: Theme[] = [
   },
 ];
 
-export const ARTICLES: Article[] = [
+const RAW_ARTICLES: Article[] = [
   ...WW2_ARTICLES,
   ...ARQUITETOS_DO_PODER_ARTICLES,
   ...SISTEMA_AUTOPERPETUANTE_ARTICLES,
@@ -771,3 +772,6 @@ Compreender esses interesses financeiros é essencial para reformar o sistema e 
     },
   },
 ];
+
+// Adicionar "DGP" como autor em todos os artigos
+export const ARTICLES: Article[] = addDGPAuthorToAll(RAW_ARTICLES);
