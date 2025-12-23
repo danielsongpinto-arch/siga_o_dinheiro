@@ -190,3 +190,35 @@
 - [x] Incluir excerpt, nota pessoal (opcional), tags coloridas
 - [x] Captura com react-native-view-shot (1080x1350, 4:5)
 - [x] Compartilhar via Share API (Instagram, Twitter, WhatsApp)
+
+
+## Funcionalidades Finais - Sexta Rodada
+
+### 16. Notificações de lembrete de leitura
+- [x] Criar hook useReadingReminders
+- [x] Configurações: ativar/desativar notificações (toggle)
+- [x] Configurações: escolher horário preferido (Alert.prompt)
+- [x] Configurações: dias da semana (segunda a sexta por padrão)
+- [x] Agendar notificação recorrente com expo-notifications (CalendarTrigger)
+- [x] Mensagem: "Continue sua jornada! Você tem artigos em progresso."
+- [x] Ao tocar notificação: abrir app (data: { screen: "themes" })
+- [x] Persistir configurações em AsyncStorage
+
+### 17. Modo anotações colaborativas
+- [x] Botão "Compartilhar Destaque" em cada bookmark (ícone verde)
+- [x] Gerar texto formatado com todas as informações
+- [x] Formato: título, artigo, parte, excerpt, nota, tags
+- [x] Emojis e formatação Markdown para WhatsApp/Telegram
+- [x] Compartilhar via Share API nativa
+- [x] Feedback háptico ao compartilhar
+- [ ] Deep linking (não implementado - texto formatado é mais prático)
+
+### 18. Análise de padrões de leitura
+- [x] Criar hook useReadingPatterns
+- [x] Rastrear timestamps de todas as ações de leitura (logActivity)
+- [x] Calcular heatmap: 7 dias x 24 horas (getHeatmapData)
+- [x] Componente HeatmapChart (grid colorido)
+- [x] Escala de cores: cinza (0) → azul escuro (máximo) (6 níveis)
+- [x] Adicionar seção "Padrões de Leitura" na tela Estatísticas
+- [ ] Tooltip mostrando quantidade ao tocar célula (não implementado)
+- [x] Identificar horário/dia com mais atividade (getPeakTime)

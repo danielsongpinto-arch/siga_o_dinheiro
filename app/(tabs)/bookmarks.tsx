@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, Pressable, Text, Share, Alert, TextInput } from "react-native";
+import { View, ScrollView, Pressable, StyleSheet, Alert, Text, TextInput, Share } from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
@@ -68,6 +68,44 @@ export default function BookmarksScreen() {
   const shareAsImage = (bookmark: Bookmark) => {
     setSelectedBookmark(bookmark);
     setGeneratingImage(true);
+  };
+
+  const shareBookmarkText = async (bookmark: Bookmark) => {
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+      // Formatar tags
+      const tagsText =
+        bookmark.tags && bookmark.tags.length > 0
+          ? bookmark.tags
+              .map((tagId) => {
+                const tag = PREDEFINED_TAGS.find((t) => t.id === tagId);
+                return tag ? tag.label : "";
+              })
+              .filter(Boolean)
+              .join(", ")
+          : "";
+
+      // Montar texto formatado
+      const text = `📚 *Destaque - Siga o Dinheiro*
+
+📝 *Artigo:* ${bookmark.articleTitle}
+📖 *Parte:* ${bookmark.partTitle}
+
+“${bookmark.excerpt}”
+${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️ *Tags:* ${tagsText}` : ""}
+
+———————————————
+📱 Compartilhado via app Siga o Dinheiro`;
+
+      await Share.share({
+        message: text,
+      });
+
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (error) {
+      console.error("Error sharing bookmark text:", error);
+    }
   };
 
   const exportToPDF = async () => {
@@ -469,6 +507,12 @@ export default function BookmarksScreen() {
                   </Pressable>
 
                   <View style={styles.bookmarkActions}>
+                    <Pressable
+                      onPress={() => shareBookmarkText(bookmark)}
+                      style={styles.actionButton}
+                    >
+                      <IconSymbol name="square.and.arrow.up" size={20} color="#34C759" />
+                    </Pressable>
                     <Pressable
                       onPress={() => shareAsImage(bookmark)}
                       style={styles.actionButton}

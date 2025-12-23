@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { View, ScrollView, Pressable, StyleSheet, Switch, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -9,6 +10,7 @@ import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preferenc
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useAuth } from "@/hooks/use-auth";
 import { useNightMode } from "@/hooks/use-night-mode";
+import { useReadingReminders } from "@/hooks/use-reading-reminders";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
@@ -25,6 +27,9 @@ export default function SettingsScreen() {
   const { isAuthenticated } = useAuth();
   const { syncEnabled, isSyncing, lastSyncTime, toggleSync, performSync } = useBookmarkSync();
   const { isNightMode, autoModeEnabled, hasManualOverride, toggleAutoMode, setManualMode, clearManualOverride } = useNightMode();
+  const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
+
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   const themeOptions: { value: ThemePreference; label: string; icon: string; description: string }[] =
     [
@@ -241,6 +246,111 @@ export default function SettingsScreen() {
                   }}
                   trackColor={{ false: colors.border, true: "#FF9500" }}
                 />
+              </Pressable>
+            )}
+          </View>
+        </View>
+
+        {/* Seção de Notificações */}
+        <View style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Lembretes de Leitura
+          </ThemedText>
+          <ThemedText style={[styles.sectionDescription, { color: colors.icon }]}>
+            Receba notificações para continuar suas leituras
+          </ThemedText>
+
+          <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+            {/* Toggle Ativar Notificações */}
+            <Pressable
+              onPress={async () => {
+                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                await toggleReminders();
+              }}
+              style={({ pressed }) => [
+                styles.toggleItem,
+                { borderBottomColor: colors.border },
+                pressed && styles.pressed,
+              ]}
+            >
+              <View style={styles.toggleLeft}>
+                <IconSymbol name="bell.fill" size={24} color={colors.tint} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Ativar Lembretes</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    {remindersConfig.enabled
+                      ? `Todos os dias às ${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`
+                      : "Desativado"}
+                  </ThemedText>
+                </View>
+              </View>
+              <Switch
+                value={remindersConfig.enabled}
+                onValueChange={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  await toggleReminders();
+                }}
+                trackColor={{ false: colors.border, true: colors.tint }}
+              />
+            </Pressable>
+
+            {/* Configurar Horário */}
+            {remindersConfig.enabled && (
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  Alert.prompt(
+                    "Configurar Horário",
+                    "Digite o horário no formato HH:MM (ex: 19:00)",
+                    [
+                      { text: "Cancelar", style: "cancel" },
+                      {
+                        text: "Salvar",
+                        onPress: async (text?: string) => {
+                          if (text) {
+                            const [hourStr, minuteStr] = text.split(":");
+                            const hour = parseInt(hourStr, 10);
+                            const minute = parseInt(minuteStr, 10);
+                            
+                            if (
+                              !isNaN(hour) &&
+                              !isNaN(minute) &&
+                              hour >= 0 &&
+                              hour <= 23 &&
+                              minute >= 0 &&
+                              minute <= 59
+                            ) {
+                              await setReminderTime(hour, minute);
+                              await Haptics.notificationAsync(
+                                Haptics.NotificationFeedbackType.Success
+                              );
+                            } else {
+                              Alert.alert("Erro", "Horário inválido. Use o formato HH:MM (ex: 19:00)");
+                            }
+                          }
+                        },
+                      },
+                    ],
+                    "plain-text",
+                    `${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`
+                  );
+                }}
+                style={({ pressed }) => [
+                  styles.toggleItem,
+                  styles.toggleItemLast,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <View style={styles.toggleLeft}>
+                  <IconSymbol name="clock.fill" size={24} color="#FF9500" />
+                  <View style={styles.toggleText}>
+                    <ThemedText type="defaultSemiBold">Horário</ThemedText>
+                    <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                      {`${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`}
+                    </ThemedText>
+                  </View>
+                </View>
+                <IconSymbol name="chevron.right" size={20} color={colors.icon} />
               </Pressable>
             )}
           </View>

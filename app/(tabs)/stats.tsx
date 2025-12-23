@@ -7,6 +7,8 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useAchievements } from "@/hooks/use-achievements";
+import { useReadingPatterns } from "@/hooks/use-reading-patterns";
+import { HeatmapChart } from "@/components/heatmap-chart";
 import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 
@@ -25,6 +27,7 @@ export default function StatsScreen() {
   const [loading, setLoading] = useState(true);
   const { getAllProgress, getCompletedCount } = useReadingProgress();
   const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
+  const { getHeatmapData, getPeakTime, getTotalActivities } = useReadingPatterns();
 
   useEffect(() => {
     loadBookmarks();
@@ -386,6 +389,33 @@ export default function StatsScreen() {
               </View>
             </View>
 
+            {/* Padrões de Leitura */}
+            <View style={styles.section}>
+              <ThemedText type="subtitle" style={styles.sectionTitle}>
+                Padrões de Leitura
+              </ThemedText>
+              <ThemedText style={[styles.sectionDescription, { color: colors.icon }]}>
+                Quando você mais lê durante a semana
+              </ThemedText>
+              <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+                <HeatmapChart data={getHeatmapData()} />
+                
+                {getPeakTime() && (
+                  <View style={styles.peakTimeContainer}>
+                    <ThemedText style={[styles.peakTimeLabel, { color: colors.icon }]}>
+                      Horário de pico:
+                    </ThemedText>
+                    <ThemedText type="defaultSemiBold" style={{ color: colors.tint }}>
+                      {["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"][
+                        getPeakTime()!.day
+                      ]}{" "}
+                      às {getPeakTime()!.hour}h ({getPeakTime()!.count} atividades)
+                    </ThemedText>
+                  </View>
+                )}
+              </View>
+            </View>
+
             {/* Atividade Mensal */}
             <View style={styles.section}>
               <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -491,6 +521,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     marginBottom: 12,
+  },
+  sectionDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  peakTimeContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    gap: 4,
+  },
+  peakTimeLabel: {
+    fontSize: 13,
   },
   card: {
     borderRadius: 12,
