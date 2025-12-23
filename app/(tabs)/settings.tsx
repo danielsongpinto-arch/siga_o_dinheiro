@@ -17,6 +17,7 @@ import { useReviewReminders } from "@/hooks/use-review-reminders";
 import { useAutoTheme } from "@/hooks/use-auto-theme";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useDataSaver } from "@/hooks/use-data-saver";
+import { useScheduledDownloads } from "@/hooks/use-scheduled-downloads";
 import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
@@ -42,6 +43,7 @@ export default function SettingsScreen() {
   const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
   const { cacheIndex, clearCache, getCacheSizeFormatted } = useOfflineCache();
   const { settings: dataSaverSettings, isOnCellular, toggleDataSaver, toggleImages, toggleAudio } = useDataSaver();
+  const { scheduledDownloads, cancelScheduledDownload } = useScheduledDownloads();
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const themeOptions: { value: ThemePreference; label: string; icon: string; description: string }[] =
@@ -920,6 +922,75 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Downloads Agendados */}
+        {scheduledDownloads.length > 0 && (
+          <View style={styles.section}>
+            <ThemedText type="subtitle" style={styles.sectionTitle}>
+              Downloads Agendados
+            </ThemedText>
+
+            <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+              {scheduledDownloads.map((download, index) => {
+                const scheduledDate = new Date(download.scheduledTime);
+                const formattedDate = scheduledDate.toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+
+                return (
+                  <View
+                    key={download.id}
+                    style={[
+                      styles.toggleItem,
+                      index > 0 && { borderTopWidth: 1, borderTopColor: colors.border },
+                    ]}
+                  >
+                    <View style={styles.toggleLeft}>
+                      <IconSymbol name="clock" size={20} color={colors.icon} />
+                      <View style={styles.toggleText}>
+                        <ThemedText type="defaultSemiBold">{download.themeName}</ThemedText>
+                        <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                          {formattedDate}
+                        </ThemedText>
+                        {download.wifiOnly && (
+                          <ThemedText style={[styles.sunTimesInfo, { color: colors.tint }]}>
+                            Apenas Wi-Fi
+                          </ThemedText>
+                        )}
+                      </View>
+                    </View>
+                    <Pressable
+                      onPress={async () => {
+                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        Alert.alert(
+                          "Cancelar Download",
+                          `Deseja cancelar o download de "${download.themeName}"?`,
+                          [
+                            { text: "Não", style: "cancel" },
+                            {
+                              text: "Sim",
+                              style: "destructive",
+                              onPress: () => cancelScheduledDownload(download.id),
+                            },
+                          ]
+                        );
+                      }}
+                      style={({ pressed }) => [
+                        styles.deleteButton,
+                        pressed && styles.pressed,
+                      ]}
+                    >
+                      <IconSymbol name="trash" size={20} color="#FF3B30" />
+                    </Pressable>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
+
         {/* Informações do App */}
         <View style={styles.section}>
           <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -1162,5 +1233,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 8,
     fontWeight: "600",
+  },
+  deleteButton: {
+    padding: 8,
   },
 });

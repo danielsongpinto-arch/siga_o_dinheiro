@@ -15,6 +15,7 @@ export interface CachedArticle {
   series: string;
   tags: string[];
   cachedAt: string;
+  lastAccessedAt: string;
 }
 
 export interface CacheIndex {
@@ -96,9 +97,24 @@ export function useOfflineCache() {
 
       // Verificar limite de cache
       if (cacheIndex.articleIds.length >= MAX_CACHE_SIZE) {
-        // Remover artigo mais antigo
-        const oldestId = cacheIndex.articleIds[0];
-        await removeFromCache(oldestId);
+        // Implementar política LRU: remover artigo menos acessado recentemente
+        let lruArticleId = cacheIndex.articleIds[0];
+        let oldestAccessTime = new Date().getTime();
+
+        // Encontrar artigo com lastAccessedAt mais antigo
+        for (const articleId of cacheIndex.articleIds) {
+          const cachedData = await AsyncStorage.getItem(`${CACHE_KEY_PREFIX}${articleId}`);
+          if (cachedData) {
+            const cached: CachedArticle = JSON.parse(cachedData);
+            const accessTime = new Date(cached.lastAccessedAt).getTime();
+            if (accessTime < oldestAccessTime) {
+              oldestAccessTime = accessTime;
+              lruArticleId = articleId;
+            }
+          }
+        }
+
+        await removeFromCache(lruArticleId);
       }
 
       // Salvar artigo

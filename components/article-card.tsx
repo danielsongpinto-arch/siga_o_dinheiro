@@ -12,6 +12,9 @@ import * as Haptics from "expo-haptics";
 import { Article } from "@/types";
 import { THEMES } from "@/data/mock-data";
 import { calculateReadingTime, formatReadingTime } from "@/utils/reading-time";
+import { SeriesPreviewModal } from "./series-preview-modal";
+import { ScheduleDownloadModal } from "./schedule-download-modal";
+import { useScheduledDownloads } from "@/hooks/use-scheduled-downloads";
 
 interface ArticleCardProps {
   article: Article;
@@ -29,7 +32,10 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
   const { isArticleOffline } = useOfflineArticles();
   const { isArticleCached, cacheArticle, removeFromCache, downloadProgress } = useOfflineCache();
   const { batchStatus, downloadSeries, getSeriesArticleCount } = useBatchDownload();
+  const { scheduleDownload } = useScheduledDownloads();
   const [isCaching, setIsCaching] = useState(false);
+  const [showSeriesPreview, setShowSeriesPreview] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
   
   const progress = getProgress(article.id);
   const isOffline = isArticleOffline(article.id);
@@ -62,11 +68,12 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
           id: article.id,
           title: article.title,
           content: article.content,
-          author: article.authors?.map(a => a.name).join(", ") || "Autor",
+          author: article.authors?.map((a) => a.name).join(", ") || "Autor",
           date: article.date,
           series: article.themeId,
           tags: [],
           cachedAt: new Date().toISOString(),
+          lastAccessedAt: new Date().toISOString(),
         });
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
@@ -78,6 +85,7 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
   };
 
   return (
+    <>
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
@@ -152,7 +160,7 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
                 onPress={async (e) => {
                   e.stopPropagation();
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  await downloadSeries(article.themeId);
+                  setShowSeriesPreview(true);
                 }}
                 disabled={batchStatus[article.themeId]?.isDownloading}
                 style={({ pressed }) => [
@@ -213,6 +221,38 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
         )}
       </ThemedView>
     </Pressable>
+
+    {/* Modal de Pré-visualização de Série */}
+    {article.themeId && (
+      <SeriesPreviewModal
+        visible={showSeriesPreview}
+        themeId={article.themeId}
+        onClose={() => setShowSeriesPreview(false)}
+        onConfirm={() => downloadSeries(article.themeId)}
+        onSchedule={() => {
+          setShowSeriesPreview(false);
+          setShowScheduleModal(true);
+        }}
+      />
+    )}
+    
+    {/* Modal de Agendamento */}
+    {article.themeId && (
+      <ScheduleDownloadModal
+        visible={showScheduleModal}
+        themeName={THEMES.find((t) => t.id === article.themeId)?.title || "Série"}
+        onClose={() => setShowScheduleModal(false)}
+        onSchedule={async (time, wifiOnly) => {
+          const themeName = THEMES.find((t) => t.id === article.themeId)?.title || "Série";
+          const success = await scheduleDownload(article.themeId, themeName, time, wifiOnly);
+          if (success) {
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          }
+          setShowScheduleModal(false);
+        }}
+      />
+    )}
+    </>
   );
 }
 

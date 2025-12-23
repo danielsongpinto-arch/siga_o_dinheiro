@@ -552,3 +552,40 @@
 - [x] Feedback haptic ao completar download (já existente)
 - [x] Tratamento de erros durante download
 - [x] Auto-limpeza do progresso após 2s (completo) ou 3s (erro)
+
+
+## Melhorias Finais - Décima Nona Rodada
+
+### 51. Pré-visualização de série antes de baixar
+- [x] Criar modal SeriesPreviewModal
+- [x] Listar todos os artigos da série com títulos
+- [x] Mostrar tamanho estimado de cada artigo (~1KB por 500 caracteres)
+- [x] Indicar quais artigos já estão em cache (checkmark verde)
+- [x] Botão "Baixar X Artigos" para confirmar
+- [x] Botão "Cancelar" para fechar modal
+- [x] Total de artigos, já em cache, e tamanho total da série
+- [x] Modal slide-up com ScrollView para listas longas
+- [x] Botão de download em lote abre modal antes de iniciar
+
+### 52. Gestão inteligente de cache (LRU)
+- [x] Adicionar campo lastAccessedAt em CachedArticle
+- [x] Atualizar lastAccessedAt ao abrir artigo em cache (hook useUpdateArticleAccess)
+- [x] Implementar política LRU no hook useOfflineCache
+- [x] Remover artigos menos acessados quando cache cheio (MAX_CACHE_SIZE = 50)
+- [x] Algoritmo LRU: percorre todos os artigos em cache e encontra o com lastAccessedAt mais antigo
+- [ ] Configuração: tamanho máximo do cache (MB) - não implementado (usa contador fixo)
+- [ ] Indicador visual de artigos "em risco" de remoção - não implementado
+
+### 53. Download agendado
+- [x] Criar hook useScheduledDownloads
+- [x] Permitir agendar download de série para horário específico
+- [x] Verificar tipo de conexão antes de executar (apenas Wi-Fi)
+- [x] Notificação quando download agendado for concluído
+- [x] Lista de downloads agendados nas Configurações
+- [x] Cancelar download agendado
+- [x] Persistir agendamentos em AsyncStorage
+- [x] Botão "Agendar" no modal de preview da série (SeriesPreviewModal)
+- [x] Modal de agendamento (ScheduleDownloadModal) com seletor de data/hora
+- [x] Toggle "Apenas Wi-Fi" no modal de agendamento
+- [x] Listener de notificações no _layout.tsx para executar downloads
+- [x] Integração completa com ArticleCard

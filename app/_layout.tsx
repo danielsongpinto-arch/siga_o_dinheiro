@@ -20,6 +20,8 @@ import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
 import { TabBarProvider } from "@/contexts/tab-bar-context";
 import { NightModeOverlay } from "@/components/night-mode-overlay";
+import * as Notifications from "expo-notifications";
+import { useScheduledDownloads } from "@/hooks/use-scheduled-downloads";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
@@ -32,6 +34,7 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const { loading: onboardingLoading } = useOnboarding();
+  const { executeScheduledDownload } = useScheduledDownloads();
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
 
@@ -42,6 +45,18 @@ export default function RootLayout() {
   useEffect(() => {
     initManusRuntime();
   }, []);
+
+  // Listener para notificações de download agendado
+  useEffect(() => {
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      const data = response.notification.request.content.data;
+      if (data?.scheduledDownloadId) {
+        executeScheduledDownload(data.scheduledDownloadId as string);
+      }
+    });
+
+    return () => subscription.remove();
+  }, [executeScheduledDownload]);
 
   const handleSafeAreaUpdate = useCallback((metrics: Metrics) => {
     setInsets(metrics.insets);

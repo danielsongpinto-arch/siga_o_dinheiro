@@ -61,6 +61,7 @@ export function useBatchDownload() {
           series: article.themeId,
           tags: [],
           cachedAt: new Date().toISOString(),
+          lastAccessedAt: new Date().toISOString(),
         };
 
         const success = await cacheArticle(cachedArticle);

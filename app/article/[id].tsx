@@ -31,6 +31,7 @@ import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useDataSaver } from "@/hooks/use-data-saver";
+import { useUpdateArticleAccess } from "@/hooks/use-update-article-access";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -74,6 +75,9 @@ export default function ArticleDetailScreen() {
 
   const article = ARTICLES.find((a) => a.id === id);
   const audioHook = useArticleAudio(article?.content || "");
+  
+  // Atualizar lastAccessedAt se artigo está em cache
+  useUpdateArticleAccess(id || "");
 
   if (!article) {
     return (
