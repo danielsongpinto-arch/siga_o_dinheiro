@@ -17,6 +17,7 @@ import { useReviewReminders } from "@/hooks/use-review-reminders";
 import { useAutoTheme } from "@/hooks/use-auto-theme";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useDataSaver } from "@/hooks/use-data-saver";
+import { useSmartSync } from "@/hooks/use-smart-sync";
 import { useScheduledDownloads } from "@/hooks/use-scheduled-downloads";
 import { useRouter } from "expo-router";
 
@@ -44,6 +45,8 @@ export default function SettingsScreen() {
   const { cacheIndex, clearCache, getCacheSizeFormatted } = useOfflineCache();
   const { settings: dataSaverSettings, isOnCellular, toggleDataSaver, toggleImages, toggleAudio } = useDataSaver();
   const { scheduledDownloads, cancelScheduledDownload } = useScheduledDownloads();
+  const { enabled: smartSyncEnabled, toggleEnabled: toggleSmartSync, getConditionsStatus, syncLog } = useSmartSync();
+  const conditions = getConditionsStatus();
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const themeOptions: { value: ThemePreference; label: string; icon: string; description: string }[] =
@@ -777,6 +780,28 @@ export default function SettingsScreen() {
               <Pressable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push("/offline-stats" as any);
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="chart.line.uptrend.xyaxis" size={20} color={colors.tint} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Estatísticas Offline</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Ver seu uso sem internet
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+            </View>
+
+            <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+              <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/cache-manager" as any);
                 }}
                 style={({ pressed }) => [
@@ -962,6 +987,86 @@ export default function SettingsScreen() {
                   />
                 </View>
               </>
+            )}
+          </View>
+        </View>
+
+        {/* Sincronização Inteligente */}
+        <View style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Sincronização Inteligente
+          </ThemedText>
+
+          <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+            <View style={styles.toggleItem}>
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  await toggleSmartSync();
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="moon.stars.fill" size={20} color={colors.icon} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Download Automático Noturno</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Baixar sugestões automaticamente durante a noite (22h-6h) quando estiver carregando e conectado ao Wi-Fi
+                  </ThemedText>
+                  {smartSyncEnabled && (
+                    <View style={{ marginTop: 8, gap: 4 }}>
+                      <ThemedText style={[styles.sunTimesInfo, { color: conditions.charging ? "#34C759" : colors.icon }]}>
+                        {conditions.charging ? "✓" : "✗"} Carregando
+                      </ThemedText>
+                      <ThemedText style={[styles.sunTimesInfo, { color: conditions.wifi ? "#34C759" : colors.icon }]}>
+                        {conditions.wifi ? "✓" : "✗"} Wi-Fi
+                      </ThemedText>
+                      <ThemedText style={[styles.sunTimesInfo, { color: conditions.nightTime ? "#34C759" : colors.icon }]}>
+                        {conditions.nightTime ? "✓" : "✗"} Horário noturno (22h-6h)
+                      </ThemedText>
+                    </View>
+                  )}
+                </View>
+              </Pressable>
+              <Switch
+                value={smartSyncEnabled}
+                onValueChange={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  await toggleSmartSync();
+                }}
+                trackColor={{ false: colors.border, true: colors.tint }}
+              />
+            </View>
+
+            {smartSyncEnabled && syncLog.length > 0 && (
+              <View style={[styles.toggleItem, { borderTopWidth: 1, borderTopColor: colors.border }]}>
+                <View style={styles.settingInfo}>
+                  <ThemedText type="defaultSemiBold">Histórico de Sincronizações</ThemedText>
+                  <View style={{ marginTop: 8, gap: 6 }}>
+                    {syncLog.slice(0, 3).map((log, index) => (
+                      <View key={index} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                        <IconSymbol
+                          name={log.success ? "checkmark.circle.fill" : "xmark.circle.fill"}
+                          size={16}
+                          color={log.success ? "#34C759" : "#FF3B30"}
+                        />
+                        <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                          {new Date(log.timestamp).toLocaleDateString("pt-BR", {
+                            day: "2-digit",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                          {" • "}
+                          {log.articlesDownloaded} {log.articlesDownloaded === 1 ? "artigo" : "artigos"}
+                        </ThemedText>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </View>
             )}
           </View>
         </View>

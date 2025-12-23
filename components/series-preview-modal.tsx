@@ -1,4 +1,5 @@
-import { Modal, Pressable, ScrollView, StyleSheet } from "react-native";
+import { Modal, View, Pressable, StyleSheet, ScrollView } from "react-native";
+import * as Haptics from "expo-haptics";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { IconSymbol } from "./ui/icon-symbol";
@@ -13,6 +14,7 @@ interface SeriesPreviewModalProps {
   onClose: () => void;
   onConfirm: () => void;
   onSchedule: () => void;
+  onShare?: () => void;
 }
 
 export function SeriesPreviewModal({
@@ -21,6 +23,7 @@ export function SeriesPreviewModal({
   onClose,
   onConfirm,
   onSchedule,
+  onShare,
 }: SeriesPreviewModalProps) {
   const cardBg = useThemeColor({}, "cardBackground");
   const tintColor = useThemeColor({}, "tint");
@@ -121,6 +124,18 @@ export function SeriesPreviewModal({
             >
               <ThemedText style={{ color: secondaryText }}>Cancelar</ThemedText>
             </Pressable>
+            {cachedCount > 0 && onShare && (
+              <Pressable
+                style={[styles.button, styles.shareButton, { borderColor: tintColor }]}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  onShare();
+                }}
+              >
+                <IconSymbol name="square.and.arrow.up" size={18} color={tintColor} />
+                <ThemedText style={{ color: tintColor, fontWeight: "600" }}>Compartilhar</ThemedText>
+              </Pressable>
+            )}
             <Pressable
               style={[styles.button, styles.scheduleButton, { borderColor: tintColor }]}
               onPress={() => {
@@ -233,6 +248,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   scheduleButton: {
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 6,
+  },
+  shareButton: {
     borderWidth: 1,
     flexDirection: "row",
     gap: 6,

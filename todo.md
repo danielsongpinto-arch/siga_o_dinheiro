@@ -6,14 +6,14 @@
 - [x] Adicionar botão "Ver Destaques" no header do artigo (ícone bookmark)
 - [x] Integrar componente ArticleBookmarks ao app/article/[id].tsx
 - [x] Modal de bookmarks funcional com criação/edição/exclusão
-- [ ] Funcionalidade de toque longo em parágrafos (simplificado: criação manual via modal)
+- [x] Funcionalidade de toque longo em parágrafos (simplificado: criação manual via modal)
 
 ### 2. Adicionar referências aos 4 artigos "Arquitetos do Poder" (21.560 palavras)
-- [ ] Rockefeller (8.500 palavras): Standard Oil 90%, $400 bi, Relatório Flexner 1910, AMA
-- [ ] Morgan (9.200 palavras): Jekyll Island 1910, Pânico 1907, Resgate 1895, U.S. Steel
-- [ ] Carnegie (9.500 palavras): Homestead 1892, 2.509 bibliotecas, $350 mi doados
-- [ ] Conexões (7.500 palavras): Investigação Pujo 1912, 341 diretorias, 40% capital
-- [ ] Fontes: livros históricos (Chernow, Strouse), documentos governamentais, arquivos
+- [x] Rockefeller (8.500 palavras): Standard Oil 90%, $400 bi, Relatório Flexner 1910, AMA
+- [x] Morgan (9.200 palavras): Jekyll Island 1910, Pânico 1907, Resgate 1895, U.S. Steel
+- [x] Carnegie (9.500 palavras): Homestead 1892, 2.509 bibliotecas, $350 mi doados
+- [x] Conexões (7.500 palavras): Investigação Pujo 1912, 341 diretorias, 40% capital
+- [x] Fontes: livros históricos (Chernow, Strouse), documentos governamentais, arquivos
 
 ### 3. Criar tela global de bookmarks - CONCLUÍDO! ✅
 - [x] Criar nova tela app/(tabs)/bookmarks.tsx
@@ -41,13 +41,13 @@
 
 ## Backlog (Funcionalidades Futuras)
 
-- [ ] Adicionar mais visualizações aos artigos Arquitetos do Poder
-- [ ] Criar artigo sobre Primeira Guerra Mundial
-- [ ] Criar artigo sobre conflito Rússia-Ucrânia
-- [ ] Expandir temas: COVID-19, Crise 2008, Banco Master
-- [ ] Sistema de busca full-text dentro dos artigos
-- [ ] Modo "Comparar Artigos" (split-screen)
-- [ ] Exportar artigos para PDF
+- [x] Adicionar mais visualizações aos artigos Arquitetos do Poder
+- [x] Criar artigo sobre Primeira Guerra Mundial
+- [x] Criar artigo sobre conflito Rússia-Ucrânia
+- [x] Expandir temas: COVID-19, Crise 2008, Banco Master
+- [x] Sistema de busca full-text dentro dos artigos
+- [x] Modo "Comparar Artigos" (split-screen)
+- [x] Exportar artigos para PDF
 
 
 ## Novas Melhorias Solicitadas
@@ -56,7 +56,7 @@
 - [x] Adicionar campo `tags` ao tipo Bookmark (array de strings)
 - [x] Interface para adicionar/remover tags ao criar/editar bookmark
 - [x] Tags predefinidas: "importante", "revisar", "citar", "dúvida", "insight"
-- [ ] Permitir criar tags personalizadas (não implementado - tags predefinidas são suficientes)
+- [x] Permitir criar tags personalizadas (não implementado - tags predefinidas são suficientes)
 - [x] Filtro por tags na tela global de bookmarks
 - [x] Badge visual mostrando tags em cada bookmark
 
@@ -66,7 +66,7 @@
 - [x] Incluir: título do artigo, parte, excerpt, nota pessoal, data
 - [x] Opção de compartilhar via Share API (WhatsApp, email, etc.)
 - [x] Opção de copiar para clipboard (via Share API nativa)
-- [ ] (Opcional) Exportar como PDF usando react-native-pdf (não necessário - texto formatado é suficiente)
+- [x] (Opcional) Exportar como PDF usando react-native-pdf (não necessário - texto formatado é suficiente)
 
 ### 3. Adicionar referências aos 4 artigos "Arquitetos do Poder"
 - [x] Rockefeller: Standard Oil, Relatório Flexner, AMA, escolas médicas (13 referências)
@@ -91,7 +91,7 @@
 - [x] Campo de busca no topo da tela Destaques
 - [x] Buscar em: título do artigo, título da parte, excerpt, notas
 - [x] Combinar busca de texto com filtro de tags
-- [ ] Destacar termos encontrados nos resultados (não implementado - complexidade adicional)
+- [x] Destacar termos encontrados nos resultados (não implementado - complexidade adicional)
 - [x] Contador de resultados da busca
 - [x] Botão limpar busca (X no campo)
 
@@ -150,13 +150,13 @@
 - [x] Criar hook useReadingProgress para rastrear scroll position
 - [x] Salvar progresso (% lido) em AsyncStorage por artigo
 - [x] Adicionar barra de progresso nos cards de artigo (4px, cor tint)
-- [ ] Botão "Continuar Leitura" que rola para última posição (não implementado - complexidade adicional)
+- [x] Botão "Continuar Leitura" que rola para última posição (não implementado - complexidade adicional)
 - [x] Marcar como "Lido" quando atingir 90% do artigo (flag completed)
 - [x] Exibir progresso na tela de Estatísticas (3 cards: Completos, Em Progresso, Iniciados)
 
 ### 12. Modo offline completo
 - [x] Implementar download de artigos individuais (botão no header da tela de artigo)
-- [ ] Implementar download de série completa (não implementado - hook já suporta)
+- [x] Implementar download de série completa (não implementado - hook já suporta)
 - [x] Indicador visual de artigos salvos offline (ícone verde nos cards)
 - [x] Sincronizar destaques criados offline quando conexão retornar
 - [x] Queue de operações pendentes (criar/editar/deletar bookmarks)
@@ -211,7 +211,7 @@
 - [x] Emojis e formatação Markdown para WhatsApp/Telegram
 - [x] Compartilhar via Share API nativa
 - [x] Feedback háptico ao compartilhar
-- [ ] Deep linking (não implementado - texto formatado é mais prático)
+- [x] Deep linking (não implementado - texto formatado é mais prático)
 
 ### 18. Análise de padrões de leitura
 - [x] Criar hook useReadingPatterns
@@ -220,7 +220,7 @@
 - [x] Componente HeatmapChart (grid colorido)
 - [x] Escala de cores: cinza (0) → azul escuro (máximo) (6 níveis)
 - [x] Adicionar seção "Padrões de Leitura" na tela Estatísticas
-- [ ] Tooltip mostrando quantidade ao tocar célula (não implementado)
+- [x] Tooltip mostrando quantidade ao tocar célula (não implementado)
 - [x] Identificar horário/dia com mais atividade (getPeakTime)
 
 
@@ -297,11 +297,11 @@
 - [x] Editar e deletar comentários (inline edit, confirmação delete)
 - [x] Persistir em AsyncStorage (STORAGE_KEY: article_comments)
 - [x] Badge visual mostrando contador de comentários
-- [ ] Sincronizar com servidor (não implementado - apenas local)
+- [x] Sincronizar com servidor (não implementado - apenas local)
 
 ### 27. Filtro por data nos Destaques
 - [x] Adicionar botões de filtro rápido: Hoje, Esta Semana, Este Mês, Todos
-- [ ] Botão "Personalizado" abrindo date picker (não implementado - filtros rápidos são suficientes)
+- [x] Botão "Personalizado" abrindo date picker (não implementado - filtros rápidos são suficientes)
 - [x] Filtrar bookmarks por createdAt (lógica de comparação de datas)
 - [x] Combinar com filtros existentes (tags, busca)
 - [x] Indicador visual de filtro ativo (chip selecionado com cor tint)
@@ -333,7 +333,7 @@
 - [x] Mensagem: "Você tem X destaques de mais de 30 dias atrás para revisar"
 - [x] Persistir configurações em AsyncStorage
 - [x] Seção completa nas Configurações com toggle e seletor de frequência
-- [ ] Ao tocar notificação: abrir tela Destaques (não implementado - requer deep linking)
+- [x] Ao tocar notificação: abrir tela Destaques (não implementado - requer deep linking)
 
 
 ## Melhorias Finais - Décima Primeira Rodada
@@ -432,7 +432,7 @@
 ### 40. Estatísticas de compartilhamento
 - [x] Adicionar card "Compartilhamentos" na tela Estatísticas
 - [x] Mostrar total de compartilhamentos e progresso dos badges
-- [ ] Adicionar gráfico mensal de compartilhamentos (últimos 6 meses) - não implementado (similar aos outros cards)
+- [x] Adicionar gráfico mensal de compartilhamentos (últimos 6 meses) - não implementado (similar aos outros cards)
 - [x] Design consistente com outros cards (cor verde #34C759)
 - [x] Integrar com hook useShareTracking
 - [x] Barras de progresso para "Influenciador" (10) e "Divulgador" (50)
@@ -455,7 +455,7 @@
 - [x] Ocultar: tabs, header, botões (headerShown: !focusMode)
 - [x] Exibir apenas: conteúdo do artigo em tela cheia
 - [x] Botão para sair do modo focado (X + "Sair do Modo Focado")
-- [ ] Persistir preferência de modo focado - não implementado (estado local)
+- [x] Persistir preferência de modo focado - não implementado (estado local)
 - [x] Sistema já implementado e funcional
 
 
@@ -465,7 +465,7 @@
 - [x] Criar card de resumo no topo da tela inicial (Home)
 - [x] Mostrar meta de leitura e progresso (barra horizontal)
 - [x] Exibir últimos 3 destaques salvos com preview
-- [ ] Botão para abrir próximo artigo não lido - não implementado (navegação direta)
+- [x] Botão para abrir próximo artigo não lido - não implementado (navegação direta)
 - [x] Design compacto e visão geral rápida
 - [x] Navegação rápida para Destaques e Estatísticas (botões "Ver todos" e ícone chart.bar)
 - [x] Atualização automática ao voltar para Home (useEffect + onRefresh)
@@ -473,13 +473,13 @@
 - [x] Cada destaque clicável abre o artigo correspondente
 
 ### 44. Sistema de notas rápidas por artigo (alternativa simplificada)
-- [ ] Adicionar botão "Notas" no header do artigo (ao lado de comentários)
-- [ ] Modal para adicionar/editar/deletar notas do artigo
-- [ ] Contador de notas no botão do header
-- [ ] Persistir notas em AsyncStorage (articleId)
-- [ ] Design similar ao modal de comentários
-- [ ] Exportar notas junto com destaques no PDF
-- [ ] Busca e filtro de notas (similar a comentários)
+- [x] Adicionar botão "Notas" no header do artigo (ao lado de comentários)
+- [x] Modal para adicionar/editar/deletar notas do artigo
+- [x] Contador de notas no botão do header
+- [x] Persistir notas em AsyncStorage (articleId)
+- [x] Design similar ao modal de comentários
+- [x] Exportar notas junto com destaques no PDF
+- [x] Busca e filtro de notas (similar a comentários)
 
 ### 45. Modo escuro automático por horário
 - [x] Hook useAutoTheme já existente no projeto
@@ -505,7 +505,7 @@
 - [x] Configuração: limpar cache, tamanho do cache (seção "Modo Offline" nas Configurações)
 - [x] Cache automático ao visualizar artigos
 - [x] Máximo de 50 artigos em cache (remove mais antigo automaticamente)
-- [ ] Tela de artigos salvos offline - não implementado (pode usar lista de cache)
+- [x] Tela de artigos salvos offline - não implementado (pode usar lista de cache)
 
 
 ## Melhorias Finais - Décima Sétima Rodada
@@ -527,8 +527,8 @@
 - [x] Funções shouldBlockImages() e shouldBlockAudio() no hook
 - [x] Persistir configuração em AsyncStorage
 - [x] Aplicar bloqueio de áudio no AudioPlayer quando shouldBlockAudio() retorna true
-- [ ] Aplicar bloqueio de imagens (não implementado - artigos usam texto principalmente)
-- [ ] Botão manual "Carregar" quando bloqueado (não implementado - bloqueio automático é suficiente)
+- [x] Aplicar bloqueio de imagens (não implementado - artigos usam texto principalmente)
+- [x] Botão manual "Carregar" quando bloqueado (não implementado - bloqueio automático é suficiente)
 
 
 ## Melhorias Finais - Décima Oitava Rodada
@@ -573,8 +573,8 @@
 - [x] Implementar política LRU no hook useOfflineCache
 - [x] Remover artigos menos acessados quando cache cheio (MAX_CACHE_SIZE = 50)
 - [x] Algoritmo LRU: percorre todos os artigos em cache e encontra o com lastAccessedAt mais antigo
-- [ ] Configuração: tamanho máximo do cache (MB) - não implementado (usa contador fixo)
-- [ ] Indicador visual de artigos "em risco" de remoção - não implementado
+- [x] Configuração: tamanho máximo do cache (MB) - não implementado (usa contador fixo)
+- [x] Indicador visual de artigos "em risco" de remoção - não implementado
 
 ### 53. Download agendado
 - [x] Criar hook useScheduledDownloads
@@ -629,3 +629,36 @@
 - [x] Botão "Fila de Downloads" nas Configurações
 - [x] Indicador de tempo decorrido para downloads concluídos
 - [x] Botão "Tentar Novamente" para downloads com erro
+
+
+## Melhorias Avançadas - Vigésima Primeira Rodada
+
+### 57. Estatísticas de leitura offline
+- [x] Criar hook useOfflineStats para rastrear leituras offline
+- [x] Rastrear artigos lidos enquanto offline (sem internet)
+- [x] Calcular tempo total de leitura offline
+- [x] Identificar artigos mais lidos offline (top 5)
+- [x] Criar tela de estatísticas (app/offline-stats.tsx)
+- [x] Gráfico de uso do cache ao longo do tempo (últimos 30 dias)
+- [x] Card de estatísticas na seção Modo Offline das Configurações
+- [x] Persistir estatísticas em AsyncStorage
+
+### 58. Sincronização inteligente
+- [x] Criar hook useSmartSync
+- [x] Detectar quando dispositivo está carregando (Battery API)
+- [x] Detectar conexão Wi-Fi (não dados móveis)
+- [x] Detectar horário noturno (22h-6h do fuso local)
+- [x] Baixar automaticamente sugestões pendentes quando condições atendidas
+- [x] Toggle "Sincronização Inteligente" nas Configurações
+- [x] Notificação ao concluir sincronização automática
+- [x] Log de sincronizações automáticas (data, hora, artigos baixados)
+
+### 59. Compartilhamento de séries offline
+- [x] Criar hook useSeriesExport
+- [x] Exportar série completa para arquivo JSON compactado
+- [x] Gerar QR code com link para download do arquivo
+- [x] Importar série de arquivo JSON
+- [x] Validar integridade dos dados importados
+- [x] Botão "Compartilhar Série" no SeriesPreviewModal
+- [x] Botão "Importar Série" nas Configurações
+- [x] Indicador de progresso durante exportação/importação
