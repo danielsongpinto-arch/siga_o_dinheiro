@@ -10,7 +10,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preference";
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useAuth } from "@/hooks/use-auth";
-import { useNightMode } from "@/hooks/use-night-mode";
+
 import { useReadingReminders } from "@/hooks/use-reading-reminders";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOnboarding } from "@/hooks/use-onboarding";
@@ -37,7 +37,7 @@ export default function SettingsScreen() {
   const { preference: themePreference, updatePreference } = useThemePreference();
   const { syncEnabled, isSyncing, lastSyncTime, toggleSync, performSync } = useBookmarkSync();
   const { user, isAuthenticated } = useAuth();
-  const { isNightMode, autoModeEnabled, hasManualOverride, toggleAutoMode, setManualMode, clearManualOverride } = useNightMode();
+
   const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
   const { goal, createGoal, deleteGoal } = useReadingGoals();
   const { resetOnboarding } = useOnboarding();
@@ -229,91 +229,7 @@ export default function SettingsScreen() {
           </View>
         )}
 
-        {/* Seção de Modo Noturno */}
-        <View style={styles.section}>
-          <ThemedText type="subtitle" style={styles.sectionTitle}>
-            Modo Leitura Noturna
-          </ThemedText>
-          <ThemedText style={[styles.sectionDescription, { color: colors.icon }]}>
-            Reduz luz azul após 20h para leitura confortável
-          </ThemedText>
 
-          <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
-            {/* Toggle Automático */}
-            <Pressable
-              onPress={async () => {
-                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                await toggleAutoMode();
-              }}
-              style={({ pressed }) => [
-                styles.toggleItem,
-                { borderBottomColor: colors.border },
-                pressed && styles.pressed,
-              ]}
-            >
-              <View style={styles.toggleLeft}>
-                <IconSymbol name="moon.stars.fill" size={24} color={colors.tint} />
-                <View style={styles.toggleText}>
-                  <ThemedText type="defaultSemiBold">Modo Automático</ThemedText>
-                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
-                    Ativa entre 20h e 7h
-                  </ThemedText>
-                </View>
-              </View>
-              <Switch
-                value={autoModeEnabled}
-                onValueChange={async () => {
-                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  await toggleAutoMode();
-                }}
-                trackColor={{ false: colors.border, true: colors.tint }}
-              />
-            </Pressable>
-
-            {/* Override Manual */}
-            {autoModeEnabled && (
-              <Pressable
-                onPress={async () => {
-                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  if (hasManualOverride) {
-                    await clearManualOverride();
-                  } else {
-                    await setManualMode(!isNightMode);
-                  }
-                }}
-                style={({ pressed }) => [
-                  styles.toggleItem,
-                  styles.toggleItemLast,
-                  pressed && styles.pressed,
-                ]}
-              >
-                <View style={styles.toggleLeft}>
-                  <IconSymbol name="hand.raised.fill" size={24} color="#FF9500" />
-                  <View style={styles.toggleText}>
-                    <ThemedText type="defaultSemiBold">Forçar Agora</ThemedText>
-                    <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
-                      {hasManualOverride
-                        ? `Modo ${isNightMode ? "noturno" : "normal"} forçado`
-                        : "Sobrescrever automático"}
-                    </ThemedText>
-                  </View>
-                </View>
-                <Switch
-                  value={hasManualOverride}
-                  onValueChange={async () => {
-                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    if (hasManualOverride) {
-                      await clearManualOverride();
-                    } else {
-                      await setManualMode(!isNightMode);
-                    }
-                  }}
-                  trackColor={{ false: colors.border, true: "#FF9500" }}
-                />
-              </Pressable>
-            )}
-          </View>
-        </View>
 
         {/* Seção de Notificações */}
         <View style={styles.section}>

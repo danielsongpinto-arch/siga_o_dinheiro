@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useReadingSettings, FontSize, LineSpacing, ReadingMode } from "@/hooks/use-reading-settings";
+import { useReadingSettings, FontSize, LineSpacing } from "@/hooks/use-reading-settings";
 
 export default function ReadingSettingsScreen() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function ReadingSettingsScreen() {
     border: useThemeColor({ light: "#E5E5EA", dark: "#38383A" }, "text"),
   };
 
-  const { settings, setFontSize, setLineSpacing, setMode, resetToDefaults } = useReadingSettings();
+  const { settings, setFontSize, setLineSpacing, resetToDefaults } = useReadingSettings();
 
   const fontSizes: { value: FontSize; label: string }[] = [
     { value: "xs", label: "Muito Pequeno" },
@@ -36,11 +36,7 @@ export default function ReadingSettingsScreen() {
     { value: "expanded", label: "Expandido" },
   ];
 
-  const readingModes: { value: ReadingMode; label: string; description: string }[] = [
-    { value: "default", label: "Padrão", description: "Segue o tema do sistema" },
-    { value: "sepia", label: "Sepia", description: "Fundo bege, ideal para leitura prolongada" },
-    { value: "high-contrast", label: "Alto Contraste", description: "Fundo preto, texto branco" },
-  ];
+
 
   return (
     <ThemedView style={styles.container}>
@@ -138,38 +134,7 @@ export default function ReadingSettingsScreen() {
           </View>
         </View>
 
-        {/* Modo de Leitura */}
-        <View style={styles.section}>
-          <ThemedText type="subtitle" style={styles.sectionTitle}>
-            Modo de Leitura
-          </ThemedText>
-          <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
-            {readingModes.map((item, index) => (
-              <Pressable
-                key={item.value}
-                onPress={async () => {
-                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  await setMode(item.value);
-                }}
-                style={({ pressed }) => [
-                  styles.modeItem,
-                  index > 0 && { borderTopWidth: 1, borderTopColor: colors.border },
-                  pressed && styles.pressed,
-                ]}
-              >
-                <View style={styles.modeInfo}>
-                  <ThemedText style={styles.modeLabel}>{item.label}</ThemedText>
-                  <ThemedText style={[styles.modeDescription, { color: colors.icon }]}>
-                    {item.description}
-                  </ThemedText>
-                </View>
-                {settings.mode === item.value && (
-                  <IconSymbol name="checkmark" size={20} color={colors.tint} />
-                )}
-              </Pressable>
-            ))}
-          </View>
-        </View>
+
 
         {/* Botão Restaurar Padrões */}
         <Pressable

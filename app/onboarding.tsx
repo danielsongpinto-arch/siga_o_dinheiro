@@ -12,6 +12,42 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const ONBOARDING_KEY = "onboarding_completed";
 
+// Componente wrapper para garantir cliques na web (FORA do componente para não recriar)
+const WebClickable = ({ children, onPress, style }: any) => {
+  if (Platform.OS === "web") {
+    const flatStyle = StyleSheet.flatten(style);
+    return (
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onPress();
+        }}
+        style={{
+          // Copiar TODOS os estilos do React Native
+          ...flatStyle,
+          // Sobrescrever estilos específicos do button HTML
+          cursor: "pointer",
+          userSelect: "none",
+          border: "none",
+          outline: "none",
+          WebkitTapHighlightColor: "transparent",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+        } as any}
+      >
+        {children}
+      </button>
+    );
+  }
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={style}>
+      {children}
+    </TouchableOpacity>
+  );
+};
+
 const slides = [
   {
     icon: "book.fill" as const,
@@ -58,60 +94,19 @@ export default function OnboardingScreen() {
     border: useThemeColor({ light: "#E5E5E5", dark: "#2C2C2E" }, "background"),
   };
 
-  // Componente wrapper para garantir cliques na web
-  const WebClickable = ({ children, onPress, style }: any) => {
-    if (Platform.OS === "web") {
-      const flatStyle = StyleSheet.flatten(style);
-      return (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log("[WebClickable] Button clicked!");
-            onPress();
-          }}
-          style={{
-            // Copiar TODOS os estilos do React Native
-            ...flatStyle,
-            // Sobrescrever estilos específicos do button HTML
-            cursor: "pointer",
-            userSelect: "none",
-            border: "none",
-            outline: "none",
-            WebkitTapHighlightColor: "transparent",
-            // Garantir que o botão seja visível e clicável
-            pointerEvents: "auto",
-            touchAction: "manipulation",
-          } as any}
-        >
-          {children}
-        </button>
-      );
-    }
-    return (
-      <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={style}>
-        {children}
-      </TouchableOpacity>
-    );
-  };
+
 
   const handleSkip = async () => {
-    console.log("[Onboarding] handleSkip CHAMADO");
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     } catch (e) {
       // Haptics pode falhar na web
     }
-    console.log("[Onboarding] Salvando onboarding_completed=true...");
     await AsyncStorage.setItem(ONBOARDING_KEY, "true");
-    console.log("[Onboarding] Navegando para /(tabs)...");
     router.replace("/(tabs)");
-    console.log("[Onboarding] handleSkip CONCLUÍDO");
   };
 
   const handleNext = async () => {
-    console.log("[Onboarding] handleNext CHAMADO. currentIndex:", currentIndex, "slides.length:", slides.length);
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     } catch (e) {
@@ -119,24 +114,13 @@ export default function OnboardingScreen() {
     }
     
     if (currentIndex < slides.length - 1) {
-      const nextIndex = currentIndex + 1;
-      console.log("[Onboarding] Avançando para slide", nextIndex);
-      setCurrentIndex(nextIndex);
-      console.log("[Onboarding] currentIndex atualizado para", nextIndex);
+      setCurrentIndex(currentIndex + 1);
     } else {
-      console.log("[Onboarding] Último slide, completando onboarding...");
       setCompleted(true);
       await AsyncStorage.setItem(ONBOARDING_KEY, "true");
-      console.log("[Onboarding] Salvou onboarding_completed=true");
-      console.log("[Onboarding] Navegando para /(tabs)...");
-      
-      // Forçar navegação com timeout para garantir que AsyncStorage foi salvo
       setTimeout(() => {
-        console.log("[Onboarding] Executando router.replace...");
         router.replace("/(tabs)");
       }, 100);
-      
-      console.log("[Onboarding] handleNext CONCLUÍDO");
     }
   };
 

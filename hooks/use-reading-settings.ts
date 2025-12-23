@@ -5,18 +5,14 @@ const READING_SETTINGS_KEY = "reading_settings";
 
 export type FontSize = "xs" | "s" | "m" | "l" | "xl";
 export type LineSpacing = "compact" | "normal" | "expanded";
-export type ReadingMode = "default" | "sepia" | "high-contrast";
-
 export interface ReadingSettings {
   fontSize: FontSize;
   lineSpacing: LineSpacing;
-  mode: ReadingMode;
 }
 
 const DEFAULT_SETTINGS: ReadingSettings = {
   fontSize: "m",
   lineSpacing: "normal",
-  mode: "default",
 };
 
 export function useReadingSettings() {
@@ -57,10 +53,6 @@ export function useReadingSettings() {
     await saveSettings({ ...settings, lineSpacing });
   };
 
-  const setMode = async (mode: ReadingMode) => {
-    await saveSettings({ ...settings, mode });
-  };
-
   const resetToDefaults = async () => {
     await saveSettings(DEFAULT_SETTINGS);
   };
@@ -87,54 +79,13 @@ export function useReadingSettings() {
     return baseLineHeight * multipliers[settings.lineSpacing];
   };
 
-  const getModeColors = (): {
-    background: string;
-    text: string;
-    cardBg: string;
-    border: string;
-  } => {
-    switch (settings.mode) {
-      case "sepia":
-        return {
-          background: "#F4ECD8",
-          text: "#5B4636",
-          cardBg: "#EDE3D0",
-          border: "#D4C4A8",
-        };
-      case "high-contrast":
-        return {
-          background: "#000000",
-          text: "#FFFFFF",
-          cardBg: "#1A1A1A",
-          border: "#333333",
-        };
-      default:
-        return {
-          background: "",
-          text: "",
-          cardBg: "",
-          border: "",
-        };
-    }
-  };
-
   const getContentStyles = () => {
     const fontSize = getFontSizeValue();
     const lineHeight = getLineHeightValue();
-    const colors = getModeColors();
 
     return {
       fontSize,
       lineHeight,
-      ...(colors.text && { color: colors.text }),
-    };
-  };
-
-  const getContainerStyles = () => {
-    const colors = getModeColors();
-
-    return {
-      ...(colors.background && { backgroundColor: colors.background }),
     };
   };
 
@@ -143,12 +94,9 @@ export function useReadingSettings() {
     loading,
     setFontSize,
     setLineSpacing,
-    setMode,
     resetToDefaults,
     getFontSizeValue,
     getLineHeightValue,
-    getModeColors,
     getContentStyles,
-    getContainerStyles,
   };
 }
