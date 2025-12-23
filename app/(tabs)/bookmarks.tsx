@@ -28,6 +28,7 @@ export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [generatingImage, setGeneratingImage] = useState(false);
   const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
+  const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
 
   useEffect(() => {
     loadBookmarks();
@@ -212,8 +213,34 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
     }
   };
 
-  // Filtrar por tag e busca
+  // Filtrar por tag, busca e data
   const filteredBookmarks = bookmarks.filter((bookmark) => {
+    // Filtro de data
+    if (dateFilter !== "all") {
+      const bookmarkDate = new Date(bookmark.createdAt);
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      if (dateFilter === "today") {
+        const bookmarkDay = new Date(bookmarkDate.getFullYear(), bookmarkDate.getMonth(), bookmarkDate.getDate());
+        if (bookmarkDay.getTime() !== today.getTime()) {
+          return false;
+        }
+      } else if (dateFilter === "week") {
+        const weekAgo = new Date(today);
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        if (bookmarkDate < weekAgo) {
+          return false;
+        }
+      } else if (dateFilter === "month") {
+        const monthAgo = new Date(today);
+        monthAgo.setMonth(monthAgo.getMonth() - 1);
+        if (bookmarkDate < monthAgo) {
+          return false;
+        }
+      }
+    }
+
     // Filtro de tag
     if (selectedTag && !bookmark.tags?.includes(selectedTag)) {
       return false;
@@ -261,7 +288,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             </ThemedText>
             <ThemedText style={[styles.headerSubtitle, { color: colors.icon }]}>
               {filteredBookmarks.length} {filteredBookmarks.length === 1 ? "destaque" : "destaques"}
-              {(selectedTag || searchQuery) && " encontrado(s)"}
+              {(selectedTag || searchQuery || dateFilter !== "all") && " encontrado(s)"}
             </ThemedText>
           </View>
           
@@ -348,6 +375,44 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             Por Data
           </ThemedText>
         </Pressable>
+      </View>
+
+      {/* Filtros de Data */}
+      <View style={[styles.dateFilterContainer, { borderBottomColor: colors.border }]}>
+        <ThemedText style={[styles.dateFilterLabel, { color: colors.icon }]}>Período:</ThemedText>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.dateFilterContent}
+        >
+          {[
+            { id: "all", label: "Todos" },
+            { id: "today", label: "Hoje" },
+            { id: "week", label: "Esta Semana" },
+            { id: "month", label: "Este Mês" },
+          ].map((filter) => (
+            <Pressable
+              key={filter.id}
+              onPress={() => {
+                setDateFilter(filter.id as typeof dateFilter);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+              style={[
+                styles.dateFilterChip,
+                dateFilter === filter.id && { backgroundColor: colors.tint },
+              ]}
+            >
+              <ThemedText
+                style={[
+                  styles.dateFilterText,
+                  dateFilter === filter.id && { color: "#fff" },
+                ]}
+              >
+                {filter.label}
+              </ThemedText>
+            </Pressable>
+          ))}
+        </ScrollView>
       </View>
 
       <ScrollView
@@ -682,6 +747,33 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
+  },
+  dateFilterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    gap: 12,
+  },
+  dateFilterLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  dateFilterContent: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  dateFilterChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+  },
+  dateFilterText: {
+    fontSize: 13,
+    fontWeight: "600",
   },
   tagsFilterContainer: {
     borderBottomWidth: 1,

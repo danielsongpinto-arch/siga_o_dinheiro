@@ -12,6 +12,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useNightMode } from "@/hooks/use-night-mode";
 import { useReadingReminders } from "@/hooks/use-reading-reminders";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
+import { useOnboarding } from "@/hooks/use-onboarding";
+import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
@@ -30,6 +32,8 @@ export default function SettingsScreen() {
   const { isNightMode, autoModeEnabled, hasManualOverride, toggleAutoMode, setManualMode, clearManualOverride } = useNightMode();
   const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
   const { goal, createGoal, deleteGoal } = useReadingGoals();
+  const { resetOnboarding } = useOnboarding();
+  const router = useRouter();
 
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -560,6 +564,40 @@ export default function SettingsScreen() {
               <ThemedText type="defaultSemiBold">~50.000 palavras</ThemedText>
             </View>
           </View>
+
+          {/* Botão Rever Tour */}
+          <Pressable
+            onPress={async () => {
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              Alert.alert(
+                "Rever Tour",
+                "Deseja rever o tour de boas-vindas?",
+                [
+                  {
+                    text: "Cancelar",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Rever",
+                    onPress: async () => {
+                      await resetOnboarding();
+                      router.push("/onboarding");
+                    },
+                  },
+                ]
+              );
+            }}
+            style={({ pressed }) => [
+              styles.reviewTourButton,
+              { backgroundColor: colors.cardBg, borderColor: colors.tint },
+              pressed && styles.pressed,
+            ]}
+          >
+            <IconSymbol name="arrow.clockwise" size={20} color={colors.tint} />
+            <ThemedText style={{ color: colors.tint, fontWeight: "600" }}>
+              Rever Tour de Boas-Vindas
+            </ThemedText>
+          </Pressable>
         </View>
       </ScrollView>
     </ThemedView>
@@ -717,5 +755,16 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.6,
+  },
+  reviewTourButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    borderWidth: 2,
+    marginTop: 16,
   },
 });

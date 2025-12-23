@@ -9,6 +9,8 @@ import { useArticleAudio } from "@/hooks/use-article-audio";
 import { VisualizationGallery } from "@/components/visualization-gallery";
 import { ArticleTableOfContents } from "@/components/article-table-of-contents";
 import { ArticleBookmarks, createBookmark } from "@/components/article-bookmarks";
+import { ArticleCommentsModal } from "@/components/article-comments-modal";
+import { useArticleComments } from "@/hooks/use-article-comments";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -51,6 +53,8 @@ export default function ArticleDetailScreen() {
   const [summaryMode, setSummaryMode] = useState(false);
   const [scrollViewRef, setScrollViewRef] = useState<ScrollView | null>(null);
   const [showBookmarks, setShowBookmarks] = useState(false);
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const { getCommentsCount } = useArticleComments(id || "");
 
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
@@ -190,10 +194,18 @@ export default function ArticleDetailScreen() {
                 <IconSymbol name="doc.text.fill" size={24} color={textSecondary} />
               </Pressable>
               <Pressable
-                onPress={() => router.push(`/discussions/${article.id}` as any)}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setShowCommentsModal(true);
+                }}
                 style={styles.headerButton}
               >
                 <IconSymbol name="bubble.left.fill" size={24} color={textSecondary} />
+                {getCommentsCount() > 0 && (
+                  <ThemedView style={[styles.commentBadge, { backgroundColor: tintColor }]}>
+                    <ThemedText style={styles.commentBadgeText}>{getCommentsCount()}</ThemedText>
+                  </ThemedView>
+                )}
               </Pressable>
               <Pressable onPress={() => setShowBookmarks(true)} style={styles.headerButton}>
                 <IconSymbol name="bookmark.fill" size={24} color={textSecondary} />
@@ -776,6 +788,13 @@ export default function ArticleDetailScreen() {
           />
         </ThemedView>
       )}
+
+      <ArticleCommentsModal
+        visible={showCommentsModal}
+        articleId={article.id}
+        articleTitle={article.title}
+        onClose={() => setShowCommentsModal(false)}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -800,6 +819,23 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     padding: 4,
+    position: "relative",
+  },
+  commentBadge: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 4,
+  },
+  commentBadgeText: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "bold",
   },
   articleHeader: {
     marginBottom: 24,

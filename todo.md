@@ -277,3 +277,32 @@
 - [x] Botão "Pular Tour" no header
 - [x] Salvar flag em AsyncStorage (onboarding_completed)
 - [x] Hook useOnboarding para gerenciar navegação automática
+
+
+## Melhorias Finais - Nona Rodada
+
+### 25. Botão "Rever Tour" nas Configurações
+- [x] Adicionar botão "Rever Tour" na seção Sobre das Configurações
+- [x] Chamar resetOnboarding() do hook useOnboarding
+- [x] Navegar para /onboarding após reset
+- [x] Feedback háptico ao tocar
+- [x] Confirmação via Alert antes de resetar
+
+### 26. Sistema de comentários por artigo
+- [x] Criar hook useArticleComments para gerenciar comentários
+- [x] Adicionar botão "Comentários" no header da tela de artigo (bubble.left.fill)
+- [x] Modal mostrando comentários do artigo (ArticleCommentsModal)
+- [x] Campo de texto para adicionar novo comentário (multiline, 500 chars)
+- [x] Listar comentários com data/hora (formato relativo: Xmin, Xh, Xd)
+- [x] Editar e deletar comentários (inline edit, confirmação delete)
+- [x] Persistir em AsyncStorage (STORAGE_KEY: article_comments)
+- [x] Badge visual mostrando contador de comentários
+- [ ] Sincronizar com servidor (não implementado - apenas local)
+
+### 27. Filtro por data nos Destaques
+- [x] Adicionar botões de filtro rápido: Hoje, Esta Semana, Este Mês, Todos
+- [ ] Botão "Personalizado" abrindo date picker (não implementado - filtros rápidos são suficientes)
+- [x] Filtrar bookmarks por createdAt (lógica de comparação de datas)
+- [x] Combinar com filtros existentes (tags, busca)
+- [x] Indicador visual de filtro ativo (chip selecionado com cor tint)
+- [x] Contador dinâmico reflete filtros aplicados
