@@ -7,10 +7,34 @@ import { addDGPAuthorToAll } from "@/utils/add-dgp-author";
 
 export const THEMES: Theme[] = [
   {
+    id: "sistema-autoperpetuante",
+    title: "Sistema que se Auto Alimenta",
+    description: "Como o sistema monetário padrão foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente - um padrão histórico que se repete desde o Império Romano",
+    articleCount: 1,
+  },
+  {
     id: "ww2",
     title: "Segunda Guerra Mundial",
     description: "Análise dos interesses financeiros por trás do maior conflito do século XX",
     articleCount: 3,
+  },
+  {
+    id: "arquitetos-do-poder",
+    title: "Arquitetos do Poder",
+    description: "Série sobre os homens que construíram os sistemas de controle financeiro e industrial que moldam o mundo moderno",
+    articleCount: 4,
+  },
+  {
+    id: "brics",
+    title: "BRICS e a Nova Ordem Financeira",
+    description: "Como os países emergentes buscam participar e remodelar o sistema financeiro global, criando alternativas à hegemonia exclusiva do dólar",
+    articleCount: 1,
+  },
+  {
+    id: "crise2008",
+    title: "Crise Financeira de 2008",
+    description: "Como interesses bancários levaram à maior crise econômica desde 1929",
+    articleCount: 1,
   },
   {
     id: "master",
@@ -25,12 +49,6 @@ export const THEMES: Theme[] = [
     articleCount: 1,
   },
   {
-    id: "crise2008",
-    title: "Crise Financeira de 2008",
-    description: "Como interesses bancários levaram à maior crise econômica desde 1929",
-    articleCount: 1,
-  },
-  {
     id: "privatizacoes",
     title: "Privatizações no Brasil",
     description: "Análise dos interesses financeiros por trás das privatizações brasileiras",
@@ -42,31 +60,12 @@ export const THEMES: Theme[] = [
     description: "O modelo de negócios e os interesses financeiros da Big Pharma",
     articleCount: 1,
   },
-
-  {
-    id: "sistema-autoperpetuante",
-    title: "Sistema que se Auto Alimenta",
-    description: "Como o sistema monetário padrão foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente - um padrão histórico que se repete desde o Império Romano",
-    articleCount: 1,
-  },
-  {
-    id: "brics",
-    title: "BRICS e a Nova Ordem Financeira",
-    description: "Como os países emergentes buscam participar e remodelar o sistema financeiro global, criando alternativas à hegemonia exclusiva do dólar",
-    articleCount: 1,
-  },
-  {
-    id: "arquitetos-do-poder",
-    title: "Arquitetos do Poder",
-    description: "Série sobre os homens que construíram os sistemas de controle financeiro e industrial que moldam o mundo moderno",
-    articleCount: 4,
-  },
 ];
 
 const RAW_ARTICLES: Article[] = [
+  ...SISTEMA_AUTOPERPETUANTE_ARTICLES,
   ...WW2_ARTICLES,
   ...ARQUITETOS_DO_PODER_ARTICLES,
-  ...SISTEMA_AUTOPERPETUANTE_ARTICLES,
   ...BRICS_ARTICLES,
   {
     id: "master-001",

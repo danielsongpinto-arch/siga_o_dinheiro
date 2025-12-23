@@ -801,3 +801,14 @@
 - [x] Remover linguagem polarizada (EUA vs China)
 - [x] Focar em multipolaridade e inclusão, não revolução
 - [x] Garantir tom neutro para uso internacional
+
+
+## Correção de Tempo de Leitura - Vigésima Segunda Rodada
+
+### 72. Expandir e reordenar artigo Sistema Monetário Padrão
+- [x] Expandir Parte 7 "A Grande Transferência de Riqueza" de 1.222 para ~5.000 palavras
+- [x] Adicionar análise detalhada dos eventos de agosto de 2023
+- [x] Expandir seções: Sinais Convergentes, Mecanismo da Transferência, 2026, Proteção Individual
+- [x] Atualizar readingTime de 28 para 38 minutos
+- [x] Atualizar wordCount para ~9.500 palavras
+- [x] Reordenar artigos para que este seja o primeiro (artigo introdutório fundamental)
