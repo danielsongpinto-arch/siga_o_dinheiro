@@ -15,6 +15,7 @@ import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOnboarding } from "@/hooks/use-onboarding";
 import { useReviewReminders } from "@/hooks/use-review-reminders";
 import { useAutoTheme } from "@/hooks/use-auto-theme";
+import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
@@ -38,7 +39,7 @@ export default function SettingsScreen() {
   const { resetOnboarding } = useOnboarding();
   const { settings: reviewSettings, loading: reviewLoading, enableReminders, disableReminders, updateFrequency, updateIntervals } = useReviewReminders();
   const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
-
+  const { cacheIndex, clearCache, getCacheSizeFormatted } = useOfflineCache();
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const themeOptions: { value: ThemePreference; label: string; icon: string; description: string }[] =
@@ -745,6 +746,64 @@ export default function SettingsScreen() {
                 trackColor={{ false: colors.border, true: colors.tint }}
                 thumbColor="#fff"
               />
+            </View>
+          </View>
+        </View>
+
+        {/* Gerenciamento de Cache Offline */}
+        <View style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Modo Offline
+          </ThemedText>
+
+          <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+            <View style={styles.settingRow}>
+              <View style={styles.settingInfo}>
+                <ThemedText type="defaultSemiBold">Cache de Artigos</ThemedText>
+                <ThemedText style={[styles.settingDescription, { color: colors.icon }]}>
+                  Artigos visualizados são salvos automaticamente para leitura offline.
+                </ThemedText>
+                <ThemedText style={[styles.sunTimesInfo, { color: colors.tint }]}>
+                  {cacheIndex.articleIds.length} artigos em cache ({getCacheSizeFormatted()})
+                </ThemedText>
+              </View>
+            </View>
+
+            <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  Alert.alert(
+                    "Limpar Cache",
+                    "Deseja remover todos os artigos salvos offline? Esta ação não pode ser desfeita.",
+                    [
+                      { text: "Cancelar", style: "cancel" },
+                      {
+                        text: "Limpar",
+                        style: "destructive",
+                        onPress: async () => {
+                          await clearCache();
+                          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        },
+                      },
+                    ]
+                  );
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold" style={{ color: "#FF3B30" }}>
+                    Limpar Cache
+                  </ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Remover todos os artigos salvos
+                  </ThemedText>
+                </View>
+              </Pressable>
             </View>
           </View>
         </View>

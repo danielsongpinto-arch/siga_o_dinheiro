@@ -491,3 +491,18 @@
 - [x] Atualizar tema automaticamente ao mudar de horário (interval a cada hora)
 - [x] Verificar horário ao abrir app ou voltar do background (AppState listener)
 - [x] Seção completa após seleção de tema manual
+
+
+## Melhorias Finais - Décima Sexta Rodada
+
+### 46. Modo offline completo
+- [x] Criar hook useOfflineCache para gerenciar cache de artigos
+- [x] Salvar artigos completos em AsyncStorage quando visualizados
+- [x] Detectar status de conexão com NetInfo
+- [x] Indicador visual de modo offline no header (badge laranja com wifi.slash)
+- [x] Badge "Disponível offline" nos artigos em cache (checkmark verde)
+- [x] Hook useOfflineSync criado para sincronização automática
+- [x] Configuração: limpar cache, tamanho do cache (seção "Modo Offline" nas Configurações)
+- [x] Cache automático ao visualizar artigos
+- [x] Máximo de 50 artigos em cache (remove mais antigo automaticamente)
+- [ ] Tela de artigos salvos offline - não implementado (pode usar lista de cache)

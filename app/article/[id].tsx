@@ -29,6 +29,7 @@ import { useScrollHideTabBar } from "@/hooks/use-scroll-hide-tab-bar";
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
+import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -47,6 +48,7 @@ export default function ArticleDetailScreen() {
   const { syncEnabled, syncBookmark, deleteBookmarkOnServer } = useBookmarkSync();
   const { updateProgress, getProgress } = useReadingProgress();
   const { incrementProgress } = useReadingGoals();
+  const { isOnline, cacheArticle, isArticleCached } = useOfflineCache();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -128,6 +130,25 @@ export default function ArticleDetailScreen() {
     };
   }, []);
 
+  // Cache automático do artigo ao visualizar
+  useEffect(() => {
+    if (article && isOnline) {
+      const cacheCurrentArticle = async () => {
+        await cacheArticle({
+          id: article.id,
+          title: article.title,
+          content: JSON.stringify(article.parts),
+          author: article.author,
+          date: article.date,
+          series: article.series,
+          tags: article.tags || [],
+          cachedAt: new Date().toISOString(),
+        });
+      };
+      cacheCurrentArticle();
+    }
+  }, [article?.id, isOnline]);
+
   const handlePlayAudio = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     audioHook.play();
@@ -170,6 +191,18 @@ export default function ArticleDetailScreen() {
           headerBackTitle: "Voltar",
           headerRight: () => (
             <ThemedView style={styles.headerActions}>
+              {/* Indicador de modo offline */}
+              {!isOnline && (
+                <ThemedView style={[styles.offlineIndicator, { backgroundColor: "#FF9500" }]}>
+                  <IconSymbol name="wifi.slash" size={16} color="#fff" />
+                </ThemedView>
+              )}
+              {/* Badge de artigo em cache */}
+              {isArticleCached(article.id) && isOnline && (
+                <ThemedView style={[styles.cachedBadge, { backgroundColor: tintColor }]}>
+                  <IconSymbol name="checkmark.circle.fill" size={16} color="#fff" />
+                </ThemedView>
+              )}
               <Pressable onPress={handleFavorite} style={styles.headerButton}>
                 <IconSymbol
                   name={isFavorite(article.id) ? "heart.fill" : "heart"}
@@ -1198,5 +1231,21 @@ const styles = StyleSheet.create({
   summaryText: {
     marginTop: 8,
     lineHeight: 22,
+  },
+  offlineIndicator: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
+  },
+  cachedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
   },
 });
