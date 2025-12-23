@@ -26,7 +26,17 @@ export interface CacheIndex {
 export interface DownloadProgress {
   articleId: string;
   progress: number; // 0-100
-  status: "downloading" | "completed" | "error";
+  status: "downloading" | "paused" | "queued" | "completed" | "error";
+  priority: number; // 1-5, maior = mais prioritário
+  articleTitle?: string;
+  seriesName?: string;
+  startedAt?: number;
+  completedAt?: number;
+}
+
+export interface ArticleWithSize extends CachedArticle {
+  sizeInBytes: number;
+  sizeFormatted: string;
 }
 
 export function useOfflineCache() {
@@ -75,7 +85,14 @@ export function useOfflineCache() {
       // Iniciar progresso
       setDownloadProgress((prev) => ({
         ...prev,
-        [article.id]: { articleId: article.id, progress: 0, status: "downloading" },
+        [article.id]: {
+          articleId: article.id,
+          progress: 0,
+          status: "downloading",
+          priority: 3,
+          articleTitle: article.title,
+          startedAt: Date.now(),
+        },
       }));
 
       const articleKey = `${CACHE_KEY_PREFIX}${article.id}`;
@@ -85,7 +102,7 @@ export function useOfflineCache() {
       // Simular progresso (AsyncStorage é síncrono, mas damos feedback visual)
       setDownloadProgress((prev) => ({
         ...prev,
-        [article.id]: { articleId: article.id, progress: 50, status: "downloading" },
+        [article.id]: { ...prev[article.id], progress: 50 },
       }));
 
       // Verificar se já está em cache
@@ -130,7 +147,12 @@ export function useOfflineCache() {
       // Completar progresso
       setDownloadProgress((prev) => ({
         ...prev,
-        [article.id]: { articleId: article.id, progress: 100, status: "completed" },
+        [article.id]: {
+          ...prev[article.id],
+          progress: 100,
+          status: "completed",
+          completedAt: Date.now(),
+        },
       }));
 
       // Limpar progresso após 2 segundos
@@ -149,7 +171,11 @@ export function useOfflineCache() {
       // Marcar erro
       setDownloadProgress((prev) => ({
         ...prev,
-        [article.id]: { articleId: article.id, progress: 0, status: "error" },
+        [article.id]: {
+          ...prev[article.id],
+          progress: 0,
+          status: "error",
+        },
       }));
 
       // Limpar erro após 3 segundos
@@ -253,6 +279,45 @@ export function useOfflineCache() {
     return `${sizeInMB.toFixed(1)} MB`;
   };
 
+  const formatBytes = (bytes: number): string => {
+    if (bytes < 1024) {
+      return `${bytes} B`;
+    }
+    const sizeInKB = bytes / 1024;
+    if (sizeInKB < 1024) {
+      return `${sizeInKB.toFixed(1)} KB`;
+    }
+    const sizeInMB = sizeInKB / 1024;
+    return `${sizeInMB.toFixed(1)} MB`;
+  };
+
+  const getAllCachedArticlesWithSize = async (): Promise<ArticleWithSize[]> => {
+    try {
+      const articles: ArticleWithSize[] = [];
+      for (const id of cacheIndex.articleIds) {
+        const articleKey = `${CACHE_KEY_PREFIX}${id}`;
+        const data = await AsyncStorage.getItem(articleKey);
+        if (data) {
+          const article: CachedArticle = JSON.parse(data);
+          const sizeInBytes = new Blob([data]).size;
+          articles.push({
+            ...article,
+            sizeInBytes,
+            sizeFormatted: formatBytes(sizeInBytes),
+          });
+        }
+      }
+      return articles;
+    } catch (error) {
+      console.error("Error getting articles with size:", error);
+      return [];
+    }
+  };
+
+  const getCacheUsagePercentage = (): number => {
+    return (cacheIndex.articleIds.length / MAX_CACHE_SIZE) * 100;
+  };
+
   return {
     isOnline,
     cacheIndex,
@@ -264,6 +329,9 @@ export function useOfflineCache() {
     removeFromCache,
     clearCache,
     getAllCachedArticles,
+    getAllCachedArticlesWithSize,
     getCacheSizeFormatted,
+    getCacheUsagePercentage,
+    formatBytes,
   };
 }

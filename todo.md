@@ -589,3 +589,43 @@
 - [x] Toggle "Apenas Wi-Fi" no modal de agendamento
 - [x] Listener de notificações no _layout.tsx para executar downloads
 - [x] Integração completa com ArticleCard
+
+
+## Melhorias Finais - Vigésima Rodada
+
+### 54. Gestão de espaço de armazenamento
+- [x] Adicionar função para calcular tamanho real de cada artigo em cache (bytes)
+- [x] Criar indicador visual de espaço usado (MB/GB) na seção Modo Offline das Configurações
+- [x] Adicionar barra de progresso mostrando % do limite (50 artigos)
+- [x] Criar tela de gerenciamento de cache (lista de artigos com tamanhos)
+- [x] Botão para remover artigos individuais do cache
+- [x] Ordenar por tamanho (maior primeiro) ou data de acesso (mais antigo primeiro)
+- [x] Indicador de quanto espaço será liberado ao remover artigo
+- [x] Botão "Gerenciar Cache" nas Configurações
+- [x] Tela app/cache-manager.tsx completa
+
+### 55. Sugestões inteligentes de download
+- [x] Criar hook useDownloadSuggestions
+- [x] Analisar histórico de leitura (temas mais lidos, autores favoritos)
+- [x] Identificar séries incompletas no cache (usuário leu 2 de 5 artigos)
+- [x] Sugerir artigos relacionados aos destaques salvos
+- [x] Card de sugestões na tela Home (abaixo do resumo rápido)
+- [x] Botão "Baixar Todos" para download em lote
+- [x] Persistir sugestões rejeitadas para não repetir (expiração 7 dias)
+- [x] Score de relevância (0-100) para ordenação
+- [x] 4 tipos de análise: séries incompletas, destaques, temas, autores
+- [x] Botão X para rejeitar sugestões individuais
+
+### 56. Fila de download prioritária
+- [x] Adicionar campo priority ao DownloadProgress (1-5, padrão 3)
+- [x] Criar tela de fila de downloads (app/download-queue.tsx)
+- [x] Listar downloads em andamento, pendentes e concluídos
+- [x] Botões: pausar, retomar, cancelar, alterar prioridade
+- [x] Ordenar fila por prioridade (maior primeiro)
+- [x] Indicador visual de status: downloading, paused, queued, completed, error
+- [x] Botão "Limpar Concluídos" para remover histórico
+- [x] Barra de progresso para downloads ativos
+- [x] Seletor de prioridade (1-5) em cada download
+- [x] Botão "Fila de Downloads" nas Configurações
+- [x] Indicador de tempo decorrido para downloads concluídos
+- [x] Botão "Tentar Novamente" para downloads com erro

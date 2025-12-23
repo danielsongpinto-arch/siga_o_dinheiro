@@ -775,6 +775,50 @@ export default function SettingsScreen() {
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
               <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push("/cache-manager" as any);
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="tray" size={20} color={colors.tint} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Gerenciar Cache</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Ver e remover artigos individuais
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+            </View>
+
+            <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+              <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push("/download-queue" as any);
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="arrow.down.circle" size={20} color={colors.tint} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Fila de Downloads</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Gerenciar downloads em andamento
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+            </View>
+
+            <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+              <Pressable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   Alert.alert(

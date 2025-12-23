@@ -11,12 +11,15 @@ import { useRecommendations } from "@/hooks/use-recommendations";
 import { useSeriesProgress } from "@/hooks/use-series-progress";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { getAllBookmarks } from "@/components/article-bookmarks";
+import { useDownloadSuggestions } from "@/hooks/use-download-suggestions";
+import { useBatchDownload } from "@/hooks/use-batch-download";
 import { SeriesCard } from "@/components/series-card";
 import { ARTICLES } from "@/data/mock-data";
 import { SERIES } from "@/data/series-data";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Pressable } from "react-native";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import * as Haptics from "expo-haptics";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -27,6 +30,8 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [recentBookmarks, setRecentBookmarks] = useState<any[]>([]);
   const { goal } = useReadingGoals();
+  const { suggestions, rejectSuggestion } = useDownloadSuggestions();
+  const { downloadSeries } = useBatchDownload();
 
   useEffect(() => {
     loadRecentBookmarks();
@@ -42,6 +47,7 @@ export default function HomeScreen() {
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
+  const secondaryText = useThemeColor({}, "textSecondary");
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -131,6 +137,63 @@ export default function HomeScreen() {
           </ThemedView>
         )}
       </ThemedView>
+
+      {/* Sugestões de Download */}
+      {suggestions.length > 0 && (
+        <ThemedView style={[styles.suggestionsCard, { backgroundColor: cardBg, borderColor }]}>
+          <ThemedView style={styles.suggestionsHeader}>
+            <ThemedView style={styles.suggestionsHeaderLeft}>
+              <IconSymbol name="lightbulb.fill" size={20} color="#FFD60A" />
+              <ThemedText type="defaultSemiBold">Sugestões para Baixar</ThemedText>
+            </ThemedView>
+            <Pressable
+              onPress={async () => {
+                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                // Baixar todos os artigos sugeridos
+                for (const suggestion of suggestions) {
+                  if (suggestion.article.themeId) {
+                    await downloadSeries(suggestion.article.themeId);
+                  }
+                }
+              }}
+              style={[styles.downloadAllButton, { backgroundColor: tintColor }]}
+            >
+              <IconSymbol name="arrow.down.circle.fill" size={16} color="#fff" />
+              <ThemedText style={styles.downloadAllText}>Baixar Todos</ThemedText>
+            </Pressable>
+          </ThemedView>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestionsList}>
+            {suggestions.slice(0, 3).map((suggestion) => (
+              <Pressable
+                key={suggestion.article.id}
+                onPress={() => router.push(`/article/${suggestion.article.id}` as any)}
+                style={[styles.suggestionItem, { borderColor }]}
+              >
+                <ThemedView style={styles.suggestionContent}>
+                  <ThemedText numberOfLines={2} style={styles.suggestionTitle}>
+                    {suggestion.article.title}
+                  </ThemedText>
+                  <ThemedView style={[styles.suggestionReason, { backgroundColor: borderColor }]}>
+                    <ThemedText style={[styles.suggestionReasonText, { color: tintColor }]}>
+                      {suggestion.reason}
+                    </ThemedText>
+                  </ThemedView>
+                </ThemedView>
+                <Pressable
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    rejectSuggestion(suggestion.article.id);
+                  }}
+                  style={styles.rejectButton}
+                >
+                  <IconSymbol name="xmark" size={16} color={secondaryText} />
+                </Pressable>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </ThemedView>
+      )}
 
       <ThemedView style={[styles.introCard, { backgroundColor: cardBg }]}>
         <ThemedText type="subtitle" style={styles.introTitle}>
@@ -388,5 +451,71 @@ const styles = StyleSheet.create({
   bookmarkArticle: {
     fontSize: 12,
     fontWeight: "600",
+  },
+  suggestionsCard: {
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 24,
+    borderWidth: 1,
+  },
+  suggestionsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  suggestionsHeaderLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  downloadAllButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  downloadAllText: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  suggestionsList: {
+    marginHorizontal: -16,
+    paddingHorizontal: 16,
+  },
+  suggestionItem: {
+    width: 240,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginRight: 12,
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  suggestionContent: {
+    flex: 1,
+    gap: 8,
+  },
+  suggestionTitle: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "600",
+  },
+  suggestionReason: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    alignSelf: "flex-start",
+  },
+  suggestionReasonText: {
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  rejectButton: {
+    padding: 4,
+    marginLeft: 8,
   },
 });
