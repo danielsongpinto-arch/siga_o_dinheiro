@@ -14,6 +14,7 @@ import { useReadingReminders } from "@/hooks/use-reading-reminders";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOnboarding } from "@/hooks/use-onboarding";
 import { useReviewReminders } from "@/hooks/use-review-reminders";
+import { useAutoTheme } from "@/hooks/use-auto-theme";
 import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
@@ -36,6 +37,7 @@ export default function SettingsScreen() {
   const { goal, createGoal, deleteGoal } = useReadingGoals();
   const { resetOnboarding } = useOnboarding();
   const { settings: reviewSettings, loading: reviewLoading, enableReminders, disableReminders, updateFrequency, updateIntervals } = useReviewReminders();
+  const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
 
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -719,6 +721,32 @@ export default function SettingsScreen() {
               );
             })}
           </View>
+
+          {/* Tema Automático por Nascer/Pôr do Sol */}
+          <View style={[styles.card, { backgroundColor: colors.cardBg, marginTop: 16, borderColor: colors.border }]}>
+            <View style={styles.settingRow}>
+              <View style={styles.settingInfo}>
+                <ThemedText type="defaultSemiBold">Tema Automático (Nascer/Pôr do Sol)</ThemedText>
+                <ThemedText style={[styles.settingDescription, { color: colors.icon }]}>
+                  Alterna automaticamente entre claro e escuro baseado no horário do nascer e pôr do sol da sua localização
+                </ThemedText>
+                {autoThemeEnabled && sunTimes && (
+                  <ThemedText style={[styles.sunTimesInfo, { color: colors.tint }]}>
+                    Nascer: {sunTimes.sunrise.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} | Pôr: {sunTimes.sunset.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                  </ThemedText>
+                )}
+              </View>
+              <Switch
+                value={autoThemeEnabled}
+                onValueChange={async (value) => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  toggleAutoTheme(value);
+                }}
+                trackColor={{ false: colors.border, true: colors.tint }}
+                thumbColor="#fff"
+              />
+            </View>
+          </View>
         </View>
 
         {/* Informações do App */}
@@ -943,5 +971,25 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     marginTop: 16,
+  },
+  settingRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    padding: 16,
+  },
+  settingInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
+  settingDescription: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 4,
+  },
+  sunTimesInfo: {
+    fontSize: 12,
+    marginTop: 8,
+    fontWeight: "600",
   },
 });

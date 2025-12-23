@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { ScrollView, StyleSheet, RefreshControl } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -9,6 +9,8 @@ import { ArticleCard } from "@/components/article-card";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useRecommendations } from "@/hooks/use-recommendations";
 import { useSeriesProgress } from "@/hooks/use-series-progress";
+import { useReadingGoals } from "@/hooks/use-reading-goals";
+import { getAllBookmarks } from "@/components/article-bookmarks";
 import { SeriesCard } from "@/components/series-card";
 import { ARTICLES } from "@/data/mock-data";
 import { SERIES } from "@/data/series-data";
@@ -23,14 +25,28 @@ export default function HomeScreen() {
   const { recommendations, getRecommendationReason } = useRecommendations();
   const { getProgressPercentage, isSeriesCompleted } = useSeriesProgress();
   const [refreshing, setRefreshing] = useState(false);
+  const [recentBookmarks, setRecentBookmarks] = useState<any[]>([]);
+  const { goal } = useReadingGoals();
+
+  useEffect(() => {
+    loadRecentBookmarks();
+  }, []);
+
+  const loadRecentBookmarks = async () => {
+    const bookmarks = await getAllBookmarks();
+    const sorted = bookmarks.sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    setRecentBookmarks(sorted.slice(0, 3));
+  };
   const tintColor = useThemeColor({}, "tint");
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // Simular refresh
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await loadRecentBookmarks();
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setRefreshing(false);
   };
 
@@ -55,6 +71,65 @@ export default function HomeScreen() {
         <ThemedText style={styles.subtitle}>
           Análise de fatos através da perspectiva financeira
         </ThemedText>
+      </ThemedView>
+
+      {/* Painel de Resumo Rápido */}
+      <ThemedView style={[styles.quickSummaryCard, { backgroundColor: cardBg, borderColor }]}>
+        <ThemedView style={styles.quickSummaryHeader}>
+          <ThemedText type="subtitle">Seu Progresso</ThemedText>
+          <Pressable onPress={() => router.push("/stats" as any)}>
+            <IconSymbol name="chart.bar.fill" size={20} color={tintColor} />
+          </Pressable>
+        </ThemedView>
+
+        {/* Meta de Leitura */}
+        {goal && (
+          <ThemedView style={styles.goalProgress}>
+            <ThemedView style={styles.goalInfo}>
+              <ThemedText style={styles.goalLabel}>Meta {goal.type === "weekly" ? "Semanal" : "Mensal"}</ThemedText>
+              <ThemedText type="defaultSemiBold" style={{ color: tintColor }}>
+                {goal.current}/{goal.target} artigos
+              </ThemedText>
+            </ThemedView>
+            <ThemedView style={[styles.progressBar, { backgroundColor: borderColor }]}>
+              <ThemedView
+                style={[
+                  styles.progressFill,
+                  {
+                    backgroundColor: tintColor,
+                    width: `${Math.min((goal.current / goal.target) * 100, 100)}%`,
+                  },
+                ]}
+              />
+            </ThemedView>
+          </ThemedView>
+        )}
+
+        {/* Últimos Destaques */}
+        {recentBookmarks.length > 0 && (
+          <ThemedView style={styles.recentBookmarks}>
+            <ThemedView style={styles.recentBookmarksHeader}>
+              <ThemedText style={styles.recentBookmarksTitle}>Últimos Destaques</ThemedText>
+              <Pressable onPress={() => router.push("/bookmarks" as any)}>
+                <ThemedText style={[styles.viewAllLink, { color: tintColor }]}>Ver todos</ThemedText>
+              </Pressable>
+            </ThemedView>
+            {recentBookmarks.map((bookmark) => (
+              <Pressable
+                key={bookmark.id}
+                onPress={() => router.push(`/article/${bookmark.articleId}` as any)}
+                style={[styles.bookmarkPreview, { borderColor }]}
+              >
+                <ThemedText numberOfLines={2} style={styles.bookmarkText}>
+                  {bookmark.excerpt}
+                </ThemedText>
+                <ThemedText style={[styles.bookmarkArticle, { color: tintColor }]}>
+                  {bookmark.articleTitle}
+                </ThemedText>
+              </Pressable>
+            ))}
+          </ThemedView>
+        )}
       </ThemedView>
 
       <ThemedView style={[styles.introCard, { backgroundColor: cardBg }]}>
@@ -246,6 +321,72 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     lineHeight: 20,
+    fontWeight: "600",
+  },
+  quickSummaryCard: {
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 24,
+    borderWidth: 1,
+  },
+  quickSummaryHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  goalProgress: {
+    marginBottom: 20,
+  },
+  goalInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  goalLabel: {
+    fontSize: 14,
+    opacity: 0.7,
+  },
+  progressBar: {
+    height: 8,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+  recentBookmarks: {
+    gap: 12,
+  },
+  recentBookmarksHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  recentBookmarksTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    opacity: 0.7,
+  },
+  viewAllLink: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  bookmarkPreview: {
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 6,
+  },
+  bookmarkText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  bookmarkArticle: {
+    fontSize: 12,
     fontWeight: "600",
   },
 });

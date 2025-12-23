@@ -457,3 +457,37 @@
 - [x] Botão para sair do modo focado (X + "Sair do Modo Focado")
 - [ ] Persistir preferência de modo focado - não implementado (estado local)
 - [x] Sistema já implementado e funcional
+
+
+## Melhorias Finais - Décima Quinta Rodada
+
+### 43. Painel de resumo rápido (alternativa a widget nativo)
+- [x] Criar card de resumo no topo da tela inicial (Home)
+- [x] Mostrar meta de leitura e progresso (barra horizontal)
+- [x] Exibir últimos 3 destaques salvos com preview
+- [ ] Botão para abrir próximo artigo não lido - não implementado (navegação direta)
+- [x] Design compacto e visão geral rápida
+- [x] Navegação rápida para Destaques e Estatísticas (botões "Ver todos" e ícone chart.bar)
+- [x] Atualização automática ao voltar para Home (useEffect + onRefresh)
+- [x] Card com borda, meta semanal/mensal, barra de progresso
+- [x] Cada destaque clicável abre o artigo correspondente
+
+### 44. Sistema de notas rápidas por artigo (alternativa simplificada)
+- [ ] Adicionar botão "Notas" no header do artigo (ao lado de comentários)
+- [ ] Modal para adicionar/editar/deletar notas do artigo
+- [ ] Contador de notas no botão do header
+- [ ] Persistir notas em AsyncStorage (articleId)
+- [ ] Design similar ao modal de comentários
+- [ ] Exportar notas junto com destaques no PDF
+- [ ] Busca e filtro de notas (similar a comentários)
+
+### 45. Modo escuro automático por horário
+- [x] Hook useAutoTheme já existente no projeto
+- [x] Funcionalidade mais avançada: usa GPS para calcular nascer/pôr do sol
+- [x] Adicionar configuração na tela Configurações
+- [x] Toggle para ativar/desativar tema automático
+- [x] Exibir horários do nascer e pôr do sol quando ativo
+- [x] Persistir configurações em AsyncStorage
+- [x] Atualizar tema automaticamente ao mudar de horário (interval a cada hora)
+- [x] Verificar horário ao abrir app ou voltar do background (AppState listener)
+- [x] Seção completa após seleção de tema manual
