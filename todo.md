@@ -135,3 +135,30 @@
 - [x] Resolver conflitos: última modificação vence (timestamp)
 - [x] Botão "Sincronizar Agora" manual na tela Configurações
 - [x] Indicador de última sincronização (data/hora)
+
+
+## Melhorias Finais - Quarta Rodada
+
+### 10. Sincronização automática de bookmarks
+- [x] Modificar createBookmark para chamar syncBookmark automaticamente (via callback)
+- [x] Modificar updateBookmark (saveNote) para chamar syncBookmark automaticamente
+- [x] Modificar deleteBookmark para chamar deleteBookmarkOnServer automaticamente
+- [x] Verificar se sync está ativado antes de sincronizar (syncEnabled)
+- [x] Adicionar tratamento de erros silencioso (try-catch, não bloqueia local)
+
+### 11. Sistema de progresso de leitura
+- [x] Criar hook useReadingProgress para rastrear scroll position
+- [x] Salvar progresso (% lido) em AsyncStorage por artigo
+- [x] Adicionar barra de progresso nos cards de artigo (4px, cor tint)
+- [ ] Botão "Continuar Leitura" que rola para última posição (não implementado - complexidade adicional)
+- [x] Marcar como "Lido" quando atingir 90% do artigo (flag completed)
+- [x] Exibir progresso na tela de Estatísticas (3 cards: Completos, Em Progresso, Iniciados)
+
+### 12. Modo offline completo
+- [x] Implementar download de artigos individuais (botão no header da tela de artigo)
+- [ ] Implementar download de série completa (não implementado - hook já suporta)
+- [x] Indicador visual de artigos salvos offline (ícone verde nos cards)
+- [x] Sincronizar destaques criados offline quando conexão retornar
+- [x] Queue de operações pendentes (criar/editar/deletar bookmarks)
+- [x] Processar queue automaticamente ao detectar conexão (NetInfo listener)
+- [x] Hook useOfflineSyncQueue com 7 funções

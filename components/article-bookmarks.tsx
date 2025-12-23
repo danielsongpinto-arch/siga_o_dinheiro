@@ -31,11 +31,21 @@ interface ArticleBookmarksProps {
   articleId: string;
   articleTitle: string;
   onClose: () => void;
+  onBookmarkCreated?: (bookmark: Bookmark) => Promise<void>;
+  onBookmarkUpdated?: (bookmark: Bookmark) => Promise<void>;
+  onBookmarkDeleted?: (bookmarkId: string) => Promise<void>;
 }
 
 const STORAGE_KEY = "article_bookmarks";
 
-export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBookmarksProps) {
+export function ArticleBookmarks({ 
+  articleId, 
+  articleTitle, 
+  onClose,
+  onBookmarkCreated,
+  onBookmarkUpdated,
+  onBookmarkDeleted,
+}: ArticleBookmarksProps) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? "light"];
   
@@ -71,6 +81,15 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
         const updated = allBookmarks.filter((b) => b.id !== bookmarkId);
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
         setBookmarks(bookmarks.filter((b) => b.id !== bookmarkId));
+        
+        // Sincronizar exclusão
+        if (onBookmarkDeleted) {
+          try {
+            await onBookmarkDeleted(bookmarkId);
+          } catch (syncError) {
+            console.error("Error syncing bookmark deletion:", syncError);
+          }
+        }
       }
     } catch (error) {
       console.error("Error deleting bookmark:", error);
@@ -85,10 +104,21 @@ export function ArticleBookmarks({ articleId, articleTitle, onClose }: ArticleBo
       if (stored) {
         const allBookmarks: Bookmark[] = JSON.parse(stored);
         const updated = allBookmarks.map((b) =>
-          b.id === bookmarkId ? { ...b, note, tags } : b
+          b.id === bookmarkId ? { ...b, note, tags, updatedAt: new Date().toISOString() } : b
         );
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        setBookmarks(bookmarks.map((b) => (b.id === bookmarkId ? { ...b, note, tags } : b)));
+        
+        const updatedBookmark = updated.find((b) => b.id === bookmarkId);
+        setBookmarks(bookmarks.map((b) => (b.id === bookmarkId ? { ...b, note, tags, updatedAt: new Date().toISOString() } : b)));
+        
+        // Sincronizar atualização
+        if (onBookmarkUpdated && updatedBookmark) {
+          try {
+            await onBookmarkUpdated(updatedBookmark);
+          } catch (syncError) {
+            console.error("Error syncing bookmark update:", syncError);
+          }
+        }
       }
       
       setEditingId(null);
@@ -419,7 +449,8 @@ export async function createBookmark(
   articleId: string,
   articleTitle: string,
   partTitle: string,
-  excerpt: string
+  excerpt: string,
+  syncCallback?: (bookmark: Bookmark) => Promise<void>
 ): Promise<void> {
   try {
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -431,12 +462,23 @@ export async function createBookmark(
       partTitle,
       excerpt: excerpt.substring(0, 200), // Limit excerpt length
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     const stored = await AsyncStorage.getItem(STORAGE_KEY);
     const bookmarks: Bookmark[] = stored ? JSON.parse(stored) : [];
     bookmarks.push(bookmark);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+    
+    // Sincronizar automaticamente se callback fornecido
+    if (syncCallback) {
+      try {
+        await syncCallback(bookmark);
+      } catch (syncError) {
+        console.error("Error syncing bookmark:", syncError);
+        // Não bloquear operação local se sync falhar
+      }
+    }
   } catch (error) {
     console.error("Error creating bookmark:", error);
   }

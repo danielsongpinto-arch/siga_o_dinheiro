@@ -24,6 +24,8 @@ import { useReadingHistory } from "@/hooks/use-reading-history";
 import { useQuiz } from "@/hooks/use-quiz";
 import { useFontSize } from "@/hooks/use-font-size";
 import { useScrollHideTabBar } from "@/hooks/use-scroll-hide-tab-bar";
+import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
+import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -39,6 +41,8 @@ export default function ArticleDetailScreen() {
   const { getFontSizes } = useFontSize();
   const fontSizes = getFontSizes();
   const { handleScroll, resetTabBar } = useScrollHideTabBar();
+  const { syncEnabled, syncBookmark, deleteBookmarkOnServer } = useBookmarkSync();
+  const { updateProgress, getProgress } = useReadingProgress();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -199,7 +203,19 @@ export default function ArticleDetailScreen() {
 
       <ScrollView
         style={styles.container}
-        onScroll={handleScroll}
+        onScroll={(event) => {
+          handleScroll(event);
+          // Atualizar progresso de leitura
+          const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+          if (article) {
+            updateProgress(
+              article.id,
+              contentOffset.y,
+              contentSize.height,
+              layoutMeasurement.height
+            );
+          }
+        }}
         scrollEventThrottle={16}
         contentContainerStyle={[
           styles.content,
@@ -749,6 +765,8 @@ export default function ArticleDetailScreen() {
             articleId={article.id}
             articleTitle={article.title}
             onClose={() => setShowBookmarks(false)}
+            onBookmarkUpdated={syncEnabled ? syncBookmark : undefined}
+            onBookmarkDeleted={syncEnabled ? deleteBookmarkOnServer : undefined}
           />
         </ThemedView>
       )}

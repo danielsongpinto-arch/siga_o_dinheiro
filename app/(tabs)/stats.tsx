@@ -5,6 +5,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 
 export default function StatsScreen() {
@@ -20,6 +21,7 @@ export default function StatsScreen() {
 
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
+  const { getAllProgress, getCompletedCount } = useReadingProgress();
 
   useEffect(() => {
     loadBookmarks();
@@ -38,6 +40,9 @@ export default function StatsScreen() {
 
   // Calcular estatísticas
   const totalBookmarks = bookmarks.length;
+  const allProgress = getAllProgress();
+  const completedArticles = getCompletedCount();
+  const articlesInProgress = allProgress.filter((p) => p.progress > 0 && !p.completed).length;
 
   // Destaques por artigo
   const bookmarksByArticle: Record<string, number> = {};
@@ -155,6 +160,39 @@ export default function StatsScreen() {
                 </ThemedText>
                 <ThemedText style={[styles.summaryLabel, { color: colors.icon }]}>
                   Com Notas
+                </ThemedText>
+              </View>
+            </View>
+
+            {/* Cards de Progresso de Leitura */}
+            <View style={styles.summaryGrid}>
+              <View style={[styles.summaryCard, { backgroundColor: colors.cardBg }]}>
+                <IconSymbol name="checkmark.circle.fill" size={32} color="#34C759" />
+                <ThemedText type="title" style={styles.summaryNumber}>
+                  {completedArticles}
+                </ThemedText>
+                <ThemedText style={[styles.summaryLabel, { color: colors.icon }]}>
+                  Completos
+                </ThemedText>
+              </View>
+
+              <View style={[styles.summaryCard, { backgroundColor: colors.cardBg }]}>
+                <IconSymbol name="book" size={32} color="#FF9500" />
+                <ThemedText type="title" style={styles.summaryNumber}>
+                  {articlesInProgress}
+                </ThemedText>
+                <ThemedText style={[styles.summaryLabel, { color: colors.icon }]}>
+                  Em Progresso
+                </ThemedText>
+              </View>
+
+              <View style={[styles.summaryCard, { backgroundColor: colors.cardBg }]}>
+                <IconSymbol name="chart.bar.fill" size={32} color={colors.tint} />
+                <ThemedText type="title" style={styles.summaryNumber}>
+                  {allProgress.length}
+                </ThemedText>
+                <ThemedText style={[styles.summaryLabel, { color: colors.icon }]}>
+                  Iniciados
                 </ThemedText>
               </View>
             </View>

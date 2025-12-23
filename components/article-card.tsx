@@ -3,6 +3,8 @@ import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { IconSymbol } from "./ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useReadingProgress } from "@/hooks/use-reading-progress";
+import { useOfflineArticles } from "@/hooks/use-offline-articles";
 import { Article } from "@/types";
 import { THEMES } from "@/data/mock-data";
 import { calculateReadingTime, formatReadingTime } from "@/utils/reading-time";
@@ -19,6 +21,11 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
   const tintColor = useThemeColor({}, "tint");
   const borderColor = useThemeColor({}, "border");
   const secondaryText = useThemeColor({}, "textSecondary");
+  const { getProgress } = useReadingProgress();
+  const { isArticleOffline } = useOfflineArticles();
+  
+  const progress = getProgress(article.id);
+  const isOffline = isArticleOffline(article.id);
 
   const theme = THEMES.find((t) => t.id === article.themeId);
 
@@ -51,6 +58,9 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
                 <ThemedText style={styles.badgeText}>{badge}</ThemedText>
               </ThemedView>
             )}
+            {isOffline && (
+              <IconSymbol name="arrow.down.circle.fill" size={18} color="#34C759" />
+            )}
             {isFavorite && (
               <IconSymbol name="heart.fill" size={18} color={tintColor} />
             )}
@@ -64,6 +74,23 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
         <ThemedText style={[styles.summary, { color: secondaryText }]} numberOfLines={3}>
           {article.summary}
         </ThemedText>
+
+        {/* Barra de Progresso */}
+        {progress && progress.progress > 0 && (
+          <ThemedView style={styles.progressContainer}>
+            <ThemedView style={[styles.progressBar, { backgroundColor: borderColor }]}>
+              <ThemedView
+                style={[
+                  styles.progressFill,
+                  { backgroundColor: tintColor, width: `${progress.progress}%` },
+                ]}
+              />
+            </ThemedView>
+            <ThemedText style={[styles.progressText, { color: secondaryText }]}>
+              {progress.completed ? "✓ Completo" : `${progress.progress}% lido`}
+            </ThemedText>
+          </ThemedView>
+        )}
 
         <ThemedView style={styles.footer}>
           <ThemedText style={[styles.date, { color: secondaryText }]}>
@@ -148,6 +175,24 @@ const styles = StyleSheet.create({
   readingTimeText: {
     fontSize: 12,
     lineHeight: 16,
+    fontWeight: "600",
+  },
+  progressContainer: {
+    marginBottom: 12,
+  },
+  progressBar: {
+    height: 4,
+    borderRadius: 2,
+    overflow: "hidden",
+    marginBottom: 4,
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 2,
+  },
+  progressText: {
+    fontSize: 11,
+    lineHeight: 14,
     fontWeight: "600",
   },
 });
