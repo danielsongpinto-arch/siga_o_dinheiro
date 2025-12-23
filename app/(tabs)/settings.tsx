@@ -10,6 +10,7 @@ import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preference";
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
+import { useSettingsSync } from "@/hooks/use-settings-sync";
 import { useAuth } from "@/hooks/use-auth";
 
 import { useReadingReminders } from "@/hooks/use-reading-reminders";
@@ -37,6 +38,13 @@ export default function SettingsScreen() {
 
   const { preference: themePreference, updatePreference } = useThemePreference();
   const { syncEnabled, isSyncing, lastSyncTime, toggleSync, performSync } = useBookmarkSync();
+  const { 
+    syncEnabled: settingsSyncEnabled, 
+    isSyncing: settingsIsSyncing, 
+    lastSyncTime: settingsLastSyncTime, 
+    toggleSync: toggleSettingsSync, 
+    performSync: performSettingsSync 
+  } = useSettingsSync();
   const { user, isAuthenticated } = useAuth();
 
   const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
@@ -226,6 +234,74 @@ export default function SettingsScreen() {
                   </ThemedText>
                 </View>
               )}
+
+              {/* Sincronização de Configurações */}
+              <WebClickable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  await toggleSettingsSync();
+                }}
+                style={[styles.syncOption, { borderBottomColor: colors.border }]}
+              >
+                <View style={styles.syncOptionLeft}>
+                  <View style={[styles.iconContainer, { backgroundColor: colors.tint + "20" }]}>
+                    <IconSymbol name="gearshape.fill" size={24} color={colors.tint} />
+                  </View>
+                  <View style={styles.optionTextContainer}>
+                    <ThemedText type="defaultSemiBold">Sincronizar Configurações</ThemedText>
+                    <ThemedText style={[styles.optionDescription, { color: colors.icon }]}>
+                      {settingsSyncEnabled ? "Ativado" : "Desativado"}
+                    </ThemedText>
+                  </View>
+                </View>
+                <Switch
+                  value={settingsSyncEnabled}
+                  onValueChange={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    await toggleSettingsSync();
+                  }}
+                  trackColor={{ false: colors.border, true: colors.tint }}
+                  thumbColor="#fff"
+                />
+              </WebClickable>
+
+              {settingsSyncEnabled && (
+                <WebClickable
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    await performSettingsSync();
+                    Alert.alert("Sucesso", "Configurações sincronizadas!");
+                  }}
+                  disabled={settingsIsSyncing}
+                  style={styles.syncButton}
+                >
+                  <IconSymbol
+                    name="arrow.clockwise"
+                    size={20}
+                    color={settingsIsSyncing ? colors.icon : colors.tint}
+                  />
+                  <ThemedText
+                    type="defaultSemiBold"
+                    style={[styles.syncButtonText, { color: settingsIsSyncing ? colors.icon : colors.tint }]}
+                  >
+                    {settingsIsSyncing ? "Sincronizando..." : "Sincronizar Agora"}
+                  </ThemedText>
+                </WebClickable>
+              )}
+
+              {settingsSyncEnabled && settingsLastSyncTime && (
+                <View style={styles.lastSyncContainer}>
+                  <ThemedText style={[styles.lastSyncText, { color: colors.icon }]}>
+                    Última sincronização:{" "}
+                    {settingsLastSyncTime.toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </ThemedText>
+                </View>
+              )}
             </View>
           </View>
         )}
@@ -248,10 +324,9 @@ export default function SettingsScreen() {
                 await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 await toggleReminders();
               }}
-              style={({ pressed }) => [
+              style={[
                 styles.toggleItem,
                 { borderBottomColor: colors.border },
-                pressed && styles.pressed,
               ]}
             >
               <View style={styles.toggleLeft}>
@@ -350,10 +425,9 @@ export default function SettingsScreen() {
                     );
                   }
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleItem,
                   styles.toggleItemLast,
-                  pressed && styles.pressed,
                 ]}
               >
                 <View style={styles.toggleLeft}>
@@ -393,10 +467,9 @@ export default function SettingsScreen() {
                   await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 }
               }}
-              style={({ pressed }) => [
+              style={[
                 styles.toggleItem,
                 { borderBottomColor: colors.border },
-                pressed && styles.pressed,
               ]}
             >
               <View style={styles.toggleLeft}>
@@ -466,10 +539,9 @@ export default function SettingsScreen() {
                       ]
                     );
                   }}
-                  style={({ pressed }) => [
+                  style={[
                     styles.toggleItem,
                     { borderBottomColor: colors.border },
-                    pressed && styles.pressed,
                   ]}
                 >
                   <View style={styles.toggleLeft}>
@@ -524,10 +596,9 @@ export default function SettingsScreen() {
                       ]
                     );
                   }}
-                  style={({ pressed }) => [
+                  style={[
                     styles.toggleItem,
                     styles.toggleItemLast,
-                    pressed && styles.pressed,
                   ]}
                 >
                   <View style={styles.toggleLeft}>
@@ -592,10 +663,9 @@ export default function SettingsScreen() {
                       ]
                     );
                   }}
-                  style={({ pressed }) => [
+                  style={[
                     styles.toggleItem,
                     styles.toggleItemLast,
-                    pressed && styles.pressed,
                   ]}
                 >
                   <View style={styles.toggleLeft}>
@@ -639,10 +709,9 @@ export default function SettingsScreen() {
                     ]
                   );
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleItem,
                   styles.toggleItemLast,
-                  pressed && styles.pressed,
                 ]}
               >
                 <View style={styles.toggleLeft}>
@@ -755,9 +824,8 @@ export default function SettingsScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/offline-stats" as any);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="chart.line.uptrend.xyaxis" size={20} color={colors.tint} />
@@ -777,9 +845,8 @@ export default function SettingsScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/cache-manager" as any);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="tray" size={20} color={colors.tint} />
@@ -799,9 +866,8 @@ export default function SettingsScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/download-queue" as any);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="arrow.down.circle" size={20} color={colors.tint} />
@@ -821,9 +887,8 @@ export default function SettingsScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/all-annotations" as any);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="doc.text.fill" size={20} color={colors.tint} />
@@ -843,9 +908,8 @@ export default function SettingsScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/backup-restore" as any);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="arrow.clockwise" size={20} color={colors.tint} />
@@ -879,9 +943,8 @@ export default function SettingsScreen() {
                     ]
                   );
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
@@ -911,9 +974,8 @@ export default function SettingsScreen() {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   await toggleDataSaver();
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="antenna.radiowaves.left.and.right" size={20} color={colors.icon} />
@@ -952,9 +1014,8 @@ export default function SettingsScreen() {
                       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       await toggleImages();
                     }}
-                    style={({ pressed }) => [
+                    style={[
                       styles.toggleLeft,
-                      pressed && styles.pressed,
                     ]}
                   >
                     <IconSymbol name="photo" size={20} color={colors.icon} />
@@ -981,9 +1042,8 @@ export default function SettingsScreen() {
                       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       await toggleAudio();
                     }}
-                    style={({ pressed }) => [
+                    style={[
                       styles.toggleLeft,
-                      pressed && styles.pressed,
                     ]}
                   >
                     <IconSymbol name="speaker.wave.2.fill" size={20} color={colors.icon} />
@@ -1021,9 +1081,8 @@ export default function SettingsScreen() {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   await toggleSmartSync();
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.toggleLeft,
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol name="moon.stars.fill" size={20} color={colors.icon} />
@@ -1143,9 +1202,8 @@ export default function SettingsScreen() {
                           ]
                         );
                       }}
-                      style={({ pressed }) => [
+                      style={[
                         styles.deleteButton,
-                        pressed && styles.pressed,
                       ]}
                     >
                       <IconSymbol name="trash" size={20} color="#FF3B30" />
@@ -1221,10 +1279,9 @@ export default function SettingsScreen() {
                 }
               }
             }}
-            style={({ pressed }) => [
+            style={[
               styles.reviewTourButton,
               { backgroundColor: colors.cardBg, borderColor: "#FF3B30", marginBottom: 16 },
-              pressed && styles.pressed,
             ]}
           >
             <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
@@ -1256,10 +1313,9 @@ export default function SettingsScreen() {
               await resetOnboarding();
               router.push("/onboarding");
             }}
-            style={({ pressed }) => [
+            style={[
               styles.reviewTourButton,
               { backgroundColor: colors.cardBg, borderColor: colors.tint },
-              pressed && styles.pressed,
             ]}
           >
             <IconSymbol name="arrow.clockwise" size={20} color={colors.tint} />

@@ -44,3 +44,24 @@ export const bookmarks = mysqlTable("bookmarks", {
 
 export type Bookmark = typeof bookmarks.$inferSelect;
 export type InsertBookmark = typeof bookmarks.$inferInsert;
+
+/**
+ * User settings table for storing user preferences.
+ * Synced across devices when user is authenticated.
+ */
+export const userSettings = mysqlTable("userSettings", {
+  userId: int("userId").primaryKey(), // Foreign key para users.id (1 registro por usuário)
+  themePreference: varchar("themePreference", { length: 16 }), // "light" | "dark" | "auto"
+  fontSize: varchar("fontSize", { length: 8 }), // "xs" | "sm" | "md" | "lg" | "xl"
+  lineSpacing: varchar("lineSpacing", { length: 16 }), // "compact" | "normal" | "expanded"
+  readingRemindersEnabled: int("readingRemindersEnabled"), // 0 = false, 1 = true
+  readingReminderTime: varchar("readingReminderTime", { length: 8 }), // "HH:MM"
+  readingReminderDays: text("readingReminderDays"), // JSON array [1,2,3,4,5]
+  readingGoalType: varchar("readingGoalType", { length: 16 }), // "weekly" | "monthly"
+  readingGoalTarget: int("readingGoalTarget"),
+  nightModeEnabled: int("nightModeEnabled"), // 0 = false, 1 = true
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserSettings = typeof userSettings.$inferSelect;
+export type InsertUserSettings = typeof userSettings.$inferInsert;

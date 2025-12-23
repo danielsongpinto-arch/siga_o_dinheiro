@@ -94,7 +94,6 @@ export default function SearchScreen() {
               styles.themeChip,
               { borderColor },
               !selectedTheme && { backgroundColor: tintColor, borderColor: tintColor },
-              pressed && styles.themeChipPressed,
             ]}
           >
             <ThemedText
@@ -114,7 +113,6 @@ export default function SearchScreen() {
                 styles.themeChip,
                 { borderColor },
                 selectedTheme === theme.id && { backgroundColor: tintColor, borderColor: tintColor },
-                pressed && styles.themeChipPressed,
               ]}
             >
               <ThemedText

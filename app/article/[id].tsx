@@ -59,7 +59,7 @@ export default function ArticleDetailScreen() {
   const { incrementProgress } = useReadingGoals();
   const { isOnline, cacheArticle, isArticleCached } = useOfflineCache();
   const { shouldBlockImages, shouldBlockAudio } = useDataSaver();
-  const { getContentStyles, getContainerStyles } = useReadingSettings();
+  const { getContentStyles } = useReadingSettings();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -319,7 +319,6 @@ export default function ArticleDetailScreen() {
             style={[
               styles.audioButton,
               { backgroundColor: tintColor },
-              pressed && styles.audioButtonPressed,
             ]}
           >
             <IconSymbol
@@ -478,7 +477,9 @@ export default function ArticleDetailScreen() {
                               backgroundColor: index === currentPartIndex ? tintColor : borderColor,
                             },
                           ]}
-                        />
+                        >
+                          <View />
+                        </WebClickable>
                       ))}
                     </ThemedView>
                   </ThemedView>
@@ -755,7 +756,6 @@ export default function ArticleDetailScreen() {
                   style={[
                     styles.relatedCard,
                     { backgroundColor: cardBg, borderColor },
-                    pressed && styles.relatedCardPressed,
                   ]}
                 >
                   <ThemedText
@@ -805,7 +805,6 @@ export default function ArticleDetailScreen() {
                   styles.sendButton,
                   { backgroundColor: tintColor },
                   !commentText.trim() && styles.sendButtonDisabled,
-                  pressed && styles.sendButtonPressed,
                 ]}
               >
                 <IconSymbol name="paperplane.fill" size={20} color="#fff" />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useColorScheme as useSystemColorScheme } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSettingsSync } from "./use-settings-sync";
 
 const THEME_PREFERENCE_KEY = "@siga_o_dinheiro:theme_preference";
 // const AUTO_THEME_ENABLED_KEY = "@siga_o_dinheiro:auto_theme_enabled"; // REMOVIDO
@@ -11,6 +12,7 @@ export function useThemePreference() {
   const systemColorScheme = useSystemColorScheme();
   const [preference, setPreference] = useState<ThemePreference>("auto");
   const [loading, setLoading] = useState(true);
+  const { syncEnabled, settings, updateTheme } = useSettingsSync();
   // const [autoThemeEnabled, setAutoThemeEnabled] = useState(false); // REMOVIDO
 
   useEffect(() => {
@@ -19,9 +21,16 @@ export function useThemePreference() {
 
   const loadPreference = async () => {
     try {
-      const stored = await AsyncStorage.getItem(THEME_PREFERENCE_KEY);
-      if (stored) {
-        setPreference(stored as ThemePreference);
+      // Se sync ativado, carregar do servidor
+      if (syncEnabled && settings.themePreference) {
+        setPreference(settings.themePreference);
+        console.log("[useThemePreference] Carregado do servidor:", settings.themePreference);
+      } else {
+        // Caso contrário, carregar do AsyncStorage local
+        const stored = await AsyncStorage.getItem(THEME_PREFERENCE_KEY);
+        if (stored) {
+          setPreference(stored as ThemePreference);
+        }
       }
       
       // Tema Automático (Nascer/Pôr do Sol) REMOVIDO
@@ -44,6 +53,12 @@ export function useThemePreference() {
       // Salvar no AsyncStorage
       await AsyncStorage.setItem(THEME_PREFERENCE_KEY, newPreference);
       console.log("[useThemePreference] Salvo no AsyncStorage:", newPreference);
+      
+      // Se sync ativado, sincronizar com servidor
+      if (syncEnabled) {
+        await updateTheme(newPreference);
+        console.log("[useThemePreference] Sincronizado com servidor:", newPreference);
+      }
       
       // Tema Automático (Nascer/Pôr do Sol) REMOVIDO
       

@@ -15,6 +15,13 @@
       "when": 1766451136061,
       "tag": "0001_amused_nicolaos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1766522261989,
+      "tag": "0002_mushy_rachel_grey",
+      "breakpoints": true
     }
   ]
 }

@@ -848,3 +848,13 @@
 - [x] Atualizar readingTime de 28 para 38 minutos
 - [x] Atualizar wordCount para ~9.500 palavras
 - [x] Reordenar artigos para que este seja o primeiro (artigo introdutório fundamental)
+
+
+## NOVA FUNCIONALIDADE - Sincronização de Configurações (23/dez/2024)
+- [ ] Criar hook useSettingsSync para sincronizar via backend
+- [ ] Integrar com useThemePreference (tema)
+- [ ] Integrar com useReadingSettings (fonte e espaçamento)
+- [ ] Integrar com useReadingReminders (lembretes)
+- [ ] Integrar com useReadingGoals (metas)
+- [ ] Criar API endpoints no backend
+- [ ] Testar sincronização entre telefone e computador

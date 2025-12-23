@@ -165,10 +165,9 @@ export default function BackupRestoreScreen() {
         <WebClickable
           onPress={handleExport}
           disabled={exporting}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: colors.tint, borderColor: colors.tint },
-            (exporting || pressed) && styles.pressed,
           ]}
         >
           <IconSymbol name="square.and.arrow.up" size={24} color="#fff" />
@@ -189,11 +188,11 @@ export default function BackupRestoreScreen() {
         <WebClickable
           onPress={handleImport}
           disabled={importing}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             styles.importButton,
             { borderColor: colors.border },
-            (importing || pressed) && styles.pressed,
+
           ]}
         >
           <IconSymbol name="square.and.arrow.down" size={24} color={colors.tint} />

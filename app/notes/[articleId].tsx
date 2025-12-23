@@ -198,7 +198,7 @@ export default function ArticleNotesScreen() {
                     <ThemedView style={styles.noteActions}>
                       <WebClickable
                         onPress={() => handleEditNote(note.id)}
-                        style={[{ opacity: pressed ? 0.7 : 1, marginRight: 12 }]}
+                        style={[{ opacity: 1, marginRight: 12 }]}
                       >
                         <IconSymbol name="pencil" size={20} color={tintColor} />
                       </WebClickable>

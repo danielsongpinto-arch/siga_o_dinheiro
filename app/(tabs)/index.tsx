@@ -181,8 +181,7 @@ export default function HomeScreen() {
                   </ThemedView>
                 </ThemedView>
                 <WebClickable
-                  onPress={(e) => {
-                    e.stopPropagation();
+                  onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     rejectSuggestion(suggestion.article.id);
                   }}
@@ -215,10 +214,9 @@ export default function HomeScreen() {
           </ThemedText>
           <WebClickable
             onPress={() => router.push("/series" as any)}
-            style={({ pressed }) => [
+            style={[
               styles.viewAllButton,
               { borderColor },
-              pressed && styles.viewAllButtonPressed,
             ]}
           >
             <ThemedText style={[styles.viewAllText, { color: tintColor }]}>Ver todas</ThemedText>

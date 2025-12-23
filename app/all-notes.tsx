@@ -74,9 +74,9 @@ export default function AllNotesScreen() {
               <WebClickable
                 key={note.id}
                 onPress={() => router.push(`/notes/${note.articleId}` as any)}
-                style={({ pressed }) => [
+                style={[
                   styles.noteCard,
-                  { backgroundColor: cardBg, borderColor, opacity: pressed ? 0.7 : 1 },
+                  { backgroundColor: cardBg, borderColor, opacity: 1 },
                 ]}
               >
                 <ThemedText type="defaultSemiBold" style={styles.noteTitle}>

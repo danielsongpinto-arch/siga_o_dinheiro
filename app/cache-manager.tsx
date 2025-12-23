@@ -183,13 +183,12 @@ export default function CacheManagerScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   setSortMode(option.mode);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.sortButton,
                   {
                     backgroundColor: sortMode === option.mode ? colors.tint : colors.cardBg,
                     borderColor: colors.border,
                   },
-                  pressed && styles.pressed,
                 ]}
               >
                 <IconSymbol
@@ -258,7 +257,7 @@ export default function CacheManagerScreen() {
                   onPress={() =>
                     handleRemoveArticle(article.id, article.title, article.sizeFormatted)
                   }
-                  style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
+                  style={[styles.removeButton]}
                 >
                   <IconSymbol name="trash" size={20} color="#FF3B30" />
                 </WebClickable>

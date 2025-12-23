@@ -147,7 +147,6 @@ export default function ProfileScreen() {
                   styles.themeOption,
                   { borderColor },
                   isSelected && { backgroundColor: tintColor, borderColor: tintColor },
-                  pressed && styles.themeOptionPressed,
                 ]}
               >
                 <IconSymbol
@@ -266,7 +265,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -282,7 +280,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -298,7 +295,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -314,7 +310,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -330,7 +325,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -346,7 +340,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -362,7 +355,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -378,7 +370,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -394,7 +385,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -410,7 +400,6 @@ export default function ProfileScreen() {
           style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
-            pressed && styles.actionButtonPressed,
           ]}
         >
           <ThemedView style={styles.actionContent}>
@@ -429,7 +418,6 @@ export default function ProfileScreen() {
               styles.actionButton,
               styles.logoutButton,
               { borderColor },
-              pressed && styles.actionButtonPressed,
             ]}
           >
             <ThemedView style={styles.actionContent}>

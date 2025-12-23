@@ -235,7 +235,7 @@ export default function HighlightsScreen() {
                 </WebClickable>
                 <WebClickable
                   onPress={() => handleDelete(highlight.id)}
-                  style={({ pressed }) => [
+                  style={[
                     styles.deleteButton,
                     styles.deleteButtonPressed,
                   ]}
