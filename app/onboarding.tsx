@@ -64,31 +64,26 @@ export default function OnboardingScreen() {
       const flatStyle = StyleSheet.flatten(style);
       return (
         <button
+          type="button"
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             console.log("[WebClickable] Button clicked!");
             onPress();
           }}
           style={{
+            // Copiar TODOS os estilos do React Native
             ...flatStyle,
+            // Sobrescrever estilos específicos do button HTML
             cursor: "pointer",
             userSelect: "none",
             border: "none",
             outline: "none",
-            padding: flatStyle.paddingVertical || flatStyle.padding || 0,
-            paddingLeft: flatStyle.paddingHorizontal || flatStyle.paddingLeft || flatStyle.padding || 0,
-            paddingRight: flatStyle.paddingHorizontal || flatStyle.paddingRight || flatStyle.padding || 0,
-            paddingTop: flatStyle.paddingVertical || flatStyle.paddingTop || flatStyle.padding || 0,
-            paddingBottom: flatStyle.paddingVertical || flatStyle.paddingBottom || flatStyle.padding || 0,
-            margin: 0,
-            font: "inherit",
-            color: "inherit",
-            textAlign: "inherit",
-            display: "flex",
-            alignItems: flatStyle.alignItems || "center",
-            justifyContent: flatStyle.justifyContent || "center",
-            flexDirection: flatStyle.flexDirection || "row",
-          }}
+            WebkitTapHighlightColor: "transparent",
+            // Garantir que o botão seja visível e clicável
+            pointerEvents: "auto",
+            touchAction: "manipulation",
+          } as any}
         >
           {children}
         </button>

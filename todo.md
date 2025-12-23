@@ -4,7 +4,14 @@
 
 ### Bugs CRÍTICOS Reportados pelo Usuário
 
-#### BUG CRÍTICO - ONBOARDING BLOQUEADO
+#### BUG CRÍTICO - TODOS OS BOTÕES NÃO FUNCIONAM
+- [ ] Botão "Começar" NÃO funciona (web + mobile)
+- [ ] Botão "Pular Tour" NÃO funciona (web + mobile)
+- [ ] Botões de Aparência NÃO funcionam (web + mobile)
+- [x] Componente WebClickable está quebrado - trocado div por button e copiando TODOS os estilos do React Native
+- [x] Testando: NightModeOverlay desativado temporariamente (NÃO era o problema)
+
+#### BUG CRÍTICO - ONBOARDING BLOQUEADO (RESOLVIDO?)
 - [x] Botão "Começar" na última página do onboarding NÃO FUNCIONA - trocado Pressable por WebClickable
 - [x] Botão "Pular Tour" NÃO FUNCIONA - trocado Pressable por WebClickable
 - [x] NINGUÉM CONSEGUE ENTRAR NO APP - CORRIGIDO com WebClickable + logs detalhados

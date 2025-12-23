@@ -87,17 +87,32 @@ export default function SettingsScreen() {
   // Componente wrapper para garantir cliques na web
   const WebClickable = ({ children, onPress, style }: any) => {
     if (Platform.OS === "web") {
+      const flatStyle = StyleSheet.flatten(style);
       return (
-        <div
-          onClick={onPress}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("[WebClickable Settings] Button clicked!");
+            onPress();
+          }}
           style={{
-            ...StyleSheet.flatten(style),
+            // Copiar TODOS os estilos do React Native
+            ...flatStyle,
+            // Sobrescrever estilos específicos do button HTML
             cursor: "pointer",
             userSelect: "none",
-          }}
+            border: "none",
+            outline: "none",
+            WebkitTapHighlightColor: "transparent",
+            // Garantir que o botão seja visível e clicável
+            pointerEvents: "auto",
+            touchAction: "manipulation",
+          } as any}
         >
           {children}
-        </div>
+        </button>
       );
     }
     return (

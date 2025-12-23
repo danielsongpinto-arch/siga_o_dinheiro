@@ -19,7 +19,7 @@ import { useOnboarding } from "@/hooks/use-onboarding";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
 import { TabBarProvider } from "@/contexts/tab-bar-context";
-import { NightModeOverlay } from "@/components/night-mode-overlay";
+// import { NightModeOverlay } from "@/components/night-mode-overlay"; // DESATIVADO TEMPORARIAMENTE PARA TESTE
 import * as Notifications from "expo-notifications";
 import { useScheduledDownloads } from "@/hooks/use-scheduled-downloads";
 
@@ -126,7 +126,7 @@ export default function RootLayout() {
               <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
               <Stack.Screen name="oauth/callback" options={{ headerShown: false }} />
             </Stack>
-              <NightModeOverlay />
+              {/* <NightModeOverlay /> */} {/* DESATIVADO TEMPORARIAMENTE PARA TESTE */}
               <StatusBar style="auto" />
             </ThemeProvider>
           </QueryClientProvider>
