@@ -74,10 +74,37 @@ export default function SettingsScreen() {
 
   const handleThemeChange = async (newTheme: ThemePreference) => {
     console.log("[handleThemeChange] Clicou em:", newTheme);
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch (e) {
+      // Haptics pode falhar na web, ignorar
+    }
     console.log("[handleThemeChange] Chamando updatePreference...");
     await updatePreference(newTheme);
     console.log("[handleThemeChange] Preferência atualizada!");
+  };
+
+  // Componente wrapper para garantir cliques na web
+  const WebClickable = ({ children, onPress, style }: any) => {
+    if (Platform.OS === "web") {
+      return (
+        <div
+          onClick={onPress}
+          style={{
+            ...StyleSheet.flatten(style),
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+        >
+          {children}
+        </div>
+      );
+    }
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={style}>
+        {children}
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -683,10 +710,9 @@ export default function SettingsScreen() {
               const isLast = index === themeOptions.length - 1;
 
               return (
-                <TouchableOpacity
+                <WebClickable
                   key={option.value}
                   onPress={() => handleThemeChange(option.value)}
-                  activeOpacity={0.7}
                   style={[
                     styles.optionItem,
                     { borderBottomColor: colors.border },
@@ -730,7 +756,7 @@ export default function SettingsScreen() {
                   {isSelected && (
                     <IconSymbol name="checkmark.circle.fill" size={24} color={colors.tint} />
                   )}
-                </TouchableOpacity>
+                </WebClickable>
               );
             })}
           </View>

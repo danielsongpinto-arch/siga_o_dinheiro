@@ -12,6 +12,7 @@
 - [x] Criar botão "Resetar Configurações" para limpar todos os dados salvos e resolver conflitos
 - [x] Botões "Resetar Configurações" e "Rever Tour" não funcionam - trocado Alert por window.confirm/alert na web
 - [x] Botões de Aparência (Claro/Escuro/Automático) não funcionam na web - trocado Pressable por TouchableOpacity
+- [x] TouchableOpacity também não funciona na web - criado WebClickable (div onClick na web, TouchableOpacity no mobile)
 
 ### Melhorias das Sugestões de IA
 - [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")
