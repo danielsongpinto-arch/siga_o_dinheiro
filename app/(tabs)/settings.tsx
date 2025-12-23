@@ -363,41 +363,75 @@ export default function SettingsScreen() {
               <Pressable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  Alert.prompt(
-                    "Configurar Horário",
-                    "Digite o horário no formato HH:MM (ex: 19:00)",
-                    [
-                      { text: "Cancelar", style: "cancel" },
-                      {
-                        text: "Salvar",
-                        onPress: async (text?: string) => {
-                          if (text) {
-                            const [hourStr, minuteStr] = text.split(":");
-                            const hour = parseInt(hourStr, 10);
-                            const minute = parseInt(minuteStr, 10);
-                            
-                            if (
-                              !isNaN(hour) &&
-                              !isNaN(minute) &&
-                              hour >= 0 &&
-                              hour <= 23 &&
-                              minute >= 0 &&
-                              minute <= 59
-                            ) {
-                              await setReminderTime(hour, minute);
-                              await Haptics.notificationAsync(
-                                Haptics.NotificationFeedbackType.Success
-                              );
-                            } else {
-                              Alert.alert("Erro", "Horário inválido. Use o formato HH:MM (ex: 19:00)");
+                  
+                  // Alert.prompt não existe na web, usar window.prompt
+                  if (Platform.OS === "web") {
+                    const currentTime = `${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`;
+                    const text = window.prompt(
+                      "Digite o horário no formato HH:MM (ex: 19:00)",
+                      currentTime
+                    );
+                    
+                    if (text) {
+                      const [hourStr, minuteStr] = text.split(":");
+                      const hour = parseInt(hourStr, 10);
+                      const minute = parseInt(minuteStr, 10);
+                      
+                      if (
+                        !isNaN(hour) &&
+                        !isNaN(minute) &&
+                        hour >= 0 &&
+                        hour <= 23 &&
+                        minute >= 0 &&
+                        minute <= 59
+                      ) {
+                        await setReminderTime(hour, minute);
+                        await Haptics.notificationAsync(
+                          Haptics.NotificationFeedbackType.Success
+                        );
+                        window.alert("Horário salvo com sucesso!");
+                      } else {
+                        window.alert("Erro: Horário inválido. Use o formato HH:MM (ex: 19:00)");
+                      }
+                    }
+                  } else {
+                    // Mobile: usar Alert.prompt (só funciona no iOS)
+                    Alert.prompt(
+                      "Configurar Horário",
+                      "Digite o horário no formato HH:MM (ex: 19:00)",
+                      [
+                        { text: "Cancelar", style: "cancel" },
+                        {
+                          text: "Salvar",
+                          onPress: async (text?: string) => {
+                            if (text) {
+                              const [hourStr, minuteStr] = text.split(":");
+                              const hour = parseInt(hourStr, 10);
+                              const minute = parseInt(minuteStr, 10);
+                              
+                              if (
+                                !isNaN(hour) &&
+                                !isNaN(minute) &&
+                                hour >= 0 &&
+                                hour <= 23 &&
+                                minute >= 0 &&
+                                minute <= 59
+                              ) {
+                                await setReminderTime(hour, minute);
+                                await Haptics.notificationAsync(
+                                  Haptics.NotificationFeedbackType.Success
+                                );
+                              } else {
+                                Alert.alert("Erro", "Horário inválido. Use o formato HH:MM (ex: 19:00)");
+                              }
                             }
-                          }
+                          },
                         },
-                      },
-                    ],
-                    "plain-text",
-                    `${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`
-                  );
+                      ],
+                      "plain-text",
+                      `${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`
+                    );
+                  }
                 }}
                 style={({ pressed }) => [
                   styles.toggleItem,
