@@ -16,6 +16,7 @@ import { useOnboarding } from "@/hooks/use-onboarding";
 import { useReviewReminders } from "@/hooks/use-review-reminders";
 import { useAutoTheme } from "@/hooks/use-auto-theme";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
+import { useDataSaver } from "@/hooks/use-data-saver";
 import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
@@ -40,6 +41,7 @@ export default function SettingsScreen() {
   const { settings: reviewSettings, loading: reviewLoading, enableReminders, disableReminders, updateFrequency, updateIntervals } = useReviewReminders();
   const { autoThemeEnabled, sunTimes, toggleAutoTheme } = useAutoTheme();
   const { cacheIndex, clearCache, getCacheSizeFormatted } = useOfflineCache();
+  const { settings: dataSaverSettings, isOnCellular, toggleDataSaver, toggleImages, toggleAudio } = useDataSaver();
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const themeOptions: { value: ThemePreference; label: string; icon: string; description: string }[] =
@@ -805,6 +807,116 @@ export default function SettingsScreen() {
                 </View>
               </Pressable>
             </View>
+          </View>
+        </View>
+
+        {/* Economia de Dados */}
+        <View style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Economia de Dados
+          </ThemedText>
+
+          <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+            <View style={styles.toggleItem}>
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  await toggleDataSaver();
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="antenna.radiowaves.left.and.right" size={20} color={colors.icon} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Modo Economia</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Reduzir consumo de dados móveis
+                  </ThemedText>
+                  {isOnCellular && (
+                    <ThemedText style={[styles.sunTimesInfo, { color: colors.tint }]}>
+                      Conexão: Dados Móveis
+                    </ThemedText>
+                  )}
+                  {!isOnCellular && (
+                    <ThemedText style={[styles.sunTimesInfo, { color: "#34C759" }]}>
+                      Conexão: Wi-Fi
+                    </ThemedText>
+                  )}
+                </View>
+              </Pressable>
+              <Switch
+                value={dataSaverSettings.enabled}
+                onValueChange={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  await toggleDataSaver();
+                }}
+                trackColor={{ false: colors.border, true: colors.tint }}
+              />
+            </View>
+
+            {dataSaverSettings.enabled && (
+              <>
+                <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+                  <Pressable
+                    onPress={async () => {
+                      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      await toggleImages();
+                    }}
+                    style={({ pressed }) => [
+                      styles.toggleLeft,
+                      pressed && styles.pressed,
+                    ]}
+                  >
+                    <IconSymbol name="photo" size={20} color={colors.icon} />
+                    <View style={styles.toggleText}>
+                      <ThemedText type="defaultSemiBold">Desabilitar Imagens</ThemedText>
+                      <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                        Não carregar imagens automaticamente em dados móveis
+                      </ThemedText>
+                    </View>
+                  </Pressable>
+                  <Switch
+                    value={dataSaverSettings.disableImages}
+                    onValueChange={async () => {
+                      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      await toggleImages();
+                    }}
+                    trackColor={{ false: colors.border, true: colors.tint }}
+                  />
+                </View>
+
+                <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+                  <Pressable
+                    onPress={async () => {
+                      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      await toggleAudio();
+                    }}
+                    style={({ pressed }) => [
+                      styles.toggleLeft,
+                      pressed && styles.pressed,
+                    ]}
+                  >
+                    <IconSymbol name="speaker.wave.2.fill" size={20} color={colors.icon} />
+                    <View style={styles.toggleText}>
+                      <ThemedText type="defaultSemiBold">Desabilitar Áudios</ThemedText>
+                      <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                        Não carregar áudios automaticamente em dados móveis
+                      </ThemedText>
+                    </View>
+                  </Pressable>
+                  <Switch
+                    value={dataSaverSettings.disableAudio}
+                    onValueChange={async () => {
+                      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      await toggleAudio();
+                    }}
+                    trackColor={{ false: colors.border, true: colors.tint }}
+                  />
+                </View>
+              </>
+            )}
           </View>
         </View>
 

@@ -1,10 +1,13 @@
 import { Pressable, StyleSheet } from "react-native";
+import { useState } from "react";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { IconSymbol } from "./ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useOfflineArticles } from "@/hooks/use-offline-articles";
+import { useOfflineCache } from "@/hooks/use-offline-cache";
+import * as Haptics from "expo-haptics";
 import { Article } from "@/types";
 import { THEMES } from "@/data/mock-data";
 import { calculateReadingTime, formatReadingTime } from "@/utils/reading-time";
@@ -23,6 +26,8 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
   const secondaryText = useThemeColor({}, "textSecondary");
   const { getProgress } = useReadingProgress();
   const { isArticleOffline } = useOfflineArticles();
+  const { cacheArticle, isArticleCached, removeFromCache } = useOfflineCache();
+  const [isCaching, setIsCaching] = useState(false);
   
   const progress = getProgress(article.id);
   const isOffline = isArticleOffline(article.id);
@@ -36,6 +41,38 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
       month: "long",
       year: "numeric",
     });
+  };
+
+  const handleDownloadToggle = async (e: any) => {
+    e.stopPropagation(); // Prevenir navegação ao clicar no botão
+    
+    if (isCaching) return;
+
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsCaching(true);
+
+    try {
+      if (isArticleCached(article.id)) {
+        await removeFromCache(article.id);
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      } else {
+        await cacheArticle({
+          id: article.id,
+          title: article.title,
+          content: article.content,
+          author: article.authors?.map(a => a.name).join(", ") || "Autor",
+          date: article.date,
+          series: article.themeId,
+          tags: [],
+          cachedAt: new Date().toISOString(),
+        });
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
+    } catch (error) {
+      console.error("Error toggling cache:", error);
+    } finally {
+      setIsCaching(false);
+    }
   };
 
   return (
@@ -93,15 +130,33 @@ export function ArticleCard({ article, isFavorite, onPress, badge }: ArticleCard
         )}
 
         <ThemedView style={styles.footer}>
-          <ThemedText style={[styles.date, { color: secondaryText }]}>
-            {formatDate(article.date)}
-          </ThemedText>
-          <ThemedView style={styles.readingTime}>
-            <IconSymbol name="clock.fill" size={14} color={secondaryText} />
-            <ThemedText style={[styles.readingTimeText, { color: secondaryText }]}>
-              {formatReadingTime(calculateReadingTime(article.content))}
+          <ThemedView style={styles.footerLeft}>
+            <ThemedText style={[styles.date, { color: secondaryText }]}>
+              {formatDate(article.date)}
             </ThemedText>
+            <ThemedView style={styles.readingTime}>
+              <IconSymbol name="clock.fill" size={14} color={secondaryText} />
+              <ThemedText style={[styles.readingTimeText, { color: secondaryText }]}>
+                {formatReadingTime(calculateReadingTime(article.content))}
+              </ThemedText>
+            </ThemedView>
           </ThemedView>
+          
+          {/* Botão de Download para Offline */}
+          <Pressable
+            onPress={handleDownloadToggle}
+            disabled={isCaching}
+            style={({ pressed }) => [
+              styles.downloadButton,
+              pressed && styles.pressed,
+            ]}
+          >
+            <IconSymbol
+              name={isArticleCached(article.id) ? "arrow.down.circle.fill" : "arrow.down.circle"}
+              size={24}
+              color={isArticleCached(article.id) ? "#34C759" : secondaryText}
+            />
+          </Pressable>
         </ThemedView>
       </ThemedView>
     </Pressable>
@@ -162,6 +217,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  footerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  downloadButton: {
+    padding: 4,
   },
   date: {
     fontSize: 12,

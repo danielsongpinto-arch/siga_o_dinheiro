@@ -30,6 +30,7 @@ import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
+import { useDataSaver } from "@/hooks/use-data-saver";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -49,6 +50,7 @@ export default function ArticleDetailScreen() {
   const { updateProgress, getProgress } = useReadingProgress();
   const { incrementProgress } = useReadingGoals();
   const { isOnline, cacheArticle, isArticleCached } = useOfflineCache();
+  const { shouldBlockImages, shouldBlockAudio } = useDataSaver();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -797,7 +799,7 @@ export default function ArticleDetailScreen() {
       </ScrollView>
 
       {/* Player de Áudio Flutuante */}
-      {(audioHook.audioState.isPlaying || audioHook.audioState.isPaused) && (
+      {!shouldBlockAudio() && (audioHook.audioState.isPlaying || audioHook.audioState.isPaused) && (
         <AudioPlayer
           audioState={audioHook.audioState}
           onPlay={audioHook.play}

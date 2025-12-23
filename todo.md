@@ -506,3 +506,26 @@
 - [x] Cache automático ao visualizar artigos
 - [x] Máximo de 50 artigos em cache (remove mais antigo automaticamente)
 - [ ] Tela de artigos salvos offline - não implementado (pode usar lista de cache)
+
+
+## Melhorias Finais - Décima Sétima Rodada
+
+### 47. Download manual de artigos
+- [x] Adicionar botão "Salvar para Offline" nos cards de artigos da Home
+- [x] Ícone: arrow.down.circle (vazio) / arrow.down.circle.fill (salvo)
+- [x] Feedback visual ao salvar (loading + haptic)
+- [x] Integrar com hook useOfflineCache
+- [x] Botão no footer do card com stopPropagation para não navegar
+- [x] Cor verde (#34C759) quando salvo, cinza quando não salvo
+
+### 48. Modo de economia de dados
+- [x] Criar hook useDataSaver para gerenciar modo economia
+- [x] Configuração nas Settings: toggle "Economia de Dados"
+- [x] Detectar tipo de conexão (WiFi vs Dados Móveis) com NetInfo
+- [x] Indicador visual de tipo de conexão (Dados Móveis / Wi-Fi)
+- [x] Toggles separados para imagens e áudios (aparecem quando modo ativo)
+- [x] Funções shouldBlockImages() e shouldBlockAudio() no hook
+- [x] Persistir configuração em AsyncStorage
+- [x] Aplicar bloqueio de áudio no AudioPlayer quando shouldBlockAudio() retorna true
+- [ ] Aplicar bloqueio de imagens (não implementado - artigos usam texto principalmente)
+- [ ] Botão manual "Carregar" quando bloqueado (não implementado - bloqueio automático é suficiente)
