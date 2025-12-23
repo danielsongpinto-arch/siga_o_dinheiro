@@ -6,6 +6,7 @@ import * as Sharing from "expo-sharing";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useComparison } from "@/hooks/use-comparison";
 import { ARTICLES, THEMES } from "@/data/mock-data";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -112,12 +113,12 @@ export default function CompareScreen() {
           <ThemedText style={[styles.emptyText, { color: secondaryText }]}>
             Selecione até 3 artigos para comparar seus autores e interesses financeiros.
           </ThemedText>
-          <Pressable
+          <WebClickable
             onPress={() => router.back()}
             style={[styles.backButton, { backgroundColor: tintColor }]}
           >
             <ThemedText style={styles.backButtonText}>Voltar</ThemedText>
-          </Pressable>
+          </WebClickable>
         </ThemedView>
       </>
     );
@@ -134,12 +135,12 @@ export default function CompareScreen() {
           headerTintColor: "#fff",
           headerRight: () => (
             <ThemedView style={styles.headerButtons}>
-              <Pressable onPress={handleExport} style={styles.headerButton}>
+              <WebClickable onPress={handleExport} style={styles.headerButton}>
                 <IconSymbol name="square.and.arrow.up" size={22} color="#fff" />
-              </Pressable>
-              <Pressable onPress={handleClear} style={styles.headerButton}>
+              </WebClickable>
+              <WebClickable onPress={handleClear} style={styles.headerButton}>
                 <IconSymbol name="trash.fill" size={22} color="#fff" />
-              </Pressable>
+              </WebClickable>
             </ThemedView>
           ),
         }}

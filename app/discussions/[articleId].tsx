@@ -7,6 +7,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useDiscussions } from "@/hooks/use-discussions";
 import { useAuth } from "@/hooks/use-auth";
@@ -135,19 +136,19 @@ export default function DiscussionsScreen() {
           </ThemedView>
 
           {!showNewDiscussion && (
-            <Pressable
+            <WebClickable
               onPress={() => setShowNewDiscussion(true)}
-              style={({ pressed }) => [
+              style={[
                 styles.newDiscussionButton,
                 { backgroundColor: tintColor },
-                pressed && styles.buttonPressed,
+                styles.buttonPressed,
               ]}
             >
               <IconSymbol name="plus" size={20} color="#fff" />
               <ThemedText style={styles.newDiscussionButtonText}>
                 Nova Discussão
               </ThemedText>
-            </Pressable>
+            </WebClickable>
           )}
 
           {showNewDiscussion && (
@@ -172,30 +173,30 @@ export default function DiscussionsScreen() {
                 style={[styles.contentInput, { borderColor }]}
               />
               <ThemedView style={styles.buttonRow}>
-                <Pressable
+                <WebClickable
                   onPress={() => {
                     setShowNewDiscussion(false);
                     setDiscussionTitle("");
                     setDiscussionContent("");
                   }}
-                  style={({ pressed }) => [
+                  style={[
                     styles.cancelButton,
                     { borderColor },
-                    pressed && styles.buttonPressed,
+                    styles.buttonPressed,
                   ]}
                 >
                   <ThemedText style={styles.cancelButtonText}>Cancelar</ThemedText>
-                </Pressable>
-                <Pressable
+                </WebClickable>
+                <WebClickable
                   onPress={handleCreateDiscussion}
-                  style={({ pressed }) => [
+                  style={[
                     styles.submitButton,
                     { backgroundColor: tintColor },
-                    pressed && styles.buttonPressed,
+                    styles.buttonPressed,
                   ]}
                 >
                   <ThemedText style={styles.submitButtonText}>Publicar</ThemedText>
-                </Pressable>
+                </WebClickable>
               </ThemedView>
             </ThemedView>
           )}
@@ -220,7 +221,7 @@ export default function DiscussionsScreen() {
               <ThemedText style={styles.discussionContent}>{discussion.content}</ThemedText>
 
               <ThemedView style={styles.discussionActions}>
-                <Pressable
+                <WebClickable
                   onPress={() => handleLike(discussion.id)}
                   style={styles.actionButton}
                 >
@@ -232,9 +233,9 @@ export default function DiscussionsScreen() {
                   <ThemedText style={[styles.actionText, { color: textSecondary }]}>
                     {discussion.likes}
                   </ThemedText>
-                </Pressable>
+                </WebClickable>
 
-                <Pressable
+                <WebClickable
                   onPress={() => setReplyingTo(replyingTo === discussion.id ? null : discussion.id)}
                   style={styles.actionButton}
                 >
@@ -242,7 +243,7 @@ export default function DiscussionsScreen() {
                   <ThemedText style={[styles.actionText, { color: textSecondary }]}>
                     {discussion.replies.length}
                   </ThemedText>
-                </Pressable>
+                </WebClickable>
               </ThemedView>
 
               {discussion.replies.length > 0 && (
@@ -258,7 +259,7 @@ export default function DiscussionsScreen() {
                         </ThemedText>
                       </ThemedView>
                       <ThemedText style={styles.replyContent}>{reply.content}</ThemedText>
-                      <Pressable
+                      <WebClickable
                         onPress={() => handleLike(reply.id, true)}
                         style={styles.replyLike}
                       >
@@ -270,7 +271,7 @@ export default function DiscussionsScreen() {
                         <ThemedText style={[styles.actionText, { color: textSecondary }]}>
                           {reply.likes}
                         </ThemedText>
-                      </Pressable>
+                      </WebClickable>
                     </ThemedView>
                   ))}
                 </ThemedView>
@@ -286,18 +287,18 @@ export default function DiscussionsScreen() {
                     multiline
                     style={styles.replyTextInput}
                   />
-                  <Pressable
+                  <WebClickable
                     onPress={() => handleAddReply(discussion.id)}
                     disabled={!replyContent.trim()}
-                    style={({ pressed }) => [
+                    style={[
                       styles.replyButton,
                       { backgroundColor: tintColor },
                       !replyContent.trim() && styles.replyButtonDisabled,
-                      pressed && styles.buttonPressed,
+                      styles.buttonPressed,
                     ]}
                   >
                     <IconSymbol name="paperplane.fill" size={20} color="#fff" />
-                  </Pressable>
+                  </WebClickable>
                 </ThemedView>
               )}
             </ThemedView>

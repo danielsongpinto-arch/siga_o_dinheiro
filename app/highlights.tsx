@@ -9,6 +9,7 @@ import { useState } from "react";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useHighlights } from "@/hooks/use-highlights";
 
@@ -164,13 +165,13 @@ export default function HighlightsScreen() {
           headerBackTitle: "Voltar",
           headerRight: () =>
             highlights.length > 0 ? (
-              <Pressable
+              <WebClickable
                 onPress={handleExportPDF}
                 disabled={exporting}
                 style={{ marginRight: 16, opacity: exporting ? 0.5 : 1 }}
               >
                 <IconSymbol name="square.and.arrow.up" size={24} color={tintColor} />
-              </Pressable>
+              </WebClickable>
             ) : null,
         }}
       />
@@ -202,7 +203,7 @@ export default function HighlightsScreen() {
                 key={highlight.id}
                 style={[styles.highlightCard, { backgroundColor: cardBg, borderColor }]}
               >
-                <Pressable
+                <WebClickable
                   onPress={() => router.push(`/article/${highlight.articleId}` as any)}
                   style={styles.highlightContent}
                 >
@@ -231,16 +232,16 @@ export default function HighlightsScreen() {
                     </ThemedView>
                     <IconSymbol name="chevron.right" size={20} color={textSecondary} />
                   </ThemedView>
-                </Pressable>
-                <Pressable
+                </WebClickable>
+                <WebClickable
                   onPress={() => handleDelete(highlight.id)}
                   style={({ pressed }) => [
                     styles.deleteButton,
-                    pressed && styles.deleteButtonPressed,
+                    styles.deleteButtonPressed,
                   ]}
                 >
                   <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
-                </Pressable>
+                </WebClickable>
               </ThemedView>
             ))}
           </ThemedView>

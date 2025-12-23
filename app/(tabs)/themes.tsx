@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { ThemeCard } from "@/components/theme-card";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useComparison } from "@/hooks/use-comparison";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { THEMES } from "@/data/mock-data";
@@ -38,7 +39,7 @@ export default function ThemesScreen() {
       </ThemedView>
 
       {selectedArticleIds.length > 0 && (
-        <Pressable
+        <WebClickable
           onPress={() => router.push("/compare" as any)}
           style={[styles.compareButton, { backgroundColor: tintColor }]}
         >
@@ -46,7 +47,7 @@ export default function ThemesScreen() {
           <ThemedText style={styles.compareButtonText}>
             Comparar ({selectedArticleIds.length})
           </ThemedText>
-        </Pressable>
+        </WebClickable>
       )}
 
       <ThemedView style={styles.themesList}>

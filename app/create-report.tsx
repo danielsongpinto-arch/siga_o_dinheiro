@@ -8,6 +8,7 @@ import * as Sharing from "expo-sharing";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useHighlights } from "@/hooks/use-highlights";
@@ -350,7 +351,7 @@ export default function CreateReportScreen() {
             const isFavorited = favorites.includes(article.id);
 
             return (
-              <Pressable
+              <WebClickable
                 key={article.id}
                 onPress={() => toggleArticle(article.id)}
                 style={[
@@ -384,12 +385,12 @@ export default function CreateReportScreen() {
                     </ThemedView>
                   </ThemedView>
                 </ThemedView>
-              </Pressable>
+              </WebClickable>
             );
           })}
         </ThemedView>
 
-        <Pressable
+        <WebClickable
           onPress={handleGenerateReport}
           disabled={isGenerating || selectedArticles.length === 0}
           style={[
@@ -410,7 +411,7 @@ export default function CreateReportScreen() {
                   selectedArticles.length === 1 ? "artigo" : "artigos"
                 })`}
           </ThemedText>
-        </Pressable>
+        </WebClickable>
       </ScrollView>
     </>
   );

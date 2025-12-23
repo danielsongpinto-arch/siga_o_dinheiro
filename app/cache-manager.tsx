@@ -6,6 +6,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useOfflineCache, ArticleWithSize } from "@/hooks/use-offline-cache";
 
@@ -113,7 +114,7 @@ export default function CacheManagerScreen() {
           },
         ]}
       >
-        <Pressable
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.back();
@@ -121,7 +122,7 @@ export default function CacheManagerScreen() {
           style={styles.backButton}
         >
           <IconSymbol name="chevron.left" size={24} color={colors.tint} />
-        </Pressable>
+        </WebClickable>
         <View style={styles.headerContent}>
           <ThemedText type="title" style={styles.headerTitle}>
             Gerenciar Cache
@@ -176,7 +177,7 @@ export default function CacheManagerScreen() {
               { mode: "date" as SortMode, label: "Data", icon: "clock" },
               { mode: "title" as SortMode, label: "Título", icon: "textformat" },
             ].map((option) => (
-              <Pressable
+              <WebClickable
                 key={option.mode}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -204,7 +205,7 @@ export default function CacheManagerScreen() {
                 >
                   {option.label}
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
             ))}
           </View>
         </View>
@@ -253,14 +254,14 @@ export default function CacheManagerScreen() {
                     </ThemedText>
                   </View>
                 </View>
-                <Pressable
+                <WebClickable
                   onPress={() =>
                     handleRemoveArticle(article.id, article.title, article.sizeFormatted)
                   }
                   style={({ pressed }) => [styles.removeButton, pressed && styles.pressed]}
                 >
                   <IconSymbol name="trash" size={20} color="#FF3B30" />
-                </Pressable>
+                </WebClickable>
               </View>
             ))}
           </View>

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useQuiz } from "@/hooks/use-quiz";
 import { ARTICLES } from "@/data/mock-data";
@@ -218,7 +219,7 @@ export default function QuizScreen() {
           </ThemedView>
 
           <ThemedView style={styles.actions}>
-            <Pressable
+            <WebClickable
               onPress={handleRetry}
               style={[styles.actionButton, styles.retryButton, { borderColor }]}
             >
@@ -226,16 +227,16 @@ export default function QuizScreen() {
               <ThemedText style={[styles.actionButtonText, { color: tintColor }]}>
                 Tentar Novamente
               </ThemedText>
-            </Pressable>
+            </WebClickable>
 
-            <Pressable
+            <WebClickable
               onPress={handleExit}
               style={[styles.actionButton, { backgroundColor: tintColor }]}
             >
               <ThemedText style={[styles.actionButtonText, { color: "#fff" }]}>
                 Voltar ao Artigo
               </ThemedText>
-            </Pressable>
+            </WebClickable>
           </ThemedView>
         </ScrollView>
       </>
@@ -279,7 +280,7 @@ export default function QuizScreen() {
               const isSelected = selectedAnswers[currentQuestion] === index;
 
               return (
-                <Pressable
+                <WebClickable
                   key={index}
                   onPress={() => handleSelectAnswer(index)}
                   style={[
@@ -294,7 +295,7 @@ export default function QuizScreen() {
                     )}
                   </ThemedView>
                   <ThemedText style={styles.optionText}>{option}</ThemedText>
-                </Pressable>
+                </WebClickable>
               );
             })}
           </ThemedView>
@@ -309,7 +310,7 @@ export default function QuizScreen() {
             },
           ]}
         >
-          <Pressable
+          <WebClickable
             onPress={handlePrevious}
             disabled={currentQuestion === 0}
             style={[
@@ -331,9 +332,9 @@ export default function QuizScreen() {
             >
               Anterior
             </ThemedText>
-          </Pressable>
+          </WebClickable>
 
-          <Pressable
+          <WebClickable
             onPress={handleNext}
             style={[styles.navButton, styles.nextButton, { backgroundColor: tintColor }]}
           >
@@ -341,7 +342,7 @@ export default function QuizScreen() {
               {currentQuestion === questions.length - 1 ? "Finalizar" : "Próxima"}
             </ThemedText>
             <IconSymbol name="chevron.right" size={20} color="#fff" />
-          </Pressable>
+          </WebClickable>
         </ThemedView>
       </ThemedView>
     </>

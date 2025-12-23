@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useAuth } from "@/hooks/use-auth";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFavorites } from "@/hooks/use-favorites";
@@ -99,7 +100,7 @@ export default function ProfileScreen() {
                 Receba notificações quando novos artigos forem publicados
               </ThemedText>
             </ThemedView>
-            <Pressable
+            <WebClickable
               onPress={() => toggleNotifications(!notificationsEnabled)}
               disabled={notifLoading}
               style={[
@@ -115,7 +116,7 @@ export default function ProfileScreen() {
                   notificationsEnabled && styles.toggleThumbActive,
                 ]}
               />
-            </Pressable>
+            </WebClickable>
           </ThemedView>
         </ThemedView>
       </ThemedView>
@@ -139,10 +140,10 @@ export default function ProfileScreen() {
             };
 
             return (
-              <Pressable
+              <WebClickable
                 key={theme}
                 onPress={() => updateThemePreference(theme)}
-                style={({ pressed }) => [
+                style={[
                   styles.themeOption,
                   { borderColor },
                   isSelected && { backgroundColor: tintColor, borderColor: tintColor },
@@ -160,7 +161,7 @@ export default function ProfileScreen() {
                 >
                   {themeLabels[theme]}
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
             );
           })}
         </ThemedView>
@@ -174,7 +175,7 @@ export default function ProfileScreen() {
                   Ajusta o tema baseado no nascer/p\u00f4r do sol
                 </ThemedText>
               </ThemedView>
-              <Pressable
+              <WebClickable
                 onPress={() => toggleAutoTheme(!autoThemeEnabled)}
                 style={[
                   styles.toggle,
@@ -189,7 +190,7 @@ export default function ProfileScreen() {
                     autoThemeEnabled && styles.toggleThumbActive,
                   ]}
                 />
-              </Pressable>
+              </WebClickable>
             </ThemedView>
             {autoThemeEnabled && sunTimes && (
               <ThemedView style={styles.sunTimesInfo}>
@@ -223,7 +224,7 @@ export default function ProfileScreen() {
         </ThemedText>
         <ThemedView style={styles.fontSizeOptions}>
           {(["small", "medium", "large", "extra-large"] as FontSizeOption[]).map((size) => (
-            <Pressable
+            <WebClickable
               key={size}
               onPress={() => updateFontSize(size)}
               style={[
@@ -254,15 +255,15 @@ export default function ProfileScreen() {
                 {size === "large" && "Grande"}
                 {size === "extra-large" && "Extra"}
               </ThemedText>
-            </Pressable>
+            </WebClickable>
           ))}
         </ThemedView>
       </ThemedView>
 
       <ThemedView style={styles.actionsSection}>
-        <Pressable
+        <WebClickable
           onPress={() => router.push("/leaderboard" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -275,10 +276,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/achievements" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -291,10 +292,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/series" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -307,10 +308,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/statistics" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -323,10 +324,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/highlights" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -339,10 +340,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/all-notes" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -355,10 +356,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/flashcards" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -371,10 +372,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/create-report" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -387,10 +388,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => router.push("/reading-history" as any)}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -403,10 +404,10 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={handleAbout}
-          style={({ pressed }) => [
+          style={[
             styles.actionButton,
             { backgroundColor: cardBg, borderColor },
             pressed && styles.actionButtonPressed,
@@ -419,12 +420,12 @@ export default function ProfileScreen() {
             </ThemedText>
           </ThemedView>
           <IconSymbol name="chevron.right" size={20} color={borderColor} />
-        </Pressable>
+        </WebClickable>
 
         {isAuthenticated && (
-          <Pressable
+          <WebClickable
             onPress={handleLogout}
-            style={({ pressed }) => [
+            style={[
               styles.actionButton,
               styles.logoutButton,
               { borderColor },
@@ -437,7 +438,7 @@ export default function ProfileScreen() {
                 Sair
               </ThemedText>
             </ThemedView>
-          </Pressable>
+          </WebClickable>
         )}
       </ThemedView>
     </ScrollView>

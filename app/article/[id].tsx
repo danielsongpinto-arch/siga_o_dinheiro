@@ -15,6 +15,7 @@ import { useArticleComments } from "@/hooks/use-article-comments";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { SelectableText } from "@/components/selectable-text";
 import { ArticleTextWithReferences, ReferenceList } from "@/components/article-text-with-references";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -216,30 +217,30 @@ export default function ArticleDetailScreen() {
                   <IconSymbol name="checkmark.circle.fill" size={16} color="#fff" />
                 </ThemedView>
               )}
-              <Pressable onPress={handleFavorite} style={styles.headerButton}>
+              <WebClickable onPress={handleFavorite} style={styles.headerButton}>
                 <IconSymbol
                   name={isFavorite(article.id) ? "heart.fill" : "heart"}
                   size={24}
                   color={isFavorite(article.id) ? tintColor : textSecondary}
                 />
-              </Pressable>
-              <Pressable onPress={handleOfflineToggle} style={styles.headerButton}>
+              </WebClickable>
+              <WebClickable onPress={handleOfflineToggle} style={styles.headerButton}>
                 <IconSymbol
                   name={isArticleOffline(article.id) ? "arrow.down.circle.fill" : "arrow.down.circle"}
                   size={24}
                   color={isArticleOffline(article.id) ? tintColor : textSecondary}
                 />
-              </Pressable>
-              <Pressable onPress={handleShare} style={styles.headerButton}>
+              </WebClickable>
+              <WebClickable onPress={handleShare} style={styles.headerButton}>
                 <IconSymbol name="square.and.arrow.up" size={24} color={textSecondary} />
-              </Pressable>
-              <Pressable onPress={() => setFocusMode(true)} style={styles.headerButton}>
+              </WebClickable>
+              <WebClickable onPress={() => setFocusMode(true)} style={styles.headerButton}>
                 <IconSymbol name="book.fill" size={24} color={textSecondary} />
-              </Pressable>
-              <Pressable onPress={() => router.push(`/notes/${article.id}` as any)} style={styles.headerButton}>
+              </WebClickable>
+              <WebClickable onPress={() => router.push(`/notes/${article.id}` as any)} style={styles.headerButton}>
                 <IconSymbol name="doc.text.fill" size={24} color={textSecondary} />
-              </Pressable>
-              <Pressable
+              </WebClickable>
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   setShowCommentsModal(true);
@@ -252,11 +253,11 @@ export default function ArticleDetailScreen() {
                     <ThemedText style={styles.commentBadgeText}>{getCommentsCount()}</ThemedText>
                   </ThemedView>
                 )}
-              </Pressable>
-              <Pressable onPress={() => setShowBookmarks(true)} style={styles.headerButton}>
+              </WebClickable>
+              <WebClickable onPress={() => setShowBookmarks(true)} style={styles.headerButton}>
                 <IconSymbol name="bookmark.fill" size={24} color={textSecondary} />
-              </Pressable>
-              <Pressable
+              </WebClickable>
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/reading-settings" as any);
@@ -264,7 +265,7 @@ export default function ArticleDetailScreen() {
                 style={styles.headerButton}
               >
                 <IconSymbol name="textformat" size={24} color={textSecondary} />
-              </Pressable>
+              </WebClickable>
             </ThemedView>
           ),
         }}
@@ -296,13 +297,13 @@ export default function ArticleDetailScreen() {
         ]}
       >
         {focusMode && (
-          <Pressable
+          <WebClickable
             onPress={() => setFocusMode(false)}
             style={[styles.focusModeButton, { backgroundColor: tintColor }]}
           >
             <IconSymbol name="xmark" size={20} color="#fff" />
             <ThemedText style={styles.focusModeText}>Sair do Modo Focado</ThemedText>
-          </Pressable>
+          </WebClickable>
         )}
         <ThemedView style={styles.articleHeader}>
           <ThemedText type="title" style={[styles.articleTitle, { fontSize: fontSizes.title }]}>
@@ -313,9 +314,9 @@ export default function ArticleDetailScreen() {
           </ThemedText>
           
            {/* Botão de Áudio */}
-          <Pressable
+          <WebClickable
             onPress={handlePlayAudio}
-            style={({ pressed }) => [
+            style={[
               styles.audioButton,
               { backgroundColor: tintColor },
               pressed && styles.audioButtonPressed,
@@ -329,7 +330,7 @@ export default function ArticleDetailScreen() {
             <ThemedText style={styles.audioButtonText}>
               Ouvir Artigo
             </ThemedText>
-          </Pressable>
+          </WebClickable>
         </ThemedView>
 
         {/* Widget de Progresso */}
@@ -343,7 +344,7 @@ export default function ArticleDetailScreen() {
 
         {/* Botão Modo Resumo */}
         {!focusMode && (
-          <Pressable
+          <WebClickable
             onPress={() => {
               setSummaryMode(!summaryMode);
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -358,7 +359,7 @@ export default function ArticleDetailScreen() {
             <ThemedText style={[styles.summaryModeText, { color: summaryMode ? "#fff" : tintColor }]}>
               {summaryMode ? "Ver Artigo Completo" : "Modo Resumo"}
             </ThemedText>
-          </Pressable>
+          </WebClickable>
         )}
 
         {/* Índice Clicável */}
@@ -465,7 +466,7 @@ export default function ArticleDetailScreen() {
                     </ThemedText>
                     <ThemedView style={styles.partDots}>
                       {validParts.map((_, index) => (
-                        <Pressable
+                        <WebClickable
                           key={index}
                           onPress={() => {
                             setCurrentPartIndex(index);
@@ -513,7 +514,7 @@ export default function ArticleDetailScreen() {
                 {/* Botões de Navegação */}
                 {totalParts > 1 && (
                   <ThemedView style={styles.partNavigation}>
-                    <Pressable
+                    <WebClickable
                       onPress={() => {
                         if (currentPartIndex > 0) {
                           setCurrentPartIndex(currentPartIndex - 1);
@@ -530,9 +531,9 @@ export default function ArticleDetailScreen() {
                       <ThemedText style={styles.partNavButtonText}>
                         {currentPartIndex === 0 ? "Início" : "Anterior"}
                       </ThemedText>
-                    </Pressable>
+                    </WebClickable>
 
-                    <Pressable
+                    <WebClickable
                       onPress={() => {
                         if (currentPartIndex < totalParts - 1) {
                           setCurrentPartIndex(currentPartIndex + 1);
@@ -549,7 +550,7 @@ export default function ArticleDetailScreen() {
                         {currentPartIndex === totalParts - 1 ? "Fim" : "Próxima"}
                       </ThemedText>
                       <IconSymbol name="chevron.right" size={20} color="#fff" />
-                    </Pressable>
+                    </WebClickable>
                   </ThemedView>
                 )}
               </>
@@ -726,7 +727,7 @@ export default function ArticleDetailScreen() {
               </ThemedView>
             )}
 
-            <Pressable
+            <WebClickable
               onPress={() => router.push(`/quiz/${id}` as any)}
               style={[styles.quizButton, { backgroundColor: tintColor }]}
             >
@@ -734,7 +735,7 @@ export default function ArticleDetailScreen() {
                 {hasCompletedQuiz(id || "") ? "Refazer Quiz" : "Iniciar Quiz"}
               </ThemedText>
               <IconSymbol name="arrow.right" size={20} color="#fff" />
-            </Pressable>
+            </WebClickable>
           </ThemedView>
         )}
 
@@ -748,10 +749,10 @@ export default function ArticleDetailScreen() {
             )
               .slice(0, 3)
               .map((relatedArticle) => (
-                <Pressable
+                <WebClickable
                   key={relatedArticle.id}
                   onPress={() => router.push(`/article/${relatedArticle.id}` as any)}
-                  style={({ pressed }) => [
+                  style={[
                     styles.relatedCard,
                     { backgroundColor: cardBg, borderColor },
                     pressed && styles.relatedCardPressed,
@@ -776,7 +777,7 @@ export default function ArticleDetailScreen() {
                     </ThemedText>
                     <IconSymbol name="chevron.right" size={16} color={textSecondary} />
                   </ThemedView>
-                </Pressable>
+                </WebClickable>
               ))}
           </ThemedView>
         </ThemedView>
@@ -797,10 +798,10 @@ export default function ArticleDetailScreen() {
                 multiline
                 maxLength={500}
               />
-              <Pressable
+              <WebClickable
                 onPress={handleAddComment}
                 disabled={!commentText.trim()}
-                style={({ pressed }) => [
+                style={[
                   styles.sendButton,
                   { backgroundColor: tintColor },
                   !commentText.trim() && styles.sendButtonDisabled,
@@ -808,7 +809,7 @@ export default function ArticleDetailScreen() {
                 ]}
               >
                 <IconSymbol name="paperplane.fill" size={20} color="#fff" />
-              </Pressable>
+              </WebClickable>
             </ThemedView>
           ) : (
             <ThemedView style={[styles.loginPrompt, { backgroundColor: cardBg, borderColor }]}>

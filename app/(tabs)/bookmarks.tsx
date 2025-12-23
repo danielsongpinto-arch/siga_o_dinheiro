@@ -5,6 +5,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -381,18 +382,18 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           
           {filteredBookmarks.length > 0 && (
             <View style={styles.headerButtons}>
-              <Pressable
+              <WebClickable
                 onPress={exportToPDF}
                 style={[styles.actionButton, { backgroundColor: "#FF9500" }]}
               >
                 <IconSymbol name="arrow.down.circle.fill" size={20} color="#fff" />
-              </Pressable>
-              <Pressable
+              </WebClickable>
+              <WebClickable
                 onPress={shareBookmarks}
                 style={[styles.actionButton, { backgroundColor: colors.tint }]}
               >
                 <IconSymbol name="square.and.arrow.up" size={20} color="#fff" />
-              </Pressable>
+              </WebClickable>
             </View>
           )}
         </View>
@@ -409,7 +410,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             returnKeyType="search"
           />
           {searchQuery.length > 0 && (
-            <Pressable
+            <WebClickable
               onPress={() => {
                 setSearchQuery("");
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -417,13 +418,13 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
               style={styles.clearButton}
             >
               <IconSymbol name="xmark.circle.fill" size={20} color={colors.icon} />
-            </Pressable>
+            </WebClickable>
           )}
         </View>
       </ThemedView>
 
       <View style={[styles.filterContainer, { borderBottomColor: colors.border }]}>
-        <Pressable
+        <WebClickable
           onPress={() => {
             setGroupBy("article");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -441,9 +442,9 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           >
             Por Artigo
           </ThemedText>
-        </Pressable>
+        </WebClickable>
 
-        <Pressable
+        <WebClickable
           onPress={() => {
             setGroupBy("date");
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -461,7 +462,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           >
             Por Data
           </ThemedText>
-        </Pressable>
+        </WebClickable>
       </View>
 
       {/* Filtros de Data */}
@@ -479,7 +480,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             { id: "month", label: "Este Mês" },
             { id: "old", label: "Antigos (30+ dias)", icon: "clock.fill" },
           ].map((filter) => (
-            <Pressable
+            <WebClickable
               key={filter.id}
               onPress={() => {
                 setDateFilter(filter.id as typeof dateFilter);
@@ -505,7 +506,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
               >
                 {filter.label}
               </ThemedText>
-            </Pressable>
+            </WebClickable>
           ))}
         </ScrollView>
       </View>
@@ -516,7 +517,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
         style={[styles.tagsFilterContainer, { borderBottomColor: colors.border }]}
         contentContainerStyle={styles.tagsFilterContent}
       >
-        <Pressable
+        <WebClickable
           onPress={() => {
             setSelectedTag(null);
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -534,12 +535,12 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           >
             Todas
           </ThemedText>
-        </Pressable>
+        </WebClickable>
 
         {PREDEFINED_TAGS.map((tag) => {
           const isSelected = selectedTag === tag.id;
           return (
-            <Pressable
+            <WebClickable
               key={tag.id}
               onPress={() => {
                 setSelectedTag(isSelected ? null : tag.id);
@@ -562,7 +563,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
               >
                 {tag.label}
               </Text>
-            </Pressable>
+            </WebClickable>
           );
         })}
       </ScrollView>
@@ -598,7 +599,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           Object.entries(grouped).map(([key, items]) => (
             <ThemedView key={key} style={styles.section}>
               {groupBy === "article" && (
-                <Pressable
+                <WebClickable
                   onPress={() => navigateToArticle(items[0].articleId, items[0].articleTitle, items[0].excerpt, items[0].createdAt)}
                   style={styles.sectionHeader}
                 >
@@ -606,7 +607,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                     {items[0].articleTitle}
                   </ThemedText>
                   <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-                </Pressable>
+                </WebClickable>
               )}
 
               {items.map((bookmark) => (
@@ -614,7 +615,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                   key={bookmark.id}
                   style={[styles.bookmarkCard, { borderColor: colors.border }]}
                 >
-                  <Pressable
+                  <WebClickable
                     onPress={() => navigateToArticle(bookmark.articleId, bookmark.articleTitle, bookmark.excerpt, bookmark.createdAt)}
                     style={styles.bookmarkContent}
                   >
@@ -664,27 +665,27 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                         minute: "2-digit",
                       })}
                     </ThemedText>
-                  </Pressable>
+                  </WebClickable>
 
                   <View style={styles.bookmarkActions}>
-                    <Pressable
+                    <WebClickable
                       onPress={() => shareBookmarkText(bookmark)}
                       style={styles.actionButton}
                     >
                       <IconSymbol name="square.and.arrow.up" size={20} color="#34C759" />
-                    </Pressable>
-                    <Pressable
+                    </WebClickable>
+                    <WebClickable
                       onPress={() => shareAsImage(bookmark)}
                       style={styles.actionButton}
                     >
                       <IconSymbol name="photo" size={20} color={colors.tint} />
-                    </Pressable>
-                    <Pressable
+                    </WebClickable>
+                    <WebClickable
                       onPress={() => deleteBookmark(bookmark.id)}
                       style={styles.actionButton}
                     >
                       <IconSymbol name="trash" size={20} color="#FF3B30" />
-                    </Pressable>
+                    </WebClickable>
                   </View>
                 </ThemedView>
               ))}
@@ -704,7 +705,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
           <View style={[styles.tagSelectorModal, { backgroundColor: colors.cardBg }]}>
             <View style={styles.tagSelectorHeader}>
               <ThemedText type="subtitle">Filtrar por Tags</ThemedText>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   setShowTagSelector(false);
                   setSelectedExportTags([]);
@@ -712,7 +713,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                 style={styles.closeButton}
               >
                 <IconSymbol name="xmark" size={24} color={colors.icon} />
-              </Pressable>
+              </WebClickable>
             </View>
 
             <ThemedText style={[styles.tagSelectorHint, { color: colors.icon }]}>
@@ -720,7 +721,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             </ThemedText>
 
             <ScrollView style={styles.tagsList}>
-              <Pressable
+              <WebClickable
                 onPress={() => setSelectedExportTags([])}
                 style={[
                   styles.tagChip,
@@ -737,7 +738,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                 >
                   Todas as tags
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
 
               {PREDEFINED_TAGS.map((tag) => {
                 const isSelected = selectedExportTags.includes(tag.id);
@@ -748,7 +749,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                 if (count === 0) return null;
 
                 return (
-                  <Pressable
+                  <WebClickable
                     key={tag.id}
                     onPress={() => {
                       if (isSelected) {
@@ -775,7 +776,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                     {isSelected && (
                       <IconSymbol name="checkmark" size={16} color="#fff" />
                     )}
-                  </Pressable>
+                  </WebClickable>
                 );
               })}
             </ScrollView>
@@ -786,14 +787,14 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                   ? `${filteredBookmarks.length} destaques serão exportados`
                   : `${filteredBookmarks.filter((b) => b.tags && b.tags.some((t) => selectedExportTags.includes(t))).length} destaques serão exportados`}
               </ThemedText>
-              <Pressable
+              <WebClickable
                 onPress={confirmExportPDF}
                 style={[styles.confirmButton, { backgroundColor: colors.tint }]}
               >
                 <ThemedText style={{ color: "#fff", fontWeight: "600" }}>
                   Exportar PDF
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
             </View>
           </View>
         </View>

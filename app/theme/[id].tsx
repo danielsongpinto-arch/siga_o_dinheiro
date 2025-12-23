@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { ArticleCard } from "@/components/article-card";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useComparison } from "@/hooks/use-comparison";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -60,7 +61,7 @@ export default function ThemeArticlesScreen() {
         <ThemedView style={styles.articlesList}>
           {articles.map((article) => (
             <ThemedView key={article.id} style={styles.articleItem}>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   if (!isSelected(article.id) && !canAddMore()) {
                     return;
@@ -72,7 +73,7 @@ export default function ThemeArticlesScreen() {
                 {isSelected(article.id) && (
                   <IconSymbol name="checkmark" size={18} color={tintColor} />
                 )}
-              </Pressable>
+              </WebClickable>
               <ThemedView style={styles.articleCardContainer}>
                 <ArticleCard
                   article={article}

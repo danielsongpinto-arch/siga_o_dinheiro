@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, StyleSheet } from "react-native";
+import { View, ScrollView, Pressable, StyleSheet, Platform, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
@@ -35,6 +35,40 @@ export default function ReadingSettingsScreen() {
     { value: "normal", label: "Normal" },
     { value: "expanded", label: "Expandido" },
   ];
+
+  // Componente wrapper para garantir cliques na web
+  const WebClickable = ({ children, onPress, style }: any) => {
+    if (Platform.OS === "web") {
+      const flatStyle = StyleSheet.flatten(style);
+      return (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onPress();
+          }}
+          style={{
+            ...flatStyle,
+            cursor: "pointer",
+            userSelect: "none",
+            border: "none",
+            outline: "none",
+            WebkitTapHighlightColor: "transparent",
+            pointerEvents: "auto",
+            touchAction: "manipulation",
+          } as any}
+        >
+          {children}
+        </button>
+      );
+    }
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={style}>
+        {children}
+      </TouchableOpacity>
+    );
+  };
 
 
 
@@ -85,23 +119,22 @@ export default function ReadingSettingsScreen() {
           </ThemedText>
           <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
             {fontSizes.map((item, index) => (
-              <Pressable
+              <WebClickable
                 key={item.value}
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   await setFontSize(item.value);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.optionItem,
                   index > 0 && { borderTopWidth: 1, borderTopColor: colors.border },
-                  pressed && styles.pressed,
                 ]}
               >
                 <ThemedText style={styles.optionLabel}>{item.label}</ThemedText>
                 {settings.fontSize === item.value && (
                   <IconSymbol name="checkmark" size={20} color={colors.tint} />
                 )}
-              </Pressable>
+              </WebClickable>
             ))}
           </View>
         </View>
@@ -113,23 +146,22 @@ export default function ReadingSettingsScreen() {
           </ThemedText>
           <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
             {lineSpacings.map((item, index) => (
-              <Pressable
+              <WebClickable
                 key={item.value}
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   await setLineSpacing(item.value);
                 }}
-                style={({ pressed }) => [
+                style={[
                   styles.optionItem,
                   index > 0 && { borderTopWidth: 1, borderTopColor: colors.border },
-                  pressed && styles.pressed,
                 ]}
               >
                 <ThemedText style={styles.optionLabel}>{item.label}</ThemedText>
                 {settings.lineSpacing === item.value && (
                   <IconSymbol name="checkmark" size={20} color={colors.tint} />
                 )}
-              </Pressable>
+              </WebClickable>
             ))}
           </View>
         </View>
@@ -137,23 +169,22 @@ export default function ReadingSettingsScreen() {
 
 
         {/* Botão Restaurar Padrões */}
-        <Pressable
+        <WebClickable
           onPress={async () => {
             await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             await resetToDefaults();
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           }}
-          style={({ pressed }) => [
+          style={[
             styles.resetButton,
             { borderColor: colors.border },
-            pressed && styles.pressed,
           ]}
         >
           <IconSymbol name="arrow.clockwise" size={20} color={colors.tint} />
           <ThemedText style={{ color: colors.tint, fontWeight: "600" }}>
             Restaurar Padrões
           </ThemedText>
-        </Pressable>
+        </WebClickable>
       </ScrollView>
     </ThemedView>
   );

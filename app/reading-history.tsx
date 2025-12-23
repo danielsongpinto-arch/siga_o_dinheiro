@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useReadingHistory } from "@/hooks/use-reading-history";
 import { ARTICLES, THEMES } from "@/data/mock-data";
@@ -101,13 +102,13 @@ export default function ReadingHistoryScreen() {
               if (!article) return null;
 
               return (
-                <Pressable
+                <WebClickable
                   key={`${item.articleId}-${index}`}
                   onPress={() => router.push(`/article/${item.articleId}` as any)}
-                  style={({ pressed }) => [
+                  style={[
                     styles.historyItem,
                     { backgroundColor: cardBg, borderColor },
-                    pressed && styles.historyItemPressed,
+                    styles.historyItemPressed,
                   ]}
                 >
                   <ThemedView style={styles.historyContent}>
@@ -153,7 +154,7 @@ export default function ReadingHistoryScreen() {
                     )}
                   </ThemedView>
                   <IconSymbol name="chevron.right" size={20} color={textSecondary} />
-                </Pressable>
+                </WebClickable>
               );
             })}
           </ThemedView>

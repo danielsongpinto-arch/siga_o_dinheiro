@@ -7,6 +7,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useFlashcards } from "@/hooks/use-flashcards";
 
@@ -136,17 +137,17 @@ export default function FlashcardsScreen() {
             </ThemedView>
           </ThemedView>
 
-          <Pressable
+          <WebClickable
             onPress={() => router.back()}
             style={[styles.button, { backgroundColor: tintColor }]}
           >
             <ThemedText style={styles.buttonText}>Voltar</ThemedText>
-          </Pressable>
+          </WebClickable>
 
           {dueFlashcards.length > 0 && (
-            <Pressable onPress={restart} style={[styles.button, styles.secondaryButton, { borderColor }]}>
+            <WebClickable onPress={restart} style={[styles.button, styles.secondaryButton, { borderColor }]}>
               <ThemedText style={styles.secondaryButtonText}>Revisar Novamente</ThemedText>
-            </Pressable>
+            </WebClickable>
           )}
         </ThemedView>
       </ThemedView>
@@ -179,7 +180,7 @@ export default function FlashcardsScreen() {
           />
         </ThemedView>
 
-        <Pressable onPress={flipCard} style={styles.cardContainer}>
+        <WebClickable onPress={flipCard} style={styles.cardContainer}>
           <Animated.View
             style={[
               styles.card,
@@ -220,7 +221,7 @@ export default function FlashcardsScreen() {
               {currentCard?.back}
             </ThemedText>
           </Animated.View>
-        </Pressable>
+        </WebClickable>
 
         <ThemedText style={[styles.hint, { color: textSecondary }]}>
           Toque no card para virar
@@ -228,21 +229,21 @@ export default function FlashcardsScreen() {
 
         {isFlipped && (
           <ThemedView style={styles.actions}>
-            <Pressable
+            <WebClickable
               onPress={() => handleAnswer(false)}
               style={[styles.actionButton, styles.incorrectButton]}
             >
               <IconSymbol name="xmark.circle.fill" size={32} color="#fff" />
               <ThemedText style={styles.actionButtonText}>Errei</ThemedText>
-            </Pressable>
+            </WebClickable>
 
-            <Pressable
+            <WebClickable
               onPress={() => handleAnswer(true)}
               style={[styles.actionButton, styles.correctButton]}
             >
               <IconSymbol name="checkmark.circle.fill" size={32} color="#fff" />
               <ThemedText style={styles.actionButtonText}>Acertei</ThemedText>
-            </Pressable>
+            </WebClickable>
           </ThemedView>
         )}
       </ThemedView>

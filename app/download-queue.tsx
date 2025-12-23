@@ -6,6 +6,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useOfflineCache, DownloadProgress } from "@/hooks/use-offline-cache";
 
@@ -150,7 +151,7 @@ export default function DownloadQueueScreen() {
           },
         ]}
       >
-        <Pressable
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.back();
@@ -158,7 +159,7 @@ export default function DownloadQueueScreen() {
           style={styles.backButton}
         >
           <IconSymbol name="chevron.left" size={24} color={colors.tint} />
-        </Pressable>
+        </WebClickable>
         <View style={styles.headerContent}>
           <ThemedText type="title" style={styles.headerTitle}>
             Fila de Downloads
@@ -210,27 +211,27 @@ export default function DownloadQueueScreen() {
                   </View>
                   <View style={styles.downloadActions}>
                     {download.status === "downloading" && (
-                      <Pressable
+                      <WebClickable
                         onPress={() => handlePauseResume(download)}
                         style={styles.actionButton}
                       >
                         <IconSymbol name="pause" size={20} color={colors.icon} />
-                      </Pressable>
+                      </WebClickable>
                     )}
                     {download.status === "paused" && (
-                      <Pressable
+                      <WebClickable
                         onPress={() => handlePauseResume(download)}
                         style={styles.actionButton}
                       >
                         <IconSymbol name="play" size={20} color={colors.icon} />
-                      </Pressable>
+                      </WebClickable>
                     )}
-                    <Pressable
+                    <WebClickable
                       onPress={() => handleCancel(download)}
                       style={styles.actionButton}
                     >
                       <IconSymbol name="xmark" size={20} color="#FF3B30" />
-                    </Pressable>
+                    </WebClickable>
                   </View>
                 </View>
 
@@ -261,7 +262,7 @@ export default function DownloadQueueScreen() {
                   </ThemedText>
                   <View style={styles.priorityButtons}>
                     {[1, 2, 3, 4, 5].map((priority) => (
-                      <Pressable
+                      <WebClickable
                         key={priority}
                         onPress={() => handleChangePriority(download, priority)}
                         style={[
@@ -281,7 +282,7 @@ export default function DownloadQueueScreen() {
                         >
                           {priority}
                         </ThemedText>
-                      </Pressable>
+                      </WebClickable>
                     ))}
                   </View>
                 </View>
@@ -297,7 +298,7 @@ export default function DownloadQueueScreen() {
               <ThemedText type="subtitle" style={styles.sectionTitle}>
                 Concluídos
               </ThemedText>
-              <Pressable
+              <WebClickable
                 onPress={handleClearCompleted}
                 style={[styles.clearButton, { borderColor: colors.border }]}
               >
@@ -305,7 +306,7 @@ export default function DownloadQueueScreen() {
                 <ThemedText style={[styles.clearButtonText, { color: colors.icon }]}>
                   Limpar
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
             </View>
             {completedDownloads.map((download) => (
               <View
@@ -350,7 +351,7 @@ export default function DownloadQueueScreen() {
                     Erro no download
                   </ThemedText>
                 </View>
-                <Pressable
+                <WebClickable
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     // TODO: Tentar novamente
@@ -358,7 +359,7 @@ export default function DownloadQueueScreen() {
                   style={styles.retryButton}
                 >
                   <IconSymbol name="arrow.clockwise" size={16} color={colors.tint} />
-                </Pressable>
+                </WebClickable>
               </View>
             ))}
           </View>

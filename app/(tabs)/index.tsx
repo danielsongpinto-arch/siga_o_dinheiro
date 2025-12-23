@@ -19,6 +19,7 @@ import { SERIES } from "@/data/series-data";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Pressable } from "react-native";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import * as Haptics from "expo-haptics";
 
 export default function HomeScreen() {
@@ -83,9 +84,9 @@ export default function HomeScreen() {
       <ThemedView style={[styles.quickSummaryCard, { backgroundColor: cardBg, borderColor }]}>
         <ThemedView style={styles.quickSummaryHeader}>
           <ThemedText type="subtitle">Seu Progresso</ThemedText>
-          <Pressable onPress={() => router.push("/stats" as any)}>
+          <WebClickable onPress={() => router.push("/stats" as any)}>
             <IconSymbol name="chart.bar.fill" size={20} color={tintColor} />
-          </Pressable>
+          </WebClickable>
         </ThemedView>
 
         {/* Meta de Leitura */}
@@ -116,12 +117,12 @@ export default function HomeScreen() {
           <ThemedView style={styles.recentBookmarks}>
             <ThemedView style={styles.recentBookmarksHeader}>
               <ThemedText style={styles.recentBookmarksTitle}>Últimos Destaques</ThemedText>
-              <Pressable onPress={() => router.push("/bookmarks" as any)}>
+              <WebClickable onPress={() => router.push("/bookmarks" as any)}>
                 <ThemedText style={[styles.viewAllLink, { color: tintColor }]}>Ver todos</ThemedText>
-              </Pressable>
+              </WebClickable>
             </ThemedView>
             {recentBookmarks.map((bookmark) => (
-              <Pressable
+              <WebClickable
                 key={bookmark.id}
                 onPress={() => router.push(`/article/${bookmark.articleId}` as any)}
                 style={[styles.bookmarkPreview, { borderColor }]}
@@ -132,7 +133,7 @@ export default function HomeScreen() {
                 <ThemedText style={[styles.bookmarkArticle, { color: tintColor }]}>
                   {bookmark.articleTitle}
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
             ))}
           </ThemedView>
         )}
@@ -146,7 +147,7 @@ export default function HomeScreen() {
               <IconSymbol name="lightbulb.fill" size={20} color="#FFD60A" />
               <ThemedText type="defaultSemiBold">Sugestões para Baixar</ThemedText>
             </ThemedView>
-            <Pressable
+            <WebClickable
               onPress={async () => {
                 await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                 // Baixar todos os artigos sugeridos
@@ -160,11 +161,11 @@ export default function HomeScreen() {
             >
               <IconSymbol name="arrow.down.circle.fill" size={16} color="#fff" />
               <ThemedText style={styles.downloadAllText}>Baixar Todos</ThemedText>
-            </Pressable>
+            </WebClickable>
           </ThemedView>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestionsList}>
             {suggestions.slice(0, 3).map((suggestion) => (
-              <Pressable
+              <WebClickable
                 key={suggestion.article.id}
                 onPress={() => router.push(`/article/${suggestion.article.id}` as any)}
                 style={[styles.suggestionItem, { borderColor }]}
@@ -179,7 +180,7 @@ export default function HomeScreen() {
                     </ThemedText>
                   </ThemedView>
                 </ThemedView>
-                <Pressable
+                <WebClickable
                   onPress={(e) => {
                     e.stopPropagation();
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -188,8 +189,8 @@ export default function HomeScreen() {
                   style={styles.rejectButton}
                 >
                   <IconSymbol name="xmark" size={16} color={secondaryText} />
-                </Pressable>
-              </Pressable>
+                </WebClickable>
+              </WebClickable>
             ))}
           </ScrollView>
         </ThemedView>
@@ -212,7 +213,7 @@ export default function HomeScreen() {
           <ThemedText type="subtitle" style={styles.sectionTitle}>
             S\u00e9ries Tem\u00e1ticas
           </ThemedText>
-          <Pressable
+          <WebClickable
             onPress={() => router.push("/series" as any)}
             style={({ pressed }) => [
               styles.viewAllButton,
@@ -222,7 +223,7 @@ export default function HomeScreen() {
           >
             <ThemedText style={[styles.viewAllText, { color: tintColor }]}>Ver todas</ThemedText>
             <IconSymbol name="chevron.right" size={16} color={tintColor} />
-          </Pressable>
+          </WebClickable>
         </ThemedView>
         {SERIES.slice(0, 2).map((series) => (
           <SeriesCard

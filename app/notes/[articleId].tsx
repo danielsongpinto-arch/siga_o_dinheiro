@@ -7,6 +7,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useNotes } from "@/hooks/use-notes";
 import { ARTICLES } from "@/data/mock-data";
@@ -102,12 +103,12 @@ export default function ArticleNotesScreen() {
         options={{
           title: `Notas - ${article?.title || "Artigo"}`,
           headerRight: () => (
-            <Pressable
+            <WebClickable
               onPress={() => setIsCreating(true)}
-              style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+              style={[]}
             >
               <IconSymbol name="plus" size={24} color={tintColor} />
-            </Pressable>
+            </WebClickable>
           ),
         }}
       />
@@ -157,18 +158,18 @@ export default function ArticleNotesScreen() {
               />
 
               <ThemedView style={styles.formActions}>
-                <Pressable
+                <WebClickable
                   onPress={handleCancel}
                   style={[styles.button, styles.cancelButton, { borderColor }]}
                 >
                   <ThemedText style={styles.cancelButtonText}>Cancelar</ThemedText>
-                </Pressable>
-                <Pressable
+                </WebClickable>
+                <WebClickable
                   onPress={handleSaveNote}
                   style={[styles.button, styles.saveButton, { backgroundColor: tintColor }]}
                 >
                   <ThemedText style={styles.saveButtonText}>Salvar</ThemedText>
-                </Pressable>
+                </WebClickable>
               </ThemedView>
             </ThemedView>
           )}
@@ -195,18 +196,18 @@ export default function ArticleNotesScreen() {
                       {note.title}
                     </ThemedText>
                     <ThemedView style={styles.noteActions}>
-                      <Pressable
+                      <WebClickable
                         onPress={() => handleEditNote(note.id)}
-                        style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1, marginRight: 12 }]}
+                        style={[{ opacity: pressed ? 0.7 : 1, marginRight: 12 }]}
                       >
                         <IconSymbol name="pencil" size={20} color={tintColor} />
-                      </Pressable>
-                      <Pressable
+                      </WebClickable>
+                      <WebClickable
                         onPress={() => handleDeleteNote(note.id)}
-                        style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+                        style={[]}
                       >
                         <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
-                      </Pressable>
+                      </WebClickable>
                     </ThemedView>
                   </ThemedView>
 

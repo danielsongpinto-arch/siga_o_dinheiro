@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { ArticleCard } from "@/components/article-card";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useSeriesProgress } from "@/hooks/use-series-progress";
 import { useFavorites } from "@/hooks/use-favorites";
 import { SERIES } from "@/data/series-data";
@@ -97,7 +98,7 @@ export default function SeriesDetailScreen() {
           </ThemedView>
 
           {nextArticleId && !completed && (
-            <Pressable
+            <WebClickable
               onPress={() => router.push(`/article/${nextArticleId}` as any)}
               style={[styles.continueButton, { backgroundColor: tintColor }]}
             >
@@ -105,7 +106,7 @@ export default function SeriesDetailScreen() {
                 {seriesProgress ? "Continuar Leitura" : "Começar Série"}
               </ThemedText>
               <IconSymbol name="chevron.right" size={20} color="#fff" />
-            </Pressable>
+            </WebClickable>
           )}
         </ThemedView>
 

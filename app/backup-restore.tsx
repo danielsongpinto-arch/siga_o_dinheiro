@@ -6,6 +6,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useBackupRestore } from "@/hooks/use-backup-restore";
 
@@ -101,7 +102,7 @@ export default function BackupRestoreScreen() {
           },
         ]}
       >
-        <Pressable
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.back();
@@ -109,7 +110,7 @@ export default function BackupRestoreScreen() {
           style={styles.backButton}
         >
           <IconSymbol name="chevron.left" size={24} color={colors.tint} />
-        </Pressable>
+        </WebClickable>
         <View style={styles.headerContent}>
           <ThemedText type="title" style={styles.headerTitle}>
             Backup e Restauração
@@ -161,7 +162,7 @@ export default function BackupRestoreScreen() {
         </View>
 
         {/* Export Button */}
-        <Pressable
+        <WebClickable
           onPress={handleExport}
           disabled={exporting}
           style={({ pressed }) => [
@@ -182,10 +183,10 @@ export default function BackupRestoreScreen() {
           {exporting && (
             <ThemedText style={styles.progressText}>{Math.round(progress)}%</ThemedText>
           )}
-        </Pressable>
+        </WebClickable>
 
         {/* Import Button */}
-        <Pressable
+        <WebClickable
           onPress={handleImport}
           disabled={importing}
           style={({ pressed }) => [
@@ -209,7 +210,7 @@ export default function BackupRestoreScreen() {
               {Math.round(progress)}%
             </ThemedText>
           )}
-        </Pressable>
+        </WebClickable>
 
         {/* Warning */}
         <View style={[styles.warningCard, { backgroundColor: "#FFF3CD", borderColor: "#FFC107" }]}>

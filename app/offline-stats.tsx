@@ -5,6 +5,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useOfflineStats } from "@/hooks/use-offline-stats";
 import { LineChart } from "react-native-chart-kit";
@@ -72,7 +73,7 @@ export default function OfflineStatsScreen() {
           },
         ]}
       >
-        <Pressable
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.back();
@@ -80,7 +81,7 @@ export default function OfflineStatsScreen() {
           style={styles.backButton}
         >
           <IconSymbol name="chevron.left" size={24} color={colors.tint} />
-        </Pressable>
+        </WebClickable>
         <View style={styles.headerContent}>
           <ThemedText type="title" style={styles.headerTitle}>
             Estatísticas Offline

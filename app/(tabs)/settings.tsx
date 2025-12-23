@@ -6,6 +6,7 @@ import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preference";
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
@@ -155,7 +156,7 @@ export default function SettingsScreen() {
             </ThemedText>
 
             <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                   await toggleSync();
@@ -182,10 +183,10 @@ export default function SettingsScreen() {
                   trackColor={{ false: colors.border, true: colors.tint }}
                   thumbColor="#fff"
                 />
-              </Pressable>
+              </WebClickable>
 
               {syncEnabled && (
-                <Pressable
+                <WebClickable
                   onPress={async () => {
                     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                     const result = await performSync();
@@ -209,7 +210,7 @@ export default function SettingsScreen() {
                   >
                     {isSyncing ? "Sincronizando..." : "Sincronizar Agora"}
                   </ThemedText>
-                </Pressable>
+                </WebClickable>
               )}
 
               {syncEnabled && lastSyncTime && (
@@ -242,7 +243,7 @@ export default function SettingsScreen() {
 
           <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
             {/* Toggle Ativar Notificações */}
-            <Pressable
+            <WebClickable
               onPress={async () => {
                 await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 await toggleReminders();
@@ -272,11 +273,11 @@ export default function SettingsScreen() {
                 }}
                 trackColor={{ false: colors.border, true: colors.tint }}
               />
-            </Pressable>
+            </WebClickable>
 
             {/* Configurar Horário */}
             {remindersConfig.enabled && (
-              <Pressable
+              <WebClickable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   
@@ -365,7 +366,7 @@ export default function SettingsScreen() {
                   </View>
                 </View>
                 <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-              </Pressable>
+              </WebClickable>
             )}
           </View>
         </View>
@@ -381,7 +382,7 @@ export default function SettingsScreen() {
 
           <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
             {/* Toggle Ativar Lembretes de Revisão */}
-            <Pressable
+            <WebClickable
               onPress={async () => {
                 await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 if (reviewSettings.enabled) {
@@ -428,12 +429,12 @@ export default function SettingsScreen() {
                 }}
                 trackColor={{ false: colors.border, true: "#0284c7" }}
               />
-            </Pressable>
+            </WebClickable>
 
             {/* Configurar Frequência */}
             {reviewSettings.enabled && (
               <>
-                <Pressable
+                <WebClickable
                   onPress={async () => {
                     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     Alert.alert(
@@ -485,10 +486,10 @@ export default function SettingsScreen() {
                     </View>
                   </View>
                   <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-                </Pressable>
+                </WebClickable>
 
                 {/* Configurar Intervalos */}
-                <Pressable
+                <WebClickable
                   onPress={async () => {
                     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     
@@ -539,7 +540,7 @@ export default function SettingsScreen() {
                     </View>
                   </View>
                   <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-                </Pressable>
+                </WebClickable>
               </>
             )}
           </View>
@@ -570,7 +571,7 @@ export default function SettingsScreen() {
                     </View>
                   </View>
                 </View>
-                <Pressable
+                <WebClickable
                   onPress={async () => {
                     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     Alert.alert(
@@ -606,10 +607,10 @@ export default function SettingsScreen() {
                     </View>
                   </View>
                   <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-                </Pressable>
+                </WebClickable>
               </>
             ) : (
-              <Pressable
+              <WebClickable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   Alert.alert(
@@ -654,7 +655,7 @@ export default function SettingsScreen() {
                   </View>
                 </View>
                 <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-              </Pressable>
+              </WebClickable>
             )}
           </View>
         </View>
@@ -749,7 +750,7 @@ export default function SettingsScreen() {
             </View>
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/offline-stats" as any);
@@ -766,12 +767,12 @@ export default function SettingsScreen() {
                     Ver seu uso sem internet
                   </ThemedText>
                 </View>
-              </Pressable>
+              </WebClickable>
               <IconSymbol name="chevron.right" size={20} color={colors.icon} />
             </View>
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/cache-manager" as any);
@@ -788,12 +789,12 @@ export default function SettingsScreen() {
                     Ver e remover artigos individuais
                   </ThemedText>
                 </View>
-              </Pressable>
+              </WebClickable>
               <IconSymbol name="chevron.right" size={20} color={colors.icon} />
             </View>
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/download-queue" as any);
@@ -810,12 +811,12 @@ export default function SettingsScreen() {
                     Gerenciar downloads em andamento
                   </ThemedText>
                 </View>
-              </Pressable>
+              </WebClickable>
               <IconSymbol name="chevron.right" size={20} color={colors.icon} />
             </View>
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/all-annotations" as any);
@@ -832,12 +833,12 @@ export default function SettingsScreen() {
                     Ver e exportar suas notas
                   </ThemedText>
                 </View>
-              </Pressable>
+              </WebClickable>
               <IconSymbol name="chevron.right" size={20} color={colors.icon} />
             </View>
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   router.push("/backup-restore" as any);
@@ -854,12 +855,12 @@ export default function SettingsScreen() {
                     Exportar e importar dados
                   </ThemedText>
                 </View>
-              </Pressable>
+              </WebClickable>
               <IconSymbol name="chevron.right" size={20} color={colors.icon} />
             </View>
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-              <Pressable
+              <WebClickable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   Alert.alert(
@@ -892,7 +893,7 @@ export default function SettingsScreen() {
                     Remover todos os artigos salvos
                   </ThemedText>
                 </View>
-              </Pressable>
+              </WebClickable>
             </View>
           </View>
         </View>
@@ -905,7 +906,7 @@ export default function SettingsScreen() {
 
           <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
             <View style={styles.toggleItem}>
-              <Pressable
+              <WebClickable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   await toggleDataSaver();
@@ -932,7 +933,7 @@ export default function SettingsScreen() {
                     </ThemedText>
                   )}
                 </View>
-              </Pressable>
+              </WebClickable>
               <Switch
                 value={dataSaverSettings.enabled}
                 onValueChange={async () => {
@@ -946,7 +947,7 @@ export default function SettingsScreen() {
             {dataSaverSettings.enabled && (
               <>
                 <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-                  <Pressable
+                  <WebClickable
                     onPress={async () => {
                       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       await toggleImages();
@@ -963,7 +964,7 @@ export default function SettingsScreen() {
                         Não carregar imagens automaticamente em dados móveis
                       </ThemedText>
                     </View>
-                  </Pressable>
+                  </WebClickable>
                   <Switch
                     value={dataSaverSettings.disableImages}
                     onValueChange={async () => {
@@ -975,7 +976,7 @@ export default function SettingsScreen() {
                 </View>
 
                 <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
-                  <Pressable
+                  <WebClickable
                     onPress={async () => {
                       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       await toggleAudio();
@@ -992,7 +993,7 @@ export default function SettingsScreen() {
                         Não carregar áudios automaticamente em dados móveis
                       </ThemedText>
                     </View>
-                  </Pressable>
+                  </WebClickable>
                   <Switch
                     value={dataSaverSettings.disableAudio}
                     onValueChange={async () => {
@@ -1015,7 +1016,7 @@ export default function SettingsScreen() {
 
           <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
             <View style={styles.toggleItem}>
-              <Pressable
+              <WebClickable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   await toggleSmartSync();
@@ -1045,7 +1046,7 @@ export default function SettingsScreen() {
                     </View>
                   )}
                 </View>
-              </Pressable>
+              </WebClickable>
               <Switch
                 value={smartSyncEnabled}
                 onValueChange={async () => {
@@ -1126,7 +1127,7 @@ export default function SettingsScreen() {
                         )}
                       </View>
                     </View>
-                    <Pressable
+                    <WebClickable
                       onPress={async () => {
                         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                         Alert.alert(
@@ -1148,7 +1149,7 @@ export default function SettingsScreen() {
                       ]}
                     >
                       <IconSymbol name="trash" size={20} color="#FF3B30" />
-                    </Pressable>
+                    </WebClickable>
                   </View>
                 );
               })}
@@ -1178,7 +1179,7 @@ export default function SettingsScreen() {
           </View>
 
           {/* Botão Resetar Configurações */}
-          <Pressable
+          <WebClickable
             onPress={async () => {
               await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               
@@ -1230,10 +1231,10 @@ export default function SettingsScreen() {
             <ThemedText style={{ color: "#FF3B30", fontWeight: "600" }}>
               Resetar Todas as Configurações
             </ThemedText>
-          </Pressable>
+          </WebClickable>
 
           {/* Botão Rever Tour */}
-          <Pressable
+          <WebClickable
             onPress={async () => {
               await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               
@@ -1265,7 +1266,7 @@ export default function SettingsScreen() {
             <ThemedText style={{ color: colors.tint, fontWeight: "600" }}>
               Rever Tour de Boas-Vindas
             </ThemedText>
-          </Pressable>
+          </WebClickable>
         </View>
       </ScrollView>
     </ThemedView>

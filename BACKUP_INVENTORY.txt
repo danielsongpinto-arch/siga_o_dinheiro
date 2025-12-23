@@ -1,0 +1,14 @@
+=== BACKUP SIGA O DINHEIRO - Tue Dec 23 15:21:18 EST 2025 ===
+
+ARTIGOS:
+data/arquitetos-do-poder-articles.ts
+data/brics-articles.ts
+data/rockefeller-articles.ts
+data/sistema-autoperpetuante-articles.ts
+data/ww2-articles.ts
+
+ASSETS:
+26
+
+ESTATÍSTICAS:
+  904 total

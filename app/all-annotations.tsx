@@ -8,6 +8,7 @@ import { Paths, File } from "expo-file-system";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useNotes } from "@/hooks/use-notes";
 import { ARTICLES } from "@/data/mock-data";
@@ -122,7 +123,7 @@ export default function AllAnnotationsScreen() {
           },
         ]}
       >
-        <Pressable
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.back();
@@ -130,7 +131,7 @@ export default function AllAnnotationsScreen() {
           style={styles.backButton}
         >
           <IconSymbol name="chevron.left" size={24} color={colors.tint} />
-        </Pressable>
+        </WebClickable>
         <View style={styles.headerContent}>
           <ThemedText type="title" style={styles.headerTitle}>
             Todas as Anotações
@@ -139,7 +140,7 @@ export default function AllAnnotationsScreen() {
             {allNotes.length} {allNotes.length === 1 ? "nota" : "notas"}
           </ThemedText>
         </View>
-        <Pressable
+        <WebClickable
           onPress={handleExport}
           disabled={exporting || allNotes.length === 0}
           style={styles.exportButton}
@@ -149,12 +150,12 @@ export default function AllAnnotationsScreen() {
             size={24}
             color={allNotes.length === 0 ? colors.icon : colors.tint}
           />
-        </Pressable>
+        </WebClickable>
       </View>
 
       {/* Filters */}
       <View style={[styles.filters, { borderBottomColor: colors.border }]}>
-        <Pressable
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             setFilter("all");
@@ -172,8 +173,8 @@ export default function AllAnnotationsScreen() {
           >
             Todas
           </ThemedText>
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             setFilter("recent");
@@ -191,8 +192,8 @@ export default function AllAnnotationsScreen() {
           >
             Recentes
           </ThemedText>
-        </Pressable>
-        <Pressable
+        </WebClickable>
+        <WebClickable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             setFilter("tagged");
@@ -210,7 +211,7 @@ export default function AllAnnotationsScreen() {
           >
             Com Tags
           </ThemedText>
-        </Pressable>
+        </WebClickable>
       </View>
 
       <ScrollView
@@ -250,7 +251,7 @@ export default function AllAnnotationsScreen() {
                 key={articleId}
                 style={[styles.articleGroup, { backgroundColor: colors.cardBg, borderColor: colors.border }]}
               >
-                <Pressable
+                <WebClickable
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     router.push(`/article/${articleId}` as any);
@@ -266,10 +267,10 @@ export default function AllAnnotationsScreen() {
                     </ThemedText>
                   </View>
                   <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-                </Pressable>
+                </WebClickable>
 
                 {articleNotes.map((note) => (
-                  <Pressable
+                  <WebClickable
                     key={note.id}
                     onPress={() => {
                       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -306,7 +307,7 @@ export default function AllAnnotationsScreen() {
                       </ThemedText>
                     </View>
                     <IconSymbol name="chevron.right" size={20} color={colors.icon} />
-                  </Pressable>
+                  </WebClickable>
                 ))}
               </View>
             );

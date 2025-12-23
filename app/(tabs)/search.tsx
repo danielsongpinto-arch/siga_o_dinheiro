@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { ArticleCard } from "@/components/article-card";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ARTICLES, THEMES } from "@/data/mock-data";
@@ -72,9 +73,9 @@ export default function SearchScreen() {
           autoCorrect={false}
         />
         {searchQuery.length > 0 && (
-          <Pressable onPress={() => setSearchQuery("")}>
+          <WebClickable onPress={() => setSearchQuery("")}>
             <IconSymbol name="xmark.circle.fill" size={20} color={textSecondary} />
-          </Pressable>
+          </WebClickable>
         )}
       </ThemedView>
 
@@ -87,9 +88,9 @@ export default function SearchScreen() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.themeFilters}
         >
-          <Pressable
+          <WebClickable
             onPress={() => setSelectedTheme(null)}
-            style={({ pressed }) => [
+            style={[
               styles.themeChip,
               { borderColor },
               !selectedTheme && { backgroundColor: tintColor, borderColor: tintColor },
@@ -104,12 +105,12 @@ export default function SearchScreen() {
             >
               Todos
             </ThemedText>
-          </Pressable>
+          </WebClickable>
           {THEMES.map((theme) => (
-            <Pressable
+            <WebClickable
               key={theme.id}
               onPress={() => setSelectedTheme(theme.id)}
-              style={({ pressed }) => [
+              style={[
                 styles.themeChip,
                 { borderColor },
                 selectedTheme === theme.id && { backgroundColor: tintColor, borderColor: tintColor },
@@ -124,7 +125,7 @@ export default function SearchScreen() {
               >
                 {theme.title}
               </ThemedText>
-            </Pressable>
+            </WebClickable>
           ))}
         </ScrollView>
       </ThemedView>
@@ -135,11 +136,11 @@ export default function SearchScreen() {
             {filteredArticles.length} {filteredArticles.length === 1 ? "resultado" : "resultados"}
           </ThemedText>
           {(searchQuery.length > 0 || selectedTheme) && (
-            <Pressable onPress={clearSearch}>
+            <WebClickable onPress={clearSearch}>
               <ThemedText style={[styles.clearButton, { color: tintColor }]}>
                 Limpar filtros
               </ThemedText>
-            </Pressable>
+            </WebClickable>
           )}
         </ThemedView>
       )}

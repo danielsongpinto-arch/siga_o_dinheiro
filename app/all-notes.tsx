@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { WebClickable } from "@/components/web-clickable";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useNotes } from "@/hooks/use-notes";
 import { ARTICLES } from "@/data/mock-data";
@@ -49,9 +50,9 @@ export default function AllNotesScreen() {
             style={[styles.searchInput, { color: useThemeColor({}, "text") }]}
           />
           {searchQuery.length > 0 && (
-            <Pressable onPress={() => setSearchQuery("")}>
+            <WebClickable onPress={() => setSearchQuery("")}>
               <IconSymbol name="xmark.circle.fill" size={20} color={textSecondary} />
-            </Pressable>
+            </WebClickable>
           )}
         </ThemedView>
 
@@ -70,7 +71,7 @@ export default function AllNotesScreen() {
         ) : (
           <ThemedView style={styles.notesList}>
             {displayedNotes.map((note) => (
-              <Pressable
+              <WebClickable
                 key={note.id}
                 onPress={() => router.push(`/notes/${note.articleId}` as any)}
                 style={({ pressed }) => [
@@ -110,7 +111,7 @@ export default function AllNotesScreen() {
                 <ThemedText style={[styles.noteDate, { color: textSecondary }]}>
                   {new Date(note.updatedAt).toLocaleDateString("pt-BR")}
                 </ThemedText>
-              </Pressable>
+              </WebClickable>
             ))}
           </ThemedView>
         )}
