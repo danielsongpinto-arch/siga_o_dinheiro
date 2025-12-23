@@ -662,3 +662,42 @@
 - [x] Botão "Compartilhar Série" no SeriesPreviewModal
 - [x] Botão "Importar Série" nas Configurações
 - [x] Indicador de progresso durante exportação/importação
+
+
+## Melhorias de Experiência de Leitura - Vigésima Segunda Rodada
+
+### 60. Modo leitura otimizado
+- [x] Criar hook useReadingSettings para gerenciar preferências de leitura
+- [x] Ajuste de tamanho de fonte (5 níveis: XS, S, M, L, XL)
+- [x] Ajuste de espaçamento entre linhas (3 níveis: compacto, normal, expandido)
+- [x] Modo sepia (fundo bege, texto marrom escuro)
+- [x] Modo contraste alto (fundo preto, texto branco)
+- [x] Tela de configurações de leitura (app/reading-settings.tsx)
+- [x] Aplicar configurações no ArticleDetailScreen
+- [x] Persistir preferências em AsyncStorage
+- [x] Botão de acesso rápido às configurações no ArticleDetailScreen
+
+### 61. Backup e restauração completa
+- [x] Criar hook useBackupRestore
+- [x] Exportar cache completo (todos os artigos)
+- [x] Exportar configurações do app (tema, notificações, modo offline, etc)
+- [x] Exportar histórico de leitura e destaques
+- [x] Exportar estatísticas offline
+- [x] Gerar arquivo único .zip com todos os dados
+- [x] Importar backup completo
+- [x] Validar versão do backup antes de importar
+- [x] Tela de backup/restauração nas Configurações
+- [x] Indicador de progresso durante backup/restauração
+
+### 62. Anotações e destaques
+- [x] Criar hook useAnnotations
+- [x] Adicionar interface Annotation (id, articleId, text, note, color, createdAt)
+- [x] Selecionar texto no artigo para destacar
+- [x] Escolher cor do destaque (amarelo, verde, azul, rosa)
+- [x] Adicionar nota a um destaque
+- [x] Listar todos os destaques de um artigo
+- [x] Editar/remover destaques
+- [x] Tela de visualização de todas as anotações (app/annotations.tsx)
+- [x] Filtrar anotações por artigo, cor ou data
+- [x] Persistir anotações em AsyncStorage
+- [x] Exportar anotações para texto/PDF

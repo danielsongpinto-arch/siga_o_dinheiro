@@ -32,6 +32,7 @@ import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useDataSaver } from "@/hooks/use-data-saver";
 import { useUpdateArticleAccess } from "@/hooks/use-update-article-access";
+import { useReadingSettings } from "@/hooks/use-reading-settings";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -52,6 +53,7 @@ export default function ArticleDetailScreen() {
   const { incrementProgress } = useReadingGoals();
   const { isOnline, cacheArticle, isArticleCached } = useOfflineCache();
   const { shouldBlockImages, shouldBlockAudio } = useDataSaver();
+  const { getContentStyles, getContainerStyles } = useReadingSettings();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -249,6 +251,15 @@ export default function ArticleDetailScreen() {
               <Pressable onPress={() => setShowBookmarks(true)} style={styles.headerButton}>
                 <IconSymbol name="bookmark.fill" size={24} color={textSecondary} />
               </Pressable>
+              <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push("/reading-settings" as any);
+                }}
+                style={styles.headerButton}
+              >
+                <IconSymbol name="textformat" size={24} color={textSecondary} />
+              </Pressable>
             </ThemedView>
           ),
         }}
@@ -405,7 +416,7 @@ export default function ArticleDetailScreen() {
                     <ArticleTextWithReferences
                       key={index}
                       content={paragraph}
-                      style={{ fontSize: fontSizes.body, lineHeight: fontSizes.body * 1.6, marginBottom: 16 }}
+                      style={{ ...getContentStyles(), marginBottom: 16 }}
                       onReferencePress={(refNumber) => {
                         // Scroll para seção de referências (implementação simplificada)
                         console.log(`Reference ${refNumber} clicked`);
@@ -419,7 +430,7 @@ export default function ArticleDetailScreen() {
                     text={paragraph}
                     articleId={article.id}
                     articleTitle={article.title}
-                    fontSize={fontSizes.body}
+                    fontSize={getContentStyles().fontSize}
                   />
                 );
               });

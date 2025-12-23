@@ -844,6 +844,50 @@ export default function SettingsScreen() {
 
             <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
               <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push("/all-annotations" as any);
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="doc.text.fill" size={20} color={colors.tint} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Todas as Anotações</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Ver e exportar suas notas
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+            </View>
+
+            <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+              <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push("/backup-restore" as any);
+                }}
+                style={({ pressed }) => [
+                  styles.toggleLeft,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <IconSymbol name="arrow.clockwise" size={20} color={colors.tint} />
+                <View style={styles.toggleText}>
+                  <ThemedText type="defaultSemiBold">Backup e Restauração</ThemedText>
+                  <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                    Exportar e importar dados
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+            </View>
+
+            <View style={[styles.toggleItem, { borderTopColor: colors.border }]}>
+              <Pressable
                 onPress={async () => {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   Alert.alert(
