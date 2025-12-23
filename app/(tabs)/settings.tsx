@@ -1210,47 +1210,44 @@ export default function SettingsScreen() {
           <Pressable
             onPress={async () => {
               await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              Alert.alert(
-                "Resetar Configurações",
-                "Isso vai limpar TODAS as configurações salvas (tema, lembretes, cache, etc.) e resolver conflitos. Deseja continuar?",
-                [
-                  {
-                    text: "Cancelar",
-                    style: "cancel",
-                  },
-                  {
-                    text: "Resetar",
-                    style: "destructive",
-                    onPress: async () => {
-                      try {
-                        // Limpar TODAS as chaves do AsyncStorage do app
-                        const keys = await AsyncStorage.getAllKeys();
-                        const appKeys = keys.filter(key => key.startsWith("@siga_o_dinheiro"));
-                        await AsyncStorage.multiRemove(appKeys);
-                        
-                        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                        Alert.alert(
-                          "Sucesso!",
-                          "Configurações resetadas. Recarregue a página para aplicar as mudanças.",
-                          [
-                            {
-                              text: "OK",
-                              onPress: () => {
-                                if (Platform.OS === "web") {
-                                  window.location.reload();
-                                }
-                              },
-                            },
-                          ]
-                        );
-                      } catch (error) {
-                        console.error("Erro ao resetar configurações:", error);
-                        Alert.alert("Erro", "Não foi possível resetar as configurações.");
-                      }
-                    },
-                  },
-                ]
-              );
+              
+              const confirmed = Platform.OS === "web" 
+                ? window.confirm("Resetar Configurações\n\nIsso vai limpar TODAS as configurações salvas (tema, lembretes, cache, etc.) e resolver conflitos. Deseja continuar?")
+                : await new Promise<boolean>((resolve) => {
+                    Alert.alert(
+                      "Resetar Configurações",
+                      "Isso vai limpar TODAS as configurações salvas (tema, lembretes, cache, etc.) e resolver conflitos. Deseja continuar?",
+                      [
+                        { text: "Cancelar", style: "cancel", onPress: () => resolve(false) },
+                        { text: "Resetar", style: "destructive", onPress: () => resolve(true) },
+                      ]
+                    );
+                  });
+              
+              if (!confirmed) return;
+              
+              try {
+                // Limpar TODAS as chaves do AsyncStorage do app
+                const keys = await AsyncStorage.getAllKeys();
+                const appKeys = keys.filter((key: string) => key.startsWith("@siga_o_dinheiro"));
+                await AsyncStorage.multiRemove(appKeys);
+                
+                await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                
+                if (Platform.OS === "web") {
+                  alert("Sucesso! Configurações resetadas. A página será recarregada.");
+                  window.location.reload();
+                } else {
+                  Alert.alert("Sucesso!", "Configurações resetadas com sucesso.");
+                }
+              } catch (error) {
+                console.error("Erro ao resetar configurações:", error);
+                if (Platform.OS === "web") {
+                  alert("Erro: Não foi possível resetar as configurações.");
+                } else {
+                  Alert.alert("Erro", "Não foi possível resetar as configurações.");
+                }
+              }
             }}
             style={({ pressed }) => [
               styles.reviewTourButton,
@@ -1268,23 +1265,24 @@ export default function SettingsScreen() {
           <Pressable
             onPress={async () => {
               await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              Alert.alert(
-                "Rever Tour",
-                "Deseja rever o tour de boas-vindas?",
-                [
-                  {
-                    text: "Cancelar",
-                    style: "cancel",
-                  },
-                  {
-                    text: "Rever",
-                    onPress: async () => {
-                      await resetOnboarding();
-                      router.push("/onboarding");
-                    },
-                  },
-                ]
-              );
+              
+              const confirmed = Platform.OS === "web"
+                ? window.confirm("Rever Tour\n\nDeseja rever o tour de boas-vindas?")
+                : await new Promise<boolean>((resolve) => {
+                    Alert.alert(
+                      "Rever Tour",
+                      "Deseja rever o tour de boas-vindas?",
+                      [
+                        { text: "Cancelar", style: "cancel", onPress: () => resolve(false) },
+                        { text: "Rever", onPress: () => resolve(true) },
+                      ]
+                    );
+                  });
+              
+              if (!confirmed) return;
+              
+              await resetOnboarding();
+              router.push("/onboarding");
             }}
             style={({ pressed }) => [
               styles.reviewTourButton,
@@ -1465,6 +1463,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     marginTop: 16,
+    cursor: "pointer" as any,
   },
   settingRow: {
     flexDirection: "row",

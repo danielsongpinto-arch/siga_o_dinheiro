@@ -10,6 +10,7 @@
 - [x] Conflito entre "Modo Leitura Noturna" e "Aparência" - ajustada opacidade do filtro (8% escuro, 15% claro)
 - [x] Botões Claro/Escuro em conflito - "Claro" funciona mas "Escuro" não (AsyncStorage com dados antigos)
 - [x] Criar botão "Resetar Configurações" para limpar todos os dados salvos e resolver conflitos
+- [x] Botões "Resetar Configurações" e "Rever Tour" não funcionam - trocado Alert por window.confirm/alert na web
 
 ### Melhorias das Sugestões de IA
 - [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")
