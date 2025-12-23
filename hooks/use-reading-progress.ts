@@ -88,6 +88,23 @@ export function useReadingProgress() {
     [progressMap]
   );
 
+  const calculateEstimatedTime = useCallback(
+    (articleContent: string, currentProgress: number): number => {
+      // Contar palavras no conteúdo
+      const words = articleContent.split(/\s+/).length;
+      
+      // Velocidade média de leitura: 200 palavras por minuto
+      const wordsPerMinute = 200;
+      
+      // Calcular palavras restantes
+      const wordsRemaining = words * ((100 - currentProgress) / 100);
+      
+      // Calcular tempo em minutos
+      return wordsRemaining / wordsPerMinute;
+    },
+    []
+  );
+
   const clearProgress = useCallback(
     async (articleId: string) => {
       try {
@@ -117,5 +134,6 @@ export function useReadingProgress() {
     clearProgress,
     getAllProgress,
     getCompletedCount,
+    calculateEstimatedTime,
   };
 }

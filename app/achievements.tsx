@@ -8,10 +8,49 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useAchievements } from "@/hooks/use-achievements";
 import { BADGES } from "@/data/badges";
+import { useReadingProgress } from "@/hooks/use-reading-progress";
+import { useReadingHistory } from "@/hooks/use-reading-history";
+import { ARTICLES } from "@/data/mock-data";
 
 export default function AchievementsScreen() {
   const insets = useSafeAreaInsets();
   const { isBadgeUnlocked, getBadgeProgress, unlockedBadges } = useAchievements();
+  const { getAllProgress, getCompletedCount } = useReadingProgress();
+  const { history } = useReadingHistory();
+  
+  // Calcular estatísticas
+  const totalArticlesRead = getCompletedCount();
+  const uniqueThemes = new Set(history.map(h => ARTICLES.find((a: any) => a.id === h.articleId)?.themeId).filter(Boolean)).size;
+  
+  // Calcular streak (dias consecutivos)
+  const calculateStreak = () => {
+    if (history.length === 0) return 0;
+    
+    const sortedDates = history
+      .map(h => new Date(h.readAt).toDateString())
+      .filter((date, index, self) => self.indexOf(date) === index)
+      .sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+    
+    let streak = 0;
+    const today = new Date().toDateString();
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    
+    // Começar contagem se leu hoje ou ontem
+    if (sortedDates[0] !== today && sortedDates[0] !== yesterday) return 0;
+    
+    for (let i = 0; i < sortedDates.length; i++) {
+      const expectedDate = new Date(Date.now() - i * 86400000).toDateString();
+      if (sortedDates[i] === expectedDate) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    
+    return streak;
+  };
+  
+  const currentStreak = calculateStreak();
 
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
@@ -119,6 +158,44 @@ export default function AchievementsScreen() {
               {unlockedBadges.length}/{BADGES.length}
             </ThemedText>
             <ThemedText style={styles.statLabel}>Badges Desbloqueados</ThemedText>
+          </ThemedView>
+        </ThemedView>
+
+        {/* Dashboard de Estatísticas */}
+        <ThemedView style={styles.dashboardSection}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            📈 Seu Progresso
+          </ThemedText>
+          <ThemedView style={styles.statsGrid}>
+            <ThemedView style={[styles.statCard, { backgroundColor: cardBg, borderColor }]}>
+              <IconSymbol name="book.fill" size={24} color={tintColor} />
+              <ThemedText type="title" style={[styles.statValue, { color: tintColor }]}>
+                {totalArticlesRead}
+              </ThemedText>
+              <ThemedText style={[styles.statDescription, { color: textSecondary }]}>
+                Artigos Completos
+              </ThemedText>
+            </ThemedView>
+            
+            <ThemedView style={[styles.statCard, { backgroundColor: cardBg, borderColor }]}>
+              <IconSymbol name="flame.fill" size={24} color="#FF6B35" />
+              <ThemedText type="title" style={[styles.statValue, { color: "#FF6B35" }]}>
+                {currentStreak}
+              </ThemedText>
+              <ThemedText style={[styles.statDescription, { color: textSecondary }]}>
+                Dias Consecutivos
+              </ThemedText>
+            </ThemedView>
+            
+            <ThemedView style={[styles.statCard, { backgroundColor: cardBg, borderColor }]}>
+              <IconSymbol name="tag.fill" size={24} color="#4ECDC4" />
+              <ThemedText type="title" style={[styles.statValue, { color: "#4ECDC4" }]}>
+                {uniqueThemes}
+              </ThemedText>
+              <ThemedText style={[styles.statDescription, { color: textSecondary }]}>
+                Temas Explorados
+              </ThemedText>
+            </ThemedView>
           </ThemedView>
         </ThemedView>
 
@@ -248,5 +325,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "600",
+  },
+  dashboardSection: {
+    marginBottom: 32,
+  },
+  statsGrid: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  statCard: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: "center",
+    gap: 8,
+  },
+  statValue: {
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: "bold",
+  },
+  statDescription: {
+    fontSize: 12,
+    lineHeight: 18,
+    textAlign: "center",
   },
 });

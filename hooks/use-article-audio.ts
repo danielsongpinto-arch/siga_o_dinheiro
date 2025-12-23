@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import * as Speech from 'expo-speech';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Audio } from 'expo-av';
+
+const AUDIO_POSITION_KEY = 'article_audio_position';
 
 export interface AudioState {
   isPlaying: boolean;
@@ -9,7 +13,7 @@ export interface AudioState {
   totalParagraphs: number;
 }
 
-export function useArticleAudio(content: string) {
+export function useArticleAudio(content: string, articleId: string) {
   const [audioState, setAudioState] = useState<AudioState>({
     isPlaying: false,
     isPaused: false,
@@ -29,7 +33,48 @@ export function useArticleAudio(content: string) {
       ...prev,
       totalParagraphs: paragraphs.length,
     }));
+    
+    // Carregar posição salva
+    loadSavedPosition();
+    
+    // Configurar áudio para background playback
+    configureAudio();
   }, [content]);
+  
+  const configureAudio = async () => {
+    try {
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
+        shouldDuckAndroid: true,
+      });
+    } catch (error) {
+      console.error('Error configuring audio:', error);
+    }
+  };
+  
+  const loadSavedPosition = async () => {
+    try {
+      const saved = await AsyncStorage.getItem(`${AUDIO_POSITION_KEY}_${articleId}`);
+      if (saved) {
+        const { currentParagraph, rate } = JSON.parse(saved);
+        setAudioState(prev => ({ ...prev, currentParagraph, rate }));
+      }
+    } catch (error) {
+      console.error('Error loading audio position:', error);
+    }
+  };
+  
+  const savePosition = async (paragraph: number, rate: number) => {
+    try {
+      await AsyncStorage.setItem(
+        `${AUDIO_POSITION_KEY}_${articleId}`,
+        JSON.stringify({ currentParagraph: paragraph, rate })
+      );
+    } catch (error) {
+      console.error('Error saving audio position:', error);
+    }
+  };
 
   const speak = useCallback(async (text: string, index: number) => {
     return new Promise<void>((resolve) => {
@@ -100,12 +145,16 @@ export function useArticleAudio(content: string) {
 
   const pause = useCallback(() => {
     Speech.stop();
-    setAudioState(prev => ({
-      ...prev,
-      isPlaying: false,
-      isPaused: true,
-    }));
-  }, []);
+    setAudioState(prev => {
+      const newState = {
+        ...prev,
+        isPlaying: false,
+        isPaused: true,
+      };
+      savePosition(newState.currentParagraph, newState.rate);
+      return newState;
+    });
+  }, [articleId]);
 
   const stop = useCallback(() => {
     Speech.stop();

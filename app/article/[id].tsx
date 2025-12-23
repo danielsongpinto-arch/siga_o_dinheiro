@@ -28,6 +28,7 @@ import { useFontSize } from "@/hooks/use-font-size";
 import { useScrollHideTabBar } from "@/hooks/use-scroll-hide-tab-bar";
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
+import { ReadingProgressWidget } from "@/components/reading-progress-widget";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useOfflineCache } from "@/hooks/use-offline-cache";
 import { useDataSaver } from "@/hooks/use-data-saver";
@@ -49,7 +50,11 @@ export default function ArticleDetailScreen() {
   const fontSizes = getFontSizes();
   const { handleScroll, resetTabBar } = useScrollHideTabBar();
   const { syncEnabled, syncBookmark, deleteBookmarkOnServer } = useBookmarkSync();
-  const { updateProgress, getProgress } = useReadingProgress();
+  const { updateProgress, getProgress, calculateEstimatedTime } = useReadingProgress();
+  
+  // Buscar artigo antes de usar em hooks
+  const article = ARTICLES.find((a) => a.id === id);
+  const currentProgress = article ? getProgress(article.id) : null;
   const { incrementProgress } = useReadingGoals();
   const { isOnline, cacheArticle, isArticleCached } = useOfflineCache();
   const { shouldBlockImages, shouldBlockAudio } = useDataSaver();
@@ -75,8 +80,7 @@ export default function ArticleDetailScreen() {
     };
   }, [resetTabBar]);
 
-  const article = ARTICLES.find((a) => a.id === id);
-  const audioHook = useArticleAudio(article?.content || "");
+  const audioHook = useArticleAudio(article?.content || "", article?.id || "");
   
   // Atualizar lastAccessedAt se artigo está em cache
   useUpdateArticleAccess(id || "");
@@ -326,6 +330,15 @@ export default function ArticleDetailScreen() {
             </ThemedText>
           </Pressable>
         </ThemedView>
+
+        {/* Widget de Progresso */}
+        {!focusMode && currentProgress && currentProgress.progress > 0 && (
+          <ReadingProgressWidget
+            progress={currentProgress.progress}
+            estimatedTimeMinutes={calculateEstimatedTime(article.content, currentProgress.progress)}
+            currentPosition={`Artigo ${article.id}`}
+          />
+        )}
 
         {/* Botão Modo Resumo */}
         {!focusMode && (

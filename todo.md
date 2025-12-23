@@ -701,3 +701,41 @@
 - [x] Filtrar anotações por artigo, cor ou data
 - [x] Persistir anotações em AsyncStorage
 - [x] Exportar anotações para texto/PDF
+
+
+## Funcionalidades de Engajamento e Acessibilidade - Vigésima Terceira Rodada
+
+### 63. Widget de progresso de leitura
+- [x] Criar hook useReadingProgress para rastrear progresso de leitura
+- [x] Calcular % do artigo lido baseado em scroll position
+- [x] Estimar tempo restante de leitura (baseado em palavras por minuto)
+- [x] Barra de progresso fixa no topo/bottom do artigo
+- [x] Indicador visual de posição atual no artigo
+- [x] Salvar posição de leitura ao sair do artigo
+- [x] Retomar leitura da última posição ao abrir artigo
+- [x] Persistir progresso em AsyncStorage
+- [x] Sincronizar progresso entre dispositivos (se autenticado)
+
+### 64. Modo áudio com text-to-speech
+- [x] Criar hook useTextToSpeech com expo-speech
+- [x] Botão "Ouvir Artigo" no header do ArticleDetailScreen
+- [x] Player de áudio flutuante com controles (play/pause, avançar, voltar)
+- [x] Controle de velocidade (0.5x, 0.75x, 1x, 1.25x, 1.5x, 2x)
+- [x] Destacar parágrafo sendo lido
+- [x] Salvar posição de áudio ao pausar
+- [x] Retomar áudio da última posição
+- [x] Funcionar em background (continuar lendo com app minimizado)
+- [x] Controles na tela de lock screen
+- [x] Notificação com controles de áudio
+
+### 65. Gamificação de leitura
+- [x] Criar hook useAchievements para gerenciar conquistas
+- [x] Definir conquistas: "Primeira Leitura", "10 Artigos", "Série Completa", "Streak 7 dias", "Leitor Noturno", "Explorador de Temas"
+- [x] Sistema de badges com ícones e descrições
+- [x] Notificação ao desbloquear conquista
+- [x] Tela de conquistas (app/achievements.tsx)
+- [x] Dashboard de progresso: artigos lidos, dias consecutivos, temas explorados
+- [x] Gráfico de atividade semanal/mensal
+- [x] Ranking de leitores (se autenticado)
+- [x] Persistir conquistas em AsyncStorage
+- [x] Botão "Conquistas" nas Configurações
