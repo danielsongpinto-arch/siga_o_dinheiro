@@ -222,3 +222,30 @@
 - [x] Adicionar seção "Padrões de Leitura" na tela Estatísticas
 - [ ] Tooltip mostrando quantidade ao tocar célula (não implementado)
 - [x] Identificar horário/dia com mais atividade (getPeakTime)
+
+
+## Funcionalidades Finais - Sétima Rodada
+
+### 19. Integrar tracking automático de atividades
+- [x] Adicionar logActivity('read') na tela de artigos (ao abrir)
+- [x] Adicionar logActivity('bookmark') ao criar destaque (createBookmark)
+- [x] Adicionar logActivity('note') ao salvar nota em destaque (saveNote)
+- [x] Heatmap agora popula automaticamente com dados reais de uso
+
+### 20. Modo leitura em voz alta (TTS)
+- [x] Instalar expo-speech para text-to-speech (já instalado)
+- [x] Adicionar botão "Ouvir" no header da tela de artigo (já existe)
+- [x] Implementar controles: play/pause, velocidade (0.5x-2x) (AudioPlayer)
+- [x] Narrar título + conteúdo de todas as partes (useArticleAudio)
+- [x] Indicador visual de parte sendo narrada (AudioPlayer flutuante)
+- [x] Pausar automaticamente ao sair da tela (useEffect cleanup)
+- [x] Hook useArticleAudio completo com todos os controles
+
+### 21. Sistema de metas pessoais
+- [x] Criar hook useReadingGoals
+- [x] Configurações: definir meta (artigos por semana/mês)
+- [x] Calcular progresso atual vs meta (getProgress, getDaysRemaining)
+- [x] Card de meta na tela Estatísticas (com ícone, progresso, dias restantes)
+- [x] Barra de progresso visual linear
+- [x] Notificação ao atingir meta (Alert + Notification)
+- [x] Histórico de metas atingidas (salvo em AsyncStorage)

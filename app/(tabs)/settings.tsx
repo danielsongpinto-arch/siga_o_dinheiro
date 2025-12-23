@@ -11,6 +11,7 @@ import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useAuth } from "@/hooks/use-auth";
 import { useNightMode } from "@/hooks/use-night-mode";
 import { useReadingReminders } from "@/hooks/use-reading-reminders";
+import { useReadingGoals } from "@/hooks/use-reading-goals";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
@@ -28,6 +29,7 @@ export default function SettingsScreen() {
   const { syncEnabled, isSyncing, lastSyncTime, toggleSync, performSync } = useBookmarkSync();
   const { isNightMode, autoModeEnabled, hasManualOverride, toggleAutoMode, setManualMode, clearManualOverride } = useNightMode();
   const { config: remindersConfig, toggleEnabled: toggleReminders, setTime: setReminderTime } = useReadingReminders();
+  const { goal, createGoal, deleteGoal } = useReadingGoals();
 
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -347,6 +349,120 @@ export default function SettingsScreen() {
                     <ThemedText type="defaultSemiBold">Horário</ThemedText>
                     <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
                       {`${remindersConfig.hour.toString().padStart(2, "0")}:${remindersConfig.minute.toString().padStart(2, "0")}`}
+                    </ThemedText>
+                  </View>
+                </View>
+                <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+              </Pressable>
+            )}
+          </View>
+        </View>
+
+        {/* Seção de Metas */}
+        <View style={styles.section}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Metas de Leitura
+          </ThemedText>
+          <ThemedText style={[styles.sectionDescription, { color: colors.icon }]}>
+            Defina metas para manter sua constância
+          </ThemedText>
+
+          <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+            {goal ? (
+              <>
+                <View style={[styles.toggleItem, { borderBottomColor: colors.border }]}>
+                  <View style={styles.toggleLeft}>
+                    <IconSymbol name="target" size={24} color={colors.tint} />
+                    <View style={styles.toggleText}>
+                      <ThemedText type="defaultSemiBold">
+                        Meta {goal.type === "weekly" ? "Semanal" : "Mensal"}
+                      </ThemedText>
+                      <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                        {goal.current} de {goal.target} artigos
+                      </ThemedText>
+                    </View>
+                  </View>
+                </View>
+                <Pressable
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    Alert.alert(
+                      "Excluir Meta",
+                      "Tem certeza que deseja excluir esta meta?",
+                      [
+                        { text: "Cancelar", style: "cancel" },
+                        {
+                          text: "Excluir",
+                          style: "destructive",
+                          onPress: async () => {
+                            await deleteGoal();
+                            await Haptics.notificationAsync(
+                              Haptics.NotificationFeedbackType.Success
+                            );
+                          },
+                        },
+                      ]
+                    );
+                  }}
+                  style={({ pressed }) => [
+                    styles.toggleItem,
+                    styles.toggleItemLast,
+                    pressed && styles.pressed,
+                  ]}
+                >
+                  <View style={styles.toggleLeft}>
+                    <IconSymbol name="trash.fill" size={24} color="#FF3B30" />
+                    <View style={styles.toggleText}>
+                      <ThemedText type="defaultSemiBold" style={{ color: "#FF3B30" }}>
+                        Excluir Meta
+                      </ThemedText>
+                    </View>
+                  </View>
+                  <IconSymbol name="chevron.right" size={20} color={colors.icon} />
+                </Pressable>
+              </>
+            ) : (
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  Alert.alert(
+                    "Criar Meta",
+                    "Escolha o tipo de meta e a quantidade de artigos:",
+                    [
+                      {
+                        text: "Semanal (7 artigos)",
+                        onPress: async () => {
+                          await createGoal("weekly", 7);
+                          await Haptics.notificationAsync(
+                            Haptics.NotificationFeedbackType.Success
+                          );
+                        },
+                      },
+                      {
+                        text: "Mensal (30 artigos)",
+                        onPress: async () => {
+                          await createGoal("monthly", 30);
+                          await Haptics.notificationAsync(
+                            Haptics.NotificationFeedbackType.Success
+                          );
+                        },
+                      },
+                      { text: "Cancelar", style: "cancel" },
+                    ]
+                  );
+                }}
+                style={({ pressed }) => [
+                  styles.toggleItem,
+                  styles.toggleItemLast,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <View style={styles.toggleLeft}>
+                  <IconSymbol name="plus.circle.fill" size={24} color={colors.tint} />
+                  <View style={styles.toggleText}>
+                    <ThemedText type="defaultSemiBold">Criar Nova Meta</ThemedText>
+                    <ThemedText style={[styles.toggleDescription, { color: colors.icon }]}>
+                      Defina uma meta semanal ou mensal
                     </ThemedText>
                   </View>
                 </View>

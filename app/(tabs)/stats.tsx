@@ -8,6 +8,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useAchievements } from "@/hooks/use-achievements";
 import { useReadingPatterns } from "@/hooks/use-reading-patterns";
+import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { HeatmapChart } from "@/components/heatmap-chart";
 import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
@@ -28,6 +29,7 @@ export default function StatsScreen() {
   const { getAllProgress, getCompletedCount } = useReadingProgress();
   const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
   const { getHeatmapData, getPeakTime, getTotalActivities } = useReadingPatterns();
+  const { goal, getProgress, getDaysRemaining } = useReadingGoals();
 
   useEffect(() => {
     loadBookmarks();
@@ -137,6 +139,45 @@ export default function StatsScreen() {
           </ThemedView>
         ) : (
           <>
+            {/* Card de Meta */}
+            {goal && (
+              <View style={[styles.goalCard, { backgroundColor: colors.cardBg }]}>
+                <View style={styles.goalHeader}>
+                  <View style={styles.goalTitleRow}>
+                    <IconSymbol name="target" size={28} color={colors.tint} />
+                    <View style={styles.goalTitleText}>
+                      <ThemedText type="subtitle">
+                        Meta {goal.type === "weekly" ? "Semanal" : "Mensal"}
+                      </ThemedText>
+                      <ThemedText style={[styles.goalSubtitle, { color: colors.icon }]}>
+                        {getDaysRemaining()} dias restantes
+                      </ThemedText>
+                    </View>
+                  </View>
+                  <ThemedText type="title" style={{ color: colors.tint }}>
+                    {goal.current}/{goal.target}
+                  </ThemedText>
+                </View>
+                
+                {/* Barra de Progresso */}
+                <View style={[styles.goalProgressBar, { backgroundColor: colors.border }]}>
+                  <View
+                    style={[
+                      styles.progressFill,
+                      {
+                        backgroundColor: colors.tint,
+                        width: `${getProgress()}%`,
+                      },
+                    ]}
+                  />
+                </View>
+                
+                <ThemedText style={[styles.goalProgress, { color: colors.icon }]}>
+                  {getProgress().toFixed(0)}% completo
+                </ThemedText>
+              </View>
+            )}
+
             {/* Cards de Resumo */}
             <View style={styles.summaryGrid}>
               <View style={[styles.summaryCard, { backgroundColor: colors.cardBg }]}>
@@ -694,5 +735,43 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 11,
     fontWeight: "600",
+  },
+  goalCard: {
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 24,
+  },
+  goalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+  goalTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  goalTitleText: {
+    flex: 1,
+  },
+  goalSubtitle: {
+    fontSize: 13,
+    marginTop: 2,
+  },
+  goalProgressBar: {
+    height: 8,
+    borderRadius: 4,
+    overflow: "hidden",
+    marginBottom: 8,
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+  goalProgress: {
+    fontSize: 13,
+    textAlign: "center",
   },
 });

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "0e2e4681-57dc-43cb-9128-0cb1f90d912e",
+  "id": "2a7d54a4-e0f1-4144-a25a-ee5b241f6a91",
   "prevId": "3c3a03ea-b871-416a-b531-aa772cca8b00",
   "tables": {
     "bookmarks": {

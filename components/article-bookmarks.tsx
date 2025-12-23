@@ -6,6 +6,7 @@ import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useReadingPatterns } from "@/hooks/use-reading-patterns";
 
 export interface Bookmark {
   id: string;
@@ -48,6 +49,7 @@ export function ArticleBookmarks({
 }: ArticleBookmarksProps) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? "light"];
+  const { logActivity } = useReadingPatterns();
   
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -110,6 +112,16 @@ export function ArticleBookmarks({
         
         const updatedBookmark = updated.find((b) => b.id === bookmarkId);
         setBookmarks(bookmarks.map((b) => (b.id === bookmarkId ? { ...b, note, tags, updatedAt: new Date().toISOString() } : b)));
+        
+        // Log atividade de nota
+        const oldBookmark = bookmarks.find((b) => b.id === bookmarkId);
+        if (oldBookmark && note !== oldBookmark.note) {
+          try {
+            await logActivity("note");
+          } catch (logError) {
+            console.error("Error logging activity:", logError);
+          }
+        }
         
         // Sincronizar atualização
         if (onBookmarkUpdated && updatedBookmark) {
@@ -450,7 +462,8 @@ export async function createBookmark(
   articleTitle: string,
   partTitle: string,
   excerpt: string,
-  syncCallback?: (bookmark: Bookmark) => Promise<void>
+  syncCallback?: (bookmark: Bookmark) => Promise<void>,
+  logActivity?: (action: "read" | "bookmark" | "note") => Promise<void>
 ): Promise<void> {
   try {
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -469,6 +482,15 @@ export async function createBookmark(
     const bookmarks: Bookmark[] = stored ? JSON.parse(stored) : [];
     bookmarks.push(bookmark);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+    
+    // Log atividade de bookmark
+    if (logActivity) {
+      try {
+        await logActivity("bookmark");
+      } catch (logError) {
+        console.error("Error logging activity:", logError);
+      }
+    }
     
     // Sincronizar automaticamente se callback fornecido
     if (syncCallback) {
