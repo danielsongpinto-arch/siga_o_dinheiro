@@ -1,4 +1,4 @@
-import { View, Modal, Pressable, TextInput, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Modal, TextInput, Pressable, FlatList, Alert, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { ThemedView } from "./themed-view";
 import { IconSymbol } from "./ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useArticleComments, ArticleComment } from "@/hooks/use-article-comments";
+import { exportCommentsToPDF, shareCommentsAsText } from "@/lib/export-comments";
 
 interface ArticleCommentsModalProps {
   visible: boolean;
@@ -25,6 +26,8 @@ export function ArticleCommentsModal({
   const [newCommentText, setNewCommentText] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [dateFilter, setDateFilter] = useState<"all" | "7days" | "30days" | "90days">("all");
 
   const colors = {
     text: useThemeColor({}, "text"),
@@ -36,6 +39,30 @@ export function ArticleCommentsModal({
   };
 
   const { comments, addComment, updateComment, deleteComment } = useArticleComments(articleId);
+
+  // Filtrar comentários por busca e data
+  const filteredComments = comments.filter((comment) => {
+    // Filtro de texto
+    if (searchText.trim()) {
+      const searchLower = searchText.toLowerCase();
+      if (!comment.text.toLowerCase().includes(searchLower)) {
+        return false;
+      }
+    }
+
+    // Filtro de data
+    if (dateFilter !== "all") {
+      const commentDate = new Date(comment.createdAt);
+      const now = new Date();
+      const daysDiff = Math.floor((now.getTime() - commentDate.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (dateFilter === "7days" && daysDiff > 7) return false;
+      if (dateFilter === "30days" && daysDiff > 30) return false;
+      if (dateFilter === "90days" && daysDiff > 90) return false;
+    }
+
+    return true;
+  });
 
   const handleAddComment = async () => {
     if (!newCommentText.trim()) return;
@@ -75,6 +102,38 @@ export function ArticleCommentsModal({
     );
   };
 
+  const handleExportComments = () => {
+    Alert.alert(
+      "Exportar Todos os Comentários",
+      "Escolha o formato de exportação",
+      [
+        {
+          text: "PDF",
+          onPress: async () => {
+            try {
+              await exportCommentsToPDF();
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            } catch (error) {
+              Alert.alert("Erro", "Não foi possível exportar os comentários");
+            }
+          },
+        },
+        {
+          text: "Texto",
+          onPress: async () => {
+            try {
+              await shareCommentsAsText();
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            } catch (error) {
+              Alert.alert("Erro", "Não foi possível compartilhar os comentários");
+            }
+          },
+        },
+        { text: "Cancelar", style: "cancel" },
+      ]
+    );
+  };
+
   const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
     const now = new Date();
@@ -100,20 +159,104 @@ export function ArticleCommentsModal({
               {articleTitle}
             </ThemedText>
           </View>
+          {comments.length > 0 && (
+            <Pressable
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                handleExportComments();
+              }}
+              style={styles.exportButton}
+            >
+              <IconSymbol name="square.and.arrow.up" size={22} color={colors.tint} />
+            </Pressable>
+          )}
           <Pressable onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onClose(); }} style={styles.closeButton}>
             <IconSymbol name="xmark" size={24} color={colors.icon} />
           </Pressable>
         </View>
 
+        {/* Campo de Busca e Filtros */}
+        <View style={[styles.searchContainer, { backgroundColor: colors.cardBg, borderBottomColor: colors.border }]}>
+          <View style={[styles.searchInputContainer, { backgroundColor: colors.background, borderColor: colors.border }]}>
+            <IconSymbol name="magnifyingglass" size={20} color={colors.icon} />
+            <TextInput
+              value={searchText}
+              onChangeText={setSearchText}
+              placeholder="Buscar comentários..."
+              placeholderTextColor={colors.icon}
+              style={[styles.searchInput, { color: colors.text }]}
+            />
+            {searchText.length > 0 && (
+              <Pressable
+                onPress={() => {
+                  setSearchText("");
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <IconSymbol name="xmark.circle.fill" size={20} color={colors.icon} />
+              </Pressable>
+            )}
+          </View>
+
+          {/* Filtros de Data */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateFilters}>
+            {["all", "7days", "30days", "90days"].map((filter) => (
+              <Pressable
+                key={filter}
+                onPress={() => {
+                  setDateFilter(filter as typeof dateFilter);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+                style={[
+                  styles.dateFilterChip,
+                  {
+                    backgroundColor: dateFilter === filter ? colors.tint : colors.background,
+                    borderColor: colors.border,
+                  },
+                ]}
+              >
+                <ThemedText
+                  style={[
+                    styles.dateFilterText,
+                    { color: dateFilter === filter ? "#fff" : colors.text },
+                  ]}
+                >
+                  {filter === "all" ? "Todos" : filter === "7days" ? "Últimos 7 dias" : filter === "30days" ? "Últimos 30 dias" : "Últimos 90 dias"}
+                </ThemedText>
+              </Pressable>
+            ))}
+          </ScrollView>
+
+          {/* Indicador de Resultados */}
+          {(searchText || dateFilter !== "all") && (
+            <View style={styles.resultsIndicator}>
+              <ThemedText style={[styles.resultsText, { color: colors.icon }]}>
+                {filteredComments.length} {filteredComments.length === 1 ? "resultado" : "resultados"}
+              </ThemedText>
+              <Pressable
+                onPress={() => {
+                  setSearchText("");
+                  setDateFilter("all");
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <ThemedText style={{ color: colors.tint, fontSize: 14 }}>Limpar filtros</ThemedText>
+              </Pressable>
+            </View>
+          )}
+        </View>
+
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
           <FlatList
-            data={comments}
+            data={filteredComments}
             keyExtractor={(item) => item.id}
             contentContainerStyle={[styles.listContent, comments.length === 0 && styles.emptyList]}
             ListEmptyComponent={
               <View style={styles.emptyState}>
-                <IconSymbol name="bubble.left" size={48} color={colors.icon} />
-                <ThemedText style={[styles.emptyText, { color: colors.icon }]}>Nenhum comentário ainda</ThemedText>
+                <IconSymbol name={searchText || dateFilter !== "all" ? "magnifyingglass" : "bubble.left"} size={48} color={colors.icon} />
+                <ThemedText style={[styles.emptyText, { color: colors.icon }]}>
+                  {searchText || dateFilter !== "all" ? "Nenhum comentário encontrado" : "Nenhum comentário ainda"}
+                </ThemedText>
               </View>
             }
             renderItem={({ item }) => (
@@ -158,6 +301,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   header: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 20, paddingBottom: 16, borderBottomWidth: 1 },
   articleTitle: { fontSize: 14, marginTop: 4 },
+  exportButton: { padding: 4, marginRight: 8 },
   closeButton: { padding: 4 },
   listContent: { padding: 16, gap: 12 },
   emptyList: { flex: 1, justifyContent: "center" },
@@ -176,4 +320,12 @@ const styles = StyleSheet.create({
   inputContainer: { flexDirection: "row", gap: 12, paddingHorizontal: 16, paddingTop: 16, borderTopWidth: 1 },
   input: { flex: 1, borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, fontSize: 16, lineHeight: 22, maxHeight: 100 },
   sendButton: { width: 44, height: 44, borderRadius: 22, justifyContent: "center", alignItems: "center" },
+  searchContainer: { paddingHorizontal: 16, paddingVertical: 12, gap: 12, borderBottomWidth: 1 },
+  searchInputContainer: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10, borderWidth: 1 },
+  searchInput: { flex: 1, fontSize: 16 },
+  dateFilters: { flexDirection: "row", gap: 8 },
+  dateFilterChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1, marginRight: 8 },
+  dateFilterText: { fontSize: 14, fontWeight: "500" },
+  resultsIndicator: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 4 },
+  resultsText: { fontSize: 13 },
 });

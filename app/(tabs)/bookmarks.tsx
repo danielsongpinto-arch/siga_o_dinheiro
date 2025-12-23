@@ -18,6 +18,7 @@ interface ArticleComment {
 }
 import { exportBookmarksToPDF } from "@/lib/export-pdf";
 import { QuoteImageGenerator } from "@/components/quote-image-generator";
+import { useReviewTracking } from "@/hooks/use-review-tracking";
 
 export default function BookmarksScreen() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function BookmarksScreen() {
   const [generatingImage, setGeneratingImage] = useState(false);
   const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
   const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
+  const { trackBookmarkView } = useReviewTracking();
 
   useEffect(() => {
     loadBookmarks();
@@ -69,8 +71,17 @@ export default function BookmarksScreen() {
     }
   };
 
-  const navigateToArticle = (articleId: string) => {
+  const navigateToArticle = async (articleId: string, bookmarkCreatedAt?: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
+    // Rastrear visualização de destaque antigo
+    if (bookmarkCreatedAt) {
+      const wasTracked = await trackBookmarkView(bookmarkCreatedAt);
+      if (wasTracked) {
+        console.log("[ReviewTracking] Visualização de destaque antigo registrada");
+      }
+    }
+    
     router.push(`/article/${articleId}` as any);
   };
 
@@ -546,7 +557,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             <ThemedView key={key} style={styles.section}>
               {groupBy === "article" && (
                 <Pressable
-                  onPress={() => navigateToArticle(items[0].articleId)}
+                  onPress={() => navigateToArticle(items[0].articleId, items[0].createdAt)}
                   style={styles.sectionHeader}
                 >
                   <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -562,7 +573,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                   style={[styles.bookmarkCard, { borderColor: colors.border }]}
                 >
                   <Pressable
-                    onPress={() => navigateToArticle(bookmark.articleId)}
+                    onPress={() => navigateToArticle(bookmark.articleId, bookmark.createdAt)}
                     style={styles.bookmarkContent}
                   >
                     <ThemedText type="defaultSemiBold" style={styles.partTitle}>

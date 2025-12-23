@@ -104,4 +104,12 @@ export const BADGES: Badge[] = [
     requirement: 3,
     type: "special",
   },
+  {
+    id: "reviewer",
+    title: "Revisor Dedicado",
+    description: "Revise 10 destaques antigos (30+ dias)",
+    icon: "clock.fill",
+    requirement: 10,
+    type: "special",
+  },
 ];

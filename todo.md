@@ -334,3 +334,33 @@
 - [x] Persistir configurações em AsyncStorage
 - [x] Seção completa nas Configurações com toggle e seletor de frequência
 - [ ] Ao tocar notificação: abrir tela Destaques (não implementado - requer deep linking)
+
+
+## Melhorias Finais - Décima Primeira Rodada
+
+### 31. Busca avançada de comentários
+- [x] Adicionar campo de busca na tela de comentários do artigo
+- [x] Filtrar comentários por texto (busca case-insensitive)
+- [x] Filtrar comentários por data (últimos 7 dias, 30 dias, 90 dias, todos)
+- [x] Indicador visual de resultados encontrados (contador + botão limpar)
+- [x] Limpar busca e resetar filtros (botão X no campo, botão "Limpar filtros")
+- [x] Mensagem vazia adaptativa: "Nenhum comentário encontrado" quando filtros ativos
+
+### 32. Exportar apenas comentários
+- [x] Criar função exportCommentsToPDF (arquivo export-comments.ts)
+- [x] Criar função shareCommentsAsText
+- [x] Adicionar botão "Exportar Comentários" no header do modal (ícone share)
+- [x] Menu de opções: PDF ou Texto
+- [x] Formato: agrupar por artigo, incluir data e texto, contador total
+- [x] Design consistente com exportação de destaques (cores azuis para comentários)
+- [x] Carregar todos os comentários de todos os artigos automaticamente
+
+### 33. Badge "Revisor Dedicado"
+- [x] Adicionar badge "Revisor Dedicado" ao arquivo badges.ts
+- [x] Ícone: clock.fill (azul #0284c7 no design)
+- [x] Requisito: revisar 10 destaques antigos (30+ dias)
+- [x] Criar hook useReviewTracking para rastrear revisões
+- [x] Incrementar contador ao abrir destaque antigo (trackBookmarkView)
+- [x] Persistir contador em AsyncStorage (STORAGE_KEY: review_tracking)
+- [x] Integrar com sistema de conquistas existente (useAchievements)
+- [x] Rastreamento automático ao clicar em bookmarks na tela Destaques

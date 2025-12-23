@@ -8,6 +8,7 @@ import { useReadingHistory } from "./use-reading-history";
 import { useComments } from "./use-comments";
 import { useHighlights } from "./use-highlights";
 import { useFavorites } from "./use-favorites";
+import { useReviewTracking } from "./use-review-tracking";
 import { ARTICLES, THEMES } from "@/data/mock-data";
 
 const UNLOCKED_BADGES_KEY = "@siga_o_dinheiro:unlocked_badges";
@@ -18,6 +19,7 @@ export function useAchievements() {
   const { history } = useReadingHistory();
   const { highlights } = useHighlights();
   const { favorites } = useFavorites();
+  const { reviewCount } = useReviewTracking();
 
   useEffect(() => {
     loadUnlockedBadges();
@@ -27,7 +29,7 @@ export function useAchievements() {
     if (!loading) {
       checkAchievements();
     }
-  }, [history, highlights, favorites, loading]);
+  }, [history, highlights, favorites, reviewCount, loading]);
 
   const loadUnlockedBadges = async () => {
     try {
@@ -124,6 +126,11 @@ export function useAchievements() {
         await unlockBadge("weekend_reader");
       }
     }
+
+    // Revisor Dedicado
+    if (reviewCount >= 10 && !unlockedBadges.includes("reviewer")) {
+      await unlockBadge("reviewer");
+    }
   };
 
   const getBadgeProgress = (badge: Badge): number => {
@@ -162,6 +169,9 @@ export function useAchievements() {
         }).length;
         return Math.min(weekendReads, badge.requirement);
       }
+      
+      case "reviewer":
+        return Math.min(reviewCount, badge.requirement);
       
       default:
         return 0;
