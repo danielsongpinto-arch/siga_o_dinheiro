@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, Pressable } from "react-native";
+import { View, ScrollView, Pressable, StyleSheet, Switch, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
@@ -6,6 +6,8 @@ import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useThemePreference, ThemePreference } from "@/hooks/use-theme-preference";
+import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
@@ -19,6 +21,8 @@ export default function SettingsScreen() {
   };
 
   const { preference, updatePreference } = useThemePreference();
+  const { isAuthenticated } = useAuth();
+  const { syncEnabled, isSyncing, lastSyncTime, toggleSync, performSync } = useBookmarkSync();
 
   const themeOptions: { value: ThemePreference; label: string; icon: string; description: string }[] =
     [
@@ -68,6 +72,91 @@ export default function SettingsScreen() {
             Personalize sua experiência
           </ThemedText>
         </View>
+
+        {/* Seção de Sincronização */}
+        {isAuthenticated && (
+          <View style={styles.section}>
+            <ThemedText type="subtitle" style={styles.sectionTitle}>
+              Sincronização
+            </ThemedText>
+            <ThemedText style={[styles.sectionDescription, { color: colors.icon }]}>
+              Mantenha seus destaques sincronizados entre dispositivos
+            </ThemedText>
+
+            <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+              <Pressable
+                onPress={async () => {
+                  await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  await toggleSync();
+                }}
+                style={[styles.syncOption, { borderBottomColor: colors.border }]}
+              >
+                <View style={styles.syncOptionLeft}>
+                  <View style={[styles.iconContainer, { backgroundColor: colors.tint + "20" }]}>
+                    <IconSymbol name="arrow.triangle.2.circlepath" size={24} color={colors.tint} />
+                  </View>
+                  <View style={styles.optionTextContainer}>
+                    <ThemedText type="defaultSemiBold">Sincronizar Destaques</ThemedText>
+                    <ThemedText style={[styles.optionDescription, { color: colors.icon }]}>
+                      {syncEnabled ? "Ativado" : "Desativado"}
+                    </ThemedText>
+                  </View>
+                </View>
+                <Switch
+                  value={syncEnabled}
+                  onValueChange={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    await toggleSync();
+                  }}
+                  trackColor={{ false: colors.border, true: colors.tint }}
+                  thumbColor="#fff"
+                />
+              </Pressable>
+
+              {syncEnabled && (
+                <Pressable
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    const result = await performSync();
+                    if (result.success) {
+                      Alert.alert("Sucesso", result.message);
+                    } else {
+                      Alert.alert("Erro", result.message);
+                    }
+                  }}
+                  disabled={isSyncing}
+                  style={styles.syncButton}
+                >
+                  <IconSymbol
+                    name="arrow.clockwise"
+                    size={20}
+                    color={isSyncing ? colors.icon : colors.tint}
+                  />
+                  <ThemedText
+                    type="defaultSemiBold"
+                    style={[styles.syncButtonText, { color: isSyncing ? colors.icon : colors.tint }]}
+                  >
+                    {isSyncing ? "Sincronizando..." : "Sincronizar Agora"}
+                  </ThemedText>
+                </Pressable>
+              )}
+
+              {syncEnabled && lastSyncTime && (
+                <View style={styles.lastSyncContainer}>
+                  <ThemedText style={[styles.lastSyncText, { color: colors.icon }]}>
+                    Última sincronização:{" "}
+                    {lastSyncTime.toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </ThemedText>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
 
         {/* Seção de Tema */}
         <View style={styles.section}>
@@ -187,6 +276,11 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 32,
   },
+  card: {
+    borderRadius: 12,
+    borderWidth: 1,
+    overflow: "hidden",
+  },
   sectionTitle: {
     fontSize: 20,
     marginBottom: 8,
@@ -248,7 +342,39 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    paddingVertical: 12,
     borderTopWidth: 1,
+  },
+  syncOption: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+  },
+  syncOptionLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  syncButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  syncButtonText: {
+    fontSize: 16,
+  },
+  lastSyncContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+  },
+  lastSyncText: {
+    fontSize: 12,
   },
 });

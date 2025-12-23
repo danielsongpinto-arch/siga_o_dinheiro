@@ -1,15 +1,30 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTabBar } from "@/contexts/tab-bar-context";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+  const { isTabBarVisible } = useTabBar();
+  const tabBarHeight = useSharedValue(49 + insets.bottom);
+
+  useEffect(() => {
+    tabBarHeight.value = withTiming(isTabBarVisible ? 49 + insets.bottom : 0, {
+      duration: 250,
+    });
+  }, [isTabBarVisible, insets.bottom]);
+
+  const animatedTabBarStyle = useAnimatedStyle(() => ({
+    height: tabBarHeight.value,
+    transform: [{ translateY: isTabBarVisible ? 0 : 100 }],
+  }));
 
   return (
     <Tabs
@@ -17,10 +32,13 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
         tabBarButton: HapticTab,
-        tabBarStyle: {
-          paddingBottom: insets.bottom,
-          height: 49 + insets.bottom,
-        },
+        tabBarStyle: [
+          {
+            paddingBottom: insets.bottom,
+            height: 49 + insets.bottom,
+          },
+          animatedTabBarStyle,
+        ],
       }}
     >
       <Tabs.Screen

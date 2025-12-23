@@ -1,0 +1,26 @@
+import { createContext, useContext, useState, ReactNode } from "react";
+
+interface TabBarContextType {
+  isTabBarVisible: boolean;
+  setTabBarVisible: (visible: boolean) => void;
+}
+
+const TabBarContext = createContext<TabBarContextType | undefined>(undefined);
+
+export function TabBarProvider({ children }: { children: ReactNode }) {
+  const [isTabBarVisible, setIsTabBarVisible] = useState(true);
+
+  return (
+    <TabBarContext.Provider value={{ isTabBarVisible, setTabBarVisible: setIsTabBarVisible }}>
+      {children}
+    </TabBarContext.Provider>
+  );
+}
+
+export function useTabBar() {
+  const context = useContext(TabBarContext);
+  if (!context) {
+    throw new Error("useTabBar must be used within TabBarProvider");
+  }
+  return context;
+}

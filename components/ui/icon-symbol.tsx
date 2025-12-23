@@ -66,6 +66,7 @@ const MAPPING = {
   "trash": "delete-outline",
   "tag": "label",
   "gearshape.fill": "settings",
+  "arrow.triangle.2.circlepath": "sync",
 } as IconMapping;
 
 /**

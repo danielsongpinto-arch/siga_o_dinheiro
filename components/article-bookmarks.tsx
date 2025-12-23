@@ -16,6 +16,7 @@ export interface Bookmark {
   note?: string;
   tags?: string[];
   createdAt: string;
+  updatedAt?: string;
 }
 
 export const PREDEFINED_TAGS = [

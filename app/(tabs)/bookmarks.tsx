@@ -8,6 +8,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { exportBookmarksToPDF } from "@/lib/export-pdf";
 
 export default function BookmarksScreen() {
   const router = useRouter();
@@ -59,6 +60,40 @@ export default function BookmarksScreen() {
   const navigateToArticle = (articleId: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push(`/article/${articleId}` as any);
+  };
+
+  const exportToPDF = async () => {
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      
+      if (filteredBookmarks.length === 0) {
+        Alert.alert("Nenhum destaque", "Não há destaques para exportar.");
+        return;
+      }
+
+      Alert.alert(
+        "Exportar PDF",
+        `Exportar ${filteredBookmarks.length} ${filteredBookmarks.length === 1 ? "destaque" : "destaques"} como PDF?`,
+        [
+          { text: "Cancelar", style: "cancel" },
+          {
+            text: "Exportar",
+            onPress: async () => {
+              try {
+                await exportBookmarksToPDF(filteredBookmarks);
+                Alert.alert("Sucesso", "PDF gerado e pronto para compartilhar!");
+              } catch (error) {
+                console.error("Error exporting PDF:", error);
+                Alert.alert("Erro", "Não foi possível gerar o PDF.");
+              }
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("Error in exportToPDF:", error);
+      Alert.alert("Erro", "Não foi possível exportar os destaques.");
+    }
   };
 
   const shareBookmarks = async () => {
@@ -185,13 +220,20 @@ export default function BookmarksScreen() {
           </View>
           
           {filteredBookmarks.length > 0 && (
-            <Pressable
-              onPress={shareBookmarks}
-              style={[styles.shareButton, { backgroundColor: colors.tint }]}
-            >
-              <IconSymbol name="square.and.arrow.up" size={20} color="#fff" />
-              <Text style={styles.shareButtonText}>Compartilhar</Text>
-            </Pressable>
+            <View style={styles.headerButtons}>
+              <Pressable
+                onPress={exportToPDF}
+                style={[styles.actionButton, { backgroundColor: "#FF9500" }]}
+              >
+                <IconSymbol name="arrow.down.circle.fill" size={20} color="#fff" />
+              </Pressable>
+              <Pressable
+                onPress={shareBookmarks}
+                style={[styles.actionButton, { backgroundColor: colors.tint }]}
+              >
+                <IconSymbol name="square.and.arrow.up" size={20} color="#fff" />
+              </Pressable>
+            </View>
           )}
         </View>
 
@@ -472,18 +514,16 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginBottom: 4,
   },
-  shareButton: {
+  headerButtons: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
+    gap: 8,
   },
-  shareButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "600",
+  actionButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerSubtitle: {
     fontSize: 14,

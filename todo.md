@@ -103,3 +103,35 @@
 - [x] Métrica: Porcentagem de destaques com notas (card)
 - [x] Gráfico de atividade mensal (últimos 6 meses, gráfico de barras)
 - [x] Design visual atraente com cards coloridos e ícones
+
+
+## Novas Funcionalidades Avançadas - Terceira Rodada
+
+### 7. Exportar destaques como PDF
+- [x] Instalar biblioteca expo-print e expo-sharing
+- [x] Criar função de formatação de destaques em HTML
+- [x] Incluir capa com título "Meus Destaques - Siga o Dinheiro"
+- [x] Incluir índice com lista de artigos e contadores
+- [x] Formatar cada destaque: título, parte, excerpt, nota, tags, data
+- [x] Adicionar separadores visuais e page-break
+- [x] Botão "Exportar PDF" na tela Destaques (ícone laranja)
+- [x] Gerar PDF e compartilhar via Share API nativa
+
+### 8. Modo de leitura focado
+- [x] Detectar scroll down/up nas telas de artigo
+- [x] Animar ocultação do tab bar ao rolar para baixo
+- [x] Animar exibição do tab bar ao rolar para cima
+- [x] Usar react-native-reanimated para animações suaves (250ms)
+- [x] Aplicar na tela de leitura de artigos (app/article/[id].tsx)
+- [x] Resetar tab bar ao sair da tela (useEffect cleanup)
+
+### 9. Sincronização entre dispositivos
+- [x] Criar schema Drizzle para bookmarks no backend (tabela bookmarks)
+- [x] Criar tRPC mutations: syncBookmarks, upsert, delete, list
+- [x] Adicionar toggle "Sincronizar" na tela Configurações
+- [x] Ao ativar sync: fazer upload de bookmarks locais para servidor
+- [x] Ao desativar sync: manter dados locais, parar de sincronizar
+- [x] Hook useBookmarkSync com funções syncBookmark, deleteBookmarkOnServer
+- [x] Resolver conflitos: última modificação vence (timestamp)
+- [x] Botão "Sincronizar Agora" manual na tela Configurações
+- [x] Indicador de última sincronização (data/hora)

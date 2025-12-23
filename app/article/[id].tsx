@@ -23,6 +23,7 @@ import { useOfflineArticles } from "@/hooks/use-offline-articles";
 import { useReadingHistory } from "@/hooks/use-reading-history";
 import { useQuiz } from "@/hooks/use-quiz";
 import { useFontSize } from "@/hooks/use-font-size";
+import { useScrollHideTabBar } from "@/hooks/use-scroll-hide-tab-bar";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -37,6 +38,7 @@ export default function ArticleDetailScreen() {
   const { getQuizForArticle, getScorePercentage, hasCompletedQuiz } = useQuiz();
   const { getFontSizes } = useFontSize();
   const fontSizes = getFontSizes();
+  const { handleScroll, resetTabBar } = useScrollHideTabBar();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -48,6 +50,13 @@ export default function ArticleDetailScreen() {
   const cardBg = useThemeColor({}, "cardBackground");
   const borderColor = useThemeColor({}, "border");
   const textSecondary = useThemeColor({}, "textSecondary");
+
+  // Resetar tab bar ao desmontar
+  useEffect(() => {
+    return () => {
+      resetTabBar();
+    };
+  }, [resetTabBar]);
 
   const article = ARTICLES.find((a) => a.id === id);
   const audioHook = useArticleAudio(article?.content || "");
@@ -190,6 +199,8 @@ export default function ArticleDetailScreen() {
 
       <ScrollView
         style={styles.container}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={[
           styles.content,
           { paddingBottom: Math.max(insets.bottom, 20) + 16 },
