@@ -29,7 +29,7 @@ export default function StatsScreen() {
   const { getAllProgress, getCompletedCount } = useReadingProgress();
   const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
   const { getHeatmapData, getPeakTime, getTotalActivities } = useReadingPatterns();
-  const { goal, getProgress, getDaysRemaining } = useReadingGoals();
+  const { goal, history: goalsHistory, getProgress, getDaysRemaining } = useReadingGoals();
 
   useEffect(() => {
     loadBookmarks();
@@ -456,6 +456,65 @@ export default function StatsScreen() {
                 )}
               </View>
             </View>
+
+            {/* Histórico de Metas */}
+            {goalsHistory.length > 0 && (
+              <View style={styles.section}>
+                <ThemedText type="subtitle" style={styles.sectionTitle}>
+                  Histórico de Metas ({goalsHistory.length})
+                </ThemedText>
+                <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+                  {goalsHistory.slice(0, 5).map((historyItem, index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.listItem,
+                        { borderBottomColor: colors.border },
+                        index === Math.min(4, goalsHistory.length - 1) && styles.listItemLast,
+                      ]}
+                    >
+                      <View style={styles.listItemLeft}>
+                        <View
+                          style={[
+                            styles.rankBadge,
+                            {
+                              backgroundColor: historyItem.completed
+                                ? colors.tint
+                                : colors.border,
+                            },
+                          ]}
+                        >
+                          <IconSymbol
+                            name={historyItem.completed ? "checkmark" : "xmark"}
+                            size={16}
+                            color={historyItem.completed ? "#fff" : colors.icon}
+                          />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <ThemedText style={styles.listItemTitle}>
+                            Meta {historyItem.type === "weekly" ? "Semanal" : "Mensal"}
+                          </ThemedText>
+                          <ThemedText style={[styles.tagLabel, { color: colors.icon, fontSize: 13 }]}>
+                            {new Date(historyItem.date).toLocaleDateString("pt-BR")}
+                          </ThemedText>
+                        </View>
+                      </View>
+                      <View style={{ alignItems: "flex-end" }}>
+                        <ThemedText
+                          type="defaultSemiBold"
+                          style={{ color: historyItem.completed ? colors.tint : colors.text }}
+                        >
+                          {historyItem.achieved}/{historyItem.target}
+                        </ThemedText>
+                        <ThemedText style={[styles.tagLabel, { color: colors.icon, fontSize: 12 }]}>
+                          {Math.round((historyItem.achieved / historyItem.target) * 100)}%
+                        </ThemedText>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
 
             {/* Atividade Mensal */}
             <View style={styles.section}>

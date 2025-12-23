@@ -249,3 +249,31 @@
 - [x] Barra de progresso visual linear
 - [x] Notificação ao atingir meta (Alert + Notification)
 - [x] Histórico de metas atingidas (salvo em AsyncStorage)
+
+
+## Melhorias Finais - Oitava Rodada
+
+### 22. Integrar incremento automático de meta
+- [x] Adicionar callback onArticleCompleted ao hook useReadingProgress
+- [x] Chamar incrementProgress() quando artigo for marcado como completo (90%)
+- [x] Verificar se meta existe antes de incrementar (lógica no hook)
+- [x] Fluxo completo: ler artigo → 90% → meta incrementa automaticamente
+
+### 23. Histórico de metas na tela Estatísticas
+- [x] Adicionar seção "Histórico de Metas" na tela Estatísticas
+- [x] Exibir últimas 5 metas do histórico
+- [x] Mostrar: data, tipo (semanal/mensal), target, achieved, completed
+- [x] Indicador visual: checkmark verde (completa) ou xmark cinza (incompleta)
+- [x] Seção só aparece se houver histórico (condicional)
+
+### 24. Onboarding inicial
+- [x] Criar tela de onboarding (app/onboarding.tsx)
+- [x] 5 slides explicando funcionalidades principais
+- [x] Slide 1: Bem-vindo + propósito do app
+- [x] Slide 2: Destaques e tags
+- [x] Slide 3: Sincronização e offline
+- [x] Slide 4: Metas e estatísticas
+- [x] Slide 5: TTS e modo noturno
+- [x] Botão "Pular Tour" no header
+- [x] Salvar flag em AsyncStorage (onboarding_completed)
+- [x] Hook useOnboarding para gerenciar navegação automática

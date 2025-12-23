@@ -33,12 +33,22 @@ export function useReadingProgress() {
   };
 
   const updateProgress = useCallback(
-    async (articleId: string, scrollPosition: number, contentHeight: number, scrollHeight: number) => {
+    async (
+      articleId: string,
+      scrollPosition: number,
+      contentHeight: number,
+      scrollHeight: number,
+      onArticleCompleted?: () => Promise<void>
+    ) => {
       try {
         // Calcular progresso baseado em scroll
         const maxScroll = contentHeight - scrollHeight;
         const progress = maxScroll > 0 ? Math.min(100, (scrollPosition / maxScroll) * 100) : 0;
         const completed = progress >= 90; // Considera completo se ler 90%
+
+        // Verificar se acabou de completar (não estava completo antes)
+        const wasCompleted = progressMap[articleId]?.completed || false;
+        const justCompleted = completed && !wasCompleted;
 
         const newProgress: ReadingProgress = {
           articleId,
@@ -55,6 +65,15 @@ export function useReadingProgress() {
 
         setProgressMap(updated);
         await AsyncStorage.setItem(PROGRESS_KEY, JSON.stringify(updated));
+
+        // Se acabou de completar, chamar callback
+        if (justCompleted && onArticleCompleted) {
+          try {
+            await onArticleCompleted();
+          } catch (callbackError) {
+            console.error("Error in onArticleCompleted callback:", callbackError);
+          }
+        }
       } catch (error) {
         console.error("Error updating reading progress:", error);
       }

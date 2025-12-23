@@ -15,6 +15,7 @@ import {
 import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useOnboarding } from "@/hooks/use-onboarding";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
 import { TabBarProvider } from "@/contexts/tab-bar-context";
@@ -25,11 +26,12 @@ const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
 // Web iframe previewer cannot infer safe-area; default to zero until container sends metrics.
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  anchor: "onboarding",
 };
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const { loading: onboardingLoading } = useOnboarding();
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
 
@@ -73,6 +75,11 @@ export default function RootLayout() {
     [initialFrame, initialInsets],
   );
 
+  // Aguardar verificação de onboarding antes de renderizar
+  if (onboardingLoading) {
+    return null;
+  }
+
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TabBarProvider>
@@ -80,6 +87,7 @@ export default function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
             <Stack>
+              <Stack.Screen name="onboarding" options={{ headerShown: false }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
               <Stack.Screen name="oauth/callback" options={{ headerShown: false }} />

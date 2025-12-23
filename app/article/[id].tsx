@@ -26,6 +26,7 @@ import { useFontSize } from "@/hooks/use-font-size";
 import { useScrollHideTabBar } from "@/hooks/use-scroll-hide-tab-bar";
 import { useBookmarkSync } from "@/hooks/use-bookmark-sync";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
+import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { ARTICLES } from "@/data/mock-data";
 
 export default function ArticleDetailScreen() {
@@ -43,6 +44,7 @@ export default function ArticleDetailScreen() {
   const { handleScroll, resetTabBar } = useScrollHideTabBar();
   const { syncEnabled, syncBookmark, deleteBookmarkOnServer } = useBookmarkSync();
   const { updateProgress, getProgress } = useReadingProgress();
+  const { incrementProgress } = useReadingGoals();
   const [commentText, setCommentText] = useState("");
   const [focusMode, setFocusMode] = useState(false);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -212,7 +214,11 @@ export default function ArticleDetailScreen() {
               article.id,
               contentOffset.y,
               contentSize.height,
-              layoutMeasurement.height
+              layoutMeasurement.height,
+              async () => {
+                // Callback quando artigo é completado (90%)
+                await incrementProgress();
+              }
             );
           }
         }}
