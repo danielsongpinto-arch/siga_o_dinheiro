@@ -49,12 +49,15 @@ export default function RootLayout() {
   // Forçar tema escuro no DOM da web
   useEffect(() => {
     if (Platform.OS === "web") {
+      console.log("[Theme Web] colorScheme:", colorScheme);
       const root = document.documentElement;
       if (colorScheme === "dark") {
+        console.log("[Theme Web] Aplicando tema ESCURO");
         root.style.colorScheme = "dark";
         root.style.backgroundColor = "#000";
         document.body.style.backgroundColor = "#000";
       } else {
+        console.log("[Theme Web] Aplicando tema CLARO");
         root.style.colorScheme = "light";
         root.style.backgroundColor = "#fff";
         document.body.style.backgroundColor = "#fff";

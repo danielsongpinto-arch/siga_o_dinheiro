@@ -6,17 +6,20 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useNightMode } from "@/hooks/use-night-mode";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 export function NightModeOverlay() {
   const { isNightMode } = useNightMode();
+  const colorScheme = useColorScheme();
   const opacity = useSharedValue(0);
 
   useEffect(() => {
-    // Transição suave de 500ms
-    opacity.value = withTiming(isNightMode ? 0.15 : 0, {
+    // Se o tema for escuro, reduzir a opacidade do filtro para não clarear demais
+    const targetOpacity = colorScheme === "dark" ? 0.08 : 0.15;
+    opacity.value = withTiming(isNightMode ? targetOpacity : 0, {
       duration: 500,
     });
-  }, [isNightMode]);
+  }, [isNightMode, colorScheme]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
