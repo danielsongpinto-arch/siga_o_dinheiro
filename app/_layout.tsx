@@ -18,6 +18,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
 import { TabBarProvider } from "@/contexts/tab-bar-context";
+import { NightModeOverlay } from "@/components/night-mode-overlay";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
@@ -83,6 +84,7 @@ export default function RootLayout() {
               <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
               <Stack.Screen name="oauth/callback" options={{ headerShown: false }} />
             </Stack>
+              <NightModeOverlay />
               <StatusBar style="auto" />
             </ThemeProvider>
           </QueryClientProvider>

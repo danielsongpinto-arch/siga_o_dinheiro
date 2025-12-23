@@ -6,6 +6,8 @@ import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
+import { useAchievements } from "@/hooks/use-achievements";
+import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 
 export default function StatsScreen() {
@@ -22,6 +24,7 @@ export default function StatsScreen() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const { getAllProgress, getCompletedCount } = useReadingProgress();
+  const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
 
   useEffect(() => {
     loadBookmarks();
@@ -298,6 +301,91 @@ export default function StatsScreen() {
               </View>
             )}
 
+            {/* Conquistas */}
+            <View style={styles.section}>
+              <ThemedText type="subtitle" style={styles.sectionTitle}>
+                Conquistas ({unlockedBadges.length}/{BADGES.length})
+              </ThemedText>
+              <View style={styles.badgesGrid}>
+                {BADGES.map((badge) => {
+                  const isUnlocked = isBadgeUnlocked(badge.id);
+                  const progress = getBadgeProgress(badge);
+                  const progressPercentage = (progress / badge.requirement) * 100;
+
+                  return (
+                    <View
+                      key={badge.id}
+                      style={[
+                        styles.badgeCard,
+                        { backgroundColor: colors.cardBg },
+                        !isUnlocked && styles.badgeCardLocked,
+                      ]}
+                    >
+                      <View style={styles.badgeIcon}>
+                        <IconSymbol
+                          name={badge.icon as any}
+                          size={32}
+                          color={isUnlocked ? colors.tint : colors.icon}
+                        />
+                      </View>
+                      <ThemedText
+                        type="defaultSemiBold"
+                        style={[
+                          styles.badgeTitle,
+                          !isUnlocked && { color: colors.icon },
+                        ]}
+                        numberOfLines={1}
+                      >
+                        {badge.title}
+                      </ThemedText>
+                      <ThemedText
+                        style={[
+                          styles.badgeDescription,
+                          { color: colors.icon },
+                        ]}
+                        numberOfLines={2}
+                      >
+                        {badge.description}
+                      </ThemedText>
+                      {!isUnlocked && (
+                        <View style={styles.badgeProgress}>
+                          <View
+                            style={[
+                              styles.badgeProgressBar,
+                              { backgroundColor: colors.border },
+                            ]}
+                          >
+                            <View
+                              style={[
+                                styles.badgeProgressFill,
+                                {
+                                  backgroundColor: colors.tint,
+                                  width: `${progressPercentage}%`,
+                                },
+                              ]}
+                            />
+                          </View>
+                          <ThemedText
+                            style={[
+                              styles.badgeProgressText,
+                              { color: colors.icon },
+                            ]}
+                          >
+                            {progress}/{badge.requirement}
+                          </ThemedText>
+                        </View>
+                      )}
+                      {isUnlocked && (
+                        <View style={[styles.badgeUnlocked, { backgroundColor: colors.tint }]}>
+                          <ThemedText style={styles.badgeUnlockedText}>✓ Desbloqueado</ThemedText>
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+
             {/* Atividade Mensal */}
             <View style={styles.section}>
               <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -507,5 +595,61 @@ const styles = StyleSheet.create({
   chartValue: {
     fontSize: 13,
     textAlign: "center",
+  },
+  badgesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+  },
+  badgeCard: {
+    width: "48%",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    gap: 8,
+  },
+  badgeCardLocked: {
+    opacity: 0.6,
+  },
+  badgeIcon: {
+    marginBottom: 4,
+  },
+  badgeTitle: {
+    fontSize: 14,
+    textAlign: "center",
+  },
+  badgeDescription: {
+    fontSize: 12,
+    textAlign: "center",
+    lineHeight: 16,
+  },
+  badgeProgress: {
+    width: "100%",
+    gap: 4,
+    marginTop: 4,
+  },
+  badgeProgressBar: {
+    height: 4,
+    borderRadius: 2,
+    overflow: "hidden",
+  },
+  badgeProgressFill: {
+    height: "100%",
+    borderRadius: 2,
+  },
+  badgeProgressText: {
+    fontSize: 11,
+    textAlign: "center",
+  },
+  badgeUnlocked: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginTop: 4,
+  },
+  badgeUnlockedText: {
+    color: "#fff",
+    fontSize: 11,
+    fontWeight: "600",
   },
 });

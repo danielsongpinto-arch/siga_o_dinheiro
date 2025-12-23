@@ -162,3 +162,31 @@
 - [x] Queue de operações pendentes (criar/editar/deletar bookmarks)
 - [x] Processar queue automaticamente ao detectar conexão (NetInfo listener)
 - [x] Hook useOfflineSyncQueue com 7 funções
+
+
+## Funcionalidades de Engajamento - Quinta Rodada
+
+### 13. Sistema de gamificação com conquistas
+- [x] Criar hook useAchievements para gerenciar conquistas (já existia)
+- [x] Definir 10+ conquistas: 12 badges (leitura, engajamento, exploração, especiais)
+- [x] Sistema de progresso para cada conquista (X/Y)
+- [x] Notificação ao desbloquear conquista (Alert + haptic success)
+- [x] Seção "Conquistas" na tela Estatísticas (grid 2 colunas)
+- [x] Badges visuais com ícones e cores (SF Symbols)
+- [x] Persistir conquistas em AsyncStorage
+
+### 14. Modo leitura noturna automático
+- [x] Detectar horário atual (após 20h = modo noturno)
+- [x] Ajustar temperatura de cor (filtro laranja/âmbar, opacidade 15%)
+- [x] Overlay global aplicado em todas as telas
+- [x] Toggle manual para override na tela Configurações
+- [x] Aplicar em todas as telas (NightModeOverlay no _layout.tsx)
+- [x] Transição suave ao ativar/desativar (500ms)
+
+### 15. Compartilhar citações formatadas
+- [x] Botão "Compartilhar como Imagem" em cada destaque (ícone photo)
+- [x] Gerar imagem estilizada (card com texto, autor, data)
+- [x] Design: fundo gradiente roxo/azul, tipografia elegante, aspas decorativas
+- [x] Incluir excerpt, nota pessoal (opcional), tags coloridas
+- [x] Captura com react-native-view-shot (1080x1350, 4:5)
+- [x] Compartilhar via Share API (Instagram, Twitter, WhatsApp)

@@ -9,6 +9,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { exportBookmarksToPDF } from "@/lib/export-pdf";
+import { QuoteImageGenerator } from "@/components/quote-image-generator";
 
 export default function BookmarksScreen() {
   const router = useRouter();
@@ -25,6 +26,8 @@ export default function BookmarksScreen() {
   const [groupBy, setGroupBy] = useState<"article" | "date">("article");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [generatingImage, setGeneratingImage] = useState(false);
+  const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
 
   useEffect(() => {
     loadBookmarks();
@@ -60,6 +63,11 @@ export default function BookmarksScreen() {
   const navigateToArticle = (articleId: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push(`/article/${articleId}` as any);
+  };
+
+  const shareAsImage = (bookmark: Bookmark) => {
+    setSelectedBookmark(bookmark);
+    setGeneratingImage(true);
   };
 
   const exportToPDF = async () => {
@@ -460,18 +468,38 @@ export default function BookmarksScreen() {
                     </ThemedText>
                   </Pressable>
 
-                  <Pressable
-                    onPress={() => deleteBookmark(bookmark.id)}
-                    style={styles.deleteButton}
-                  >
-                    <IconSymbol name="trash" size={20} color="#FF3B30" />
-                  </Pressable>
+                  <View style={styles.bookmarkActions}>
+                    <Pressable
+                      onPress={() => shareAsImage(bookmark)}
+                      style={styles.actionButton}
+                    >
+                      <IconSymbol name="photo" size={20} color={colors.tint} />
+                    </Pressable>
+                    <Pressable
+                      onPress={() => deleteBookmark(bookmark.id)}
+                      style={styles.actionButton}
+                    >
+                      <IconSymbol name="trash" size={20} color="#FF3B30" />
+                    </Pressable>
+                  </View>
                 </ThemedView>
               ))}
             </ThemedView>
           ))
         )}
       </ScrollView>
+
+      {/* Gerador de imagem */}
+      {generatingImage && selectedBookmark && (
+        <QuoteImageGenerator
+          bookmark={selectedBookmark}
+          onGenerate={() => {}}
+          onComplete={() => {
+            setGeneratingImage(false);
+            setSelectedBookmark(null);
+          }}
+        />
+      )}
     </ThemedView>
   );
 }
@@ -611,9 +639,6 @@ const styles = StyleSheet.create({
   timestamp: {
     fontSize: 12,
   },
-  deleteButton: {
-    padding: 8,
-  },
   tagsFilterContainer: {
     borderBottomWidth: 1,
     maxHeight: 60,
@@ -646,5 +671,9 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 11,
     fontWeight: "600",
+  },
+  bookmarkActions: {
+    flexDirection: "row",
+    gap: 8,
   },
 });
