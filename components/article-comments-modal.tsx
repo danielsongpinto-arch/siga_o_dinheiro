@@ -8,6 +8,7 @@ import { IconSymbol } from "./ui/icon-symbol";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useArticleComments, ArticleComment } from "@/hooks/use-article-comments";
 import { exportCommentsToPDF, shareCommentsAsText } from "@/lib/export-comments";
+import { shareCommentAsText, shareCommentAsImage } from "@/lib/share-comment";
 
 interface ArticleCommentsModalProps {
   visible: boolean;
@@ -126,6 +127,44 @@ export function ArticleCommentsModal({
               await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             } catch (error) {
               Alert.alert("Erro", "Não foi possível compartilhar os comentários");
+            }
+          },
+        },
+        { text: "Cancelar", style: "cancel" },
+      ]
+    );
+  };
+
+  const handleShareComment = (comment: ArticleComment) => {
+    Alert.alert(
+      "Compartilhar Comentário",
+      "Escolha o formato",
+      [
+        {
+          text: "Imagem",
+          onPress: async () => {
+            try {
+              await shareCommentAsImage({
+                ...comment,
+                articleTitle,
+              });
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            } catch (error) {
+              Alert.alert("Erro", "Não foi possível compartilhar o comentário");
+            }
+          },
+        },
+        {
+          text: "Texto",
+          onPress: async () => {
+            try {
+              await shareCommentAsText({
+                ...comment,
+                articleTitle,
+              });
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            } catch (error) {
+              Alert.alert("Erro", "Não foi possível compartilhar o comentário");
             }
           },
         },
@@ -275,6 +314,7 @@ export function ArticleCommentsModal({
                     <View style={styles.commentFooter}>
                       <ThemedText style={[styles.commentDate, { color: colors.icon }]}>{formatDate(item.createdAt)}{item.updatedAt !== item.createdAt && " (editado)"}</ThemedText>
                       <View style={styles.commentActions}>
+                        <Pressable onPress={() => handleShareComment(item)} style={styles.actionButton}><IconSymbol name="square.and.arrow.up" size={16} color={colors.tint} /></Pressable>
                         <Pressable onPress={() => handleEditComment(item)} style={styles.actionButton}><IconSymbol name="pencil" size={16} color={colors.icon} /></Pressable>
                         <Pressable onPress={() => handleDeleteComment(item.id)} style={styles.actionButton}><IconSymbol name="trash" size={16} color="#FF3B30" /></Pressable>
                       </View>

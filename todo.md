@@ -364,3 +364,29 @@
 - [x] Persistir contador em AsyncStorage (STORAGE_KEY: review_tracking)
 - [x] Integrar com sistema de conquistas existente (useAchievements)
 - [x] Rastreamento automático ao clicar em bookmarks na tela Destaques
+
+
+## Melhorias Finais - Décima Segunda Rodada
+
+### 34. Estatísticas de revisão
+- [x] Adicionar card "Progresso de Revisão" na tela Estatísticas
+- [x] Mostrar contador de revisões (reviewCount)
+- [x] Barra de progresso para badge "Revisor Dedicado" (10 revisões)
+- [x] Indicador visual: quantos destaques antigos ainda existem
+- [x] Design consistente com outros cards de conquistas (cor roxa #8B5CF6)
+
+### 35. Filtro de destaques antigos
+- [x] Adicionar chip "Antigos (30+ dias)" nos filtros de data
+- [x] Filtrar bookmarks com createdAt >= 30 dias atrás
+- [x] Ícone: clock.fill (exibido apenas no chip "Antigos")
+- [x] Integrar com filtros existentes (tags, busca, data)
+- [x] Layout: flexDirection row com gap para ícone + texto
+
+### 36. Compartilhar comentário individual
+- [x] Adicionar botão de compartilhar em cada comentário
+- [x] Menu de opções: Imagem ou Texto
+- [x] Compartilhar como imagem: design visual com gradient roxo, quote estilizado
+- [x] Compartilhar como texto: formato simples com data e artigo
+- [x] Ícone: square.and.arrow.up (cor tint)
+- [x] Posicionar ao lado dos botões editar/deletar (primeiro na ordem)
+- [x] Arquivo share-comment.ts criado com funções shareCommentAsText e shareCommentAsImage

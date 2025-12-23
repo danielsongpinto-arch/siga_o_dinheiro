@@ -37,7 +37,7 @@ export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [generatingImage, setGeneratingImage] = useState(false);
   const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
-  const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
+  const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month" | "old">("all");
   const { trackBookmarkView } = useReviewTracking();
 
   useEffect(() => {
@@ -291,6 +291,12 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
         if (bookmarkDate < monthAgo) {
           return false;
         }
+      } else if (dateFilter === "old") {
+        const thirtyDaysAgo = new Date(today);
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        if (bookmarkDate >= thirtyDaysAgo) {
+          return false;
+        }
       }
     }
 
@@ -443,6 +449,7 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
             { id: "today", label: "Hoje" },
             { id: "week", label: "Esta Semana" },
             { id: "month", label: "Este Mês" },
+            { id: "old", label: "Antigos (30+ dias)", icon: "clock.fill" },
           ].map((filter) => (
             <Pressable
               key={filter.id}
@@ -455,6 +462,13 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
                 dateFilter === filter.id && { backgroundColor: colors.tint },
               ]}
             >
+              {filter.icon && (
+                <IconSymbol
+                  name={filter.icon as any}
+                  size={16}
+                  color={dateFilter === filter.id ? "#fff" : colors.icon}
+                />
+              )}
               <ThemedText
                 style={[
                   styles.dateFilterText,
@@ -818,6 +832,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   dateFilterChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 16,

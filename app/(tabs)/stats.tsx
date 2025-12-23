@@ -9,6 +9,7 @@ import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { useAchievements } from "@/hooks/use-achievements";
 import { useReadingPatterns } from "@/hooks/use-reading-patterns";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
+import { useReviewTracking } from "@/hooks/use-review-tracking";
 import { HeatmapChart } from "@/components/heatmap-chart";
 import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
@@ -40,6 +41,7 @@ export default function StatsScreen() {
   const { unlockedBadges, isBadgeUnlocked, getBadgeProgress } = useAchievements();
   const { getHeatmapData, getPeakTime, getTotalActivities } = useReadingPatterns();
   const { goal, history: goalsHistory, getProgress, getDaysRemaining } = useReadingGoals();
+  const { reviewCount } = useReviewTracking();
 
   useEffect(() => {
     loadBookmarks();
@@ -317,6 +319,53 @@ export default function StatsScreen() {
                 </ThemedText>
               </View>
             )}
+
+            {/* Card de Progresso de Revisão */}
+            <View style={[styles.reviewCard, { backgroundColor: colors.cardBg, borderColor: "#8B5CF6" }]}>
+              <View style={styles.reviewHeader}>
+                <IconSymbol name="clock.fill" size={28} color="#8B5CF6" />
+                <ThemedText type="subtitle" style={{ color: "#8B5CF6" }}>
+                  Progresso de Revisão
+                </ThemedText>
+              </View>
+              <ThemedText type="title" style={{ fontSize: 48, color: "#8B5CF6" }}>
+                {reviewCount}
+              </ThemedText>
+              <ThemedText style={[styles.reviewSubtitle, { color: colors.icon }]}>
+                {reviewCount === 1 ? "revisão" : "revisões"} de destaques antigos
+              </ThemedText>
+              
+              {/* Barra de progresso para badge */}
+              <View style={styles.reviewProgress}>
+                <View style={styles.reviewProgressBar}>
+                  <View
+                    style={[
+                      styles.reviewProgressFill,
+                      {
+                        width: `${Math.min((reviewCount / 10) * 100, 100)}%`,
+                        backgroundColor: "#8B5CF6",
+                      },
+                    ]}
+                  />
+                </View>
+                <ThemedText style={[styles.reviewProgressText, { color: colors.icon }]}>
+                  {reviewCount}/10 para "Revisor Dedicado"
+                </ThemedText>
+              </View>
+              
+              {/* Contador de destaques antigos disponíveis */}
+              {(() => {
+                const oldBookmarksCount = bookmarks.filter((b) => {
+                  const daysDiff = Math.floor((new Date().getTime() - new Date(b.createdAt).getTime()) / (1000 * 60 * 60 * 24));
+                  return daysDiff >= 30;
+                }).length;
+                return oldBookmarksCount > 0 ? (
+                  <ThemedText style={[styles.reviewHint, { color: "#8B5CF6" }]}>
+                    🕒 {oldBookmarksCount} {oldBookmarksCount === 1 ? "destaque antigo disponível" : "destaques antigos disponíveis"}
+                  </ThemedText>
+                ) : null;
+              })()}
+            </View>
 
             {/* Artigos Mais Comentados */}
             {topCommentedArticles.length > 0 && (
@@ -1016,5 +1065,50 @@ const styles = StyleSheet.create({
   commentsSubtitle: {
     fontSize: 14,
     marginTop: 8,
+    textAlign: "center",
+  },
+  reviewCard: {
+    padding: 24,
+    borderRadius: 12,
+    marginBottom: 24,
+    alignItems: "center",
+    borderWidth: 2,
+  },
+  reviewHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 16,
+  },
+  reviewSubtitle: {
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "center",
+  },
+  reviewProgress: {
+    width: "100%",
+    marginTop: 20,
+    gap: 8,
+  },
+  reviewProgressBar: {
+    width: "100%",
+    height: 8,
+    backgroundColor: "rgba(139, 92, 246, 0.2)",
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  reviewProgressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+  reviewProgressText: {
+    fontSize: 13,
+    textAlign: "center",
+  },
+  reviewHint: {
+    fontSize: 14,
+    marginTop: 12,
+    textAlign: "center",
+    fontWeight: "500",
   },
 });
