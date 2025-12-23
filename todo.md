@@ -74,3 +74,32 @@
 - [x] Carnegie: Homestead 1892, bibliotecas, filantropia (13 referências)
 - [x] Conexões: Investigação Pujo, conselhos interligados (15 referências)
 - [x] Fontes: Library of Congress, Britannica, Federal Reserve, National Archives, universidades
+
+
+## Novas Melhorias Solicitadas - Segunda Rodada
+
+### 4. Implementar seletor de tema com 3 opções
+- [x] Criar tela/modal de configurações de tema
+- [x] Opção 1: Modo Claro (forçar tema claro sempre)
+- [x] Opção 2: Modo Escuro (forçar tema escuro sempre)
+- [x] Opção 3: Automático (seguir sistema operacional)
+- [x] Persistir preferência do usuário em AsyncStorage
+- [x] Aplicar tema escolhido em todo o app
+- [x] Adicionar botão de acesso às configurações de tema (nova tab Configurações)
+
+### 5. Criar busca e filtros avançados nos Destaques
+- [x] Campo de busca no topo da tela Destaques
+- [x] Buscar em: título do artigo, título da parte, excerpt, notas
+- [x] Combinar busca de texto com filtro de tags
+- [ ] Destacar termos encontrados nos resultados (não implementado - complexidade adicional)
+- [x] Contador de resultados da busca
+- [x] Botão limpar busca (X no campo)
+
+### 6. Desenvolver tela de estatísticas de leitura
+- [x] Criar nova tab "Estatísticas" na navegação
+- [x] Métrica: Total de destaques salvos (card com ícone)
+- [x] Métrica: Destaques por artigo (top 5 com ranking colorido)
+- [x] Métrica: Tags mais usadas (top 5 com barra de progresso)
+- [x] Métrica: Porcentagem de destaques com notas (card)
+- [x] Gráfico de atividade mensal (últimos 6 meses, gráfico de barras)
+- [x] Design visual atraente com cards coloridos e ícones

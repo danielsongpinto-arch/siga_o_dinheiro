@@ -65,6 +65,7 @@ const MAPPING = {
   "bookmark.fill": "bookmark",
   "trash": "delete-outline",
   "tag": "label",
+  "gearshape.fill": "settings",
 } as IconMapping;
 
 /**

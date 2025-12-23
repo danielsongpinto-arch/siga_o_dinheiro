@@ -45,10 +45,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="stats"
+        options={{
+          title: "Estatísticas",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="favorites"
         options={{
-          title: "Favoritos",
-          tabBarIcon: ({ color}) => <IconSymbol size={28} name="heart.fill" color={color} />,
+          href: null, // Ocultar da tab bar
         }}
       />
       <Tabs.Screen
@@ -59,10 +65,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Configurações",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
-          title: "Perfil",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          href: null, // Ocultar da tab bar
         }}
       />
     </Tabs>

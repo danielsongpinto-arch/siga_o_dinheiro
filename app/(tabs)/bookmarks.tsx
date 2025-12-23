@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, Pressable, Text, Share, Alert } from "react-native";
+import { View, StyleSheet, ScrollView, Pressable, Text, Share, Alert, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
@@ -12,16 +12,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function BookmarksScreen() {
   const router = useRouter();
   const colors = {
+    text: useThemeColor({}, "text"),
     tint: useThemeColor({}, "tint"),
     icon: useThemeColor({}, "icon"),
-    border: useThemeColor({}, "border"),
-    cardBg: useThemeColor({}, "cardBackground"),
+    border: useThemeColor({ light: "#E5E5E5", dark: "#2C2C2E" }, "background"),
+    cardBg: useThemeColor({ light: "#F9F9F9", dark: "#1C1C1E" }, "background"),
   };
 
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [groupBy, setGroupBy] = useState<"article" | "date">("article");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     loadBookmarks();
@@ -129,9 +131,28 @@ export default function BookmarksScreen() {
     }
   };
 
-  const filteredBookmarks = selectedTag
-    ? bookmarks.filter((b) => b.tags?.includes(selectedTag))
-    : bookmarks;
+  // Filtrar por tag e busca
+  const filteredBookmarks = bookmarks.filter((bookmark) => {
+    // Filtro de tag
+    if (selectedTag && !bookmark.tags?.includes(selectedTag)) {
+      return false;
+    }
+
+    // Filtro de busca
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      const matchesArticle = bookmark.articleTitle.toLowerCase().includes(query);
+      const matchesPart = bookmark.partTitle.toLowerCase().includes(query);
+      const matchesExcerpt = bookmark.excerpt.toLowerCase().includes(query);
+      const matchesNote = bookmark.note?.toLowerCase().includes(query);
+      
+      if (!matchesArticle && !matchesPart && !matchesExcerpt && !matchesNote) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   const groupedBookmarks = () => {
     if (groupBy === "article") {
@@ -153,13 +174,13 @@ export default function BookmarksScreen() {
     <ThemedView style={styles.container}>
       <ThemedView style={[styles.header, { borderBottomColor: colors.border }]}>
         <View style={styles.headerContent}>
-          <View>
+          <View style={{ flex: 1 }}>
             <ThemedText type="title" style={styles.headerTitle}>
               Meus Destaques
             </ThemedText>
             <ThemedText style={[styles.headerSubtitle, { color: colors.icon }]}>
               {filteredBookmarks.length} {filteredBookmarks.length === 1 ? "destaque" : "destaques"}
-              {selectedTag && " filtrado(s)"}
+              {(selectedTag || searchQuery) && " encontrado(s)"}
             </ThemedText>
           </View>
           
@@ -170,6 +191,30 @@ export default function BookmarksScreen() {
             >
               <IconSymbol name="square.and.arrow.up" size={20} color="#fff" />
               <Text style={styles.shareButtonText}>Compartilhar</Text>
+            </Pressable>
+          )}
+        </View>
+
+        {/* Campo de Busca */}
+        <View style={[styles.searchContainer, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+          <IconSymbol name="magnifyingglass" size={20} color={colors.icon} />
+          <TextInput
+            style={[styles.searchInput, { color: colors.text }]}
+            placeholder="Buscar em destaques..."
+            placeholderTextColor={colors.icon}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            returnKeyType="search"
+          />
+          {searchQuery.length > 0 && (
+            <Pressable
+              onPress={() => {
+                setSearchQuery("");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+              style={styles.clearButton}
+            >
+              <IconSymbol name="xmark.circle.fill" size={20} color={colors.icon} />
             </Pressable>
           )}
         </View>
@@ -279,12 +324,18 @@ export default function BookmarksScreen() {
           <ThemedView style={styles.emptyState}>
             <ThemedText>Carregando...</ThemedText>
           </ThemedView>
-        ) : filteredBookmarks.length === 0 && selectedTag ? (
+        ) : filteredBookmarks.length === 0 && (selectedTag || searchQuery) ? (
           <ThemedView style={styles.emptyState}>
-            <IconSymbol name="tag" size={64} color={colors.icon} />
-            <ThemedText style={styles.emptyText}>Nenhum destaque com esta tag</ThemedText>
+            <IconSymbol name={searchQuery ? "magnifyingglass" : "tag"} size={64} color={colors.icon} />
+            <ThemedText style={styles.emptyText}>
+              {searchQuery
+                ? `Nenhum resultado para "${searchQuery}"`
+                : "Nenhum destaque com esta tag"}
+            </ThemedText>
             <ThemedText style={[styles.emptySubtext, { color: colors.icon }]}>
-              Tente selecionar outra tag ou limpe o filtro
+              {searchQuery
+                ? "Tente buscar por outros termos"
+                : "Tente selecionar outra tag ou limpar o filtro"}
             </ThemedText>
           </ThemedView>
         ) : bookmarks.length === 0 ? (
@@ -395,8 +446,27 @@ const styles = StyleSheet.create({
   headerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 12,
+    marginBottom: 16,
+  },
+  searchContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    gap: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    gap: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    lineHeight: 20,
+    padding: 0,
+  },
+  clearButton: {
+    padding: 4,
   },
   headerTitle: {
     fontSize: 28,
