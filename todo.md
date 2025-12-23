@@ -777,3 +777,27 @@
 - [ ] Badge visual de "Conteúdo Exclusivo" nos artigos bônus
 - [ ] Persistir recompensas desbloqueadas em AsyncStorage
 - [ ] Botão "Recompensas" nas Configurações
+
+
+## Melhorias de Nomenclatura e Estrutura - Vigésima Primeira Rodada
+
+### 69. Renomear tema "Sistema Autoperpetuante" para "Sistema que se Auto Alimenta"
+- [x] Atualizar título do tema em mock-data.ts
+- [x] Atualizar descrição: "Como o sistema monetário padrão foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente"
+- [x] Manter ID "sistema-autoperpetuante" para compatibilidade
+- [x] Verificar referências em todos os arquivos
+
+### 70. Atualizar "sistema monetário moderno" para "sistema monetário padrão"
+- [x] Buscar todas as ocorrências de "sistema monetário moderno" nos artigos
+- [x] Substituir por "sistema monetário padrão"
+- [x] Atualizar descrição do tema para refletir padrão histórico recorrente
+- [x] Adicionar contexto sobre repetição do ciclo (Império Romano → Turquia → Inglaterra → Espanha → EUA)
+
+### 71. Criar novo tema BRICS e atualizar linguagem neutra
+- [x] Criar novo tema "BRICS e a Nova Ordem Financeira"
+- [x] Mover artigo BRICS do tema "Sistema que se Auto Alimenta"
+- [x] Atualizar título: "Os BRICS querem participar da nova ordem financeira"
+- [x] Substituir "fim da era dólar" por "o dólar tem concorrentes à sua altura"
+- [x] Remover linguagem polarizada (EUA vs China)
+- [x] Focar em multipolaridade e inclusão, não revolução
+- [x] Garantir tom neutro para uso internacional

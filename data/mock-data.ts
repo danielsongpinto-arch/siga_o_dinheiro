@@ -2,6 +2,7 @@ import { Article, Theme } from "@/types";
 import { WW2_ARTICLES } from "./ww2-articles";
 import { ARQUITETOS_DO_PODER_ARTICLES } from "./arquitetos-do-poder-articles";
 import { SISTEMA_AUTOPERPETUANTE_ARTICLES } from "./sistema-autoperpetuante-articles";
+import { BRICS_ARTICLES } from "./brics-articles";
 import { addDGPAuthorToAll } from "@/utils/add-dgp-author";
 
 export const THEMES: Theme[] = [
@@ -44,9 +45,15 @@ export const THEMES: Theme[] = [
 
   {
     id: "sistema-autoperpetuante",
-    title: "O Sistema Autoperpetuante",
-    description: "Como o sistema monetário moderno foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente",
-    articleCount: 2,
+    title: "Sistema que se Auto Alimenta",
+    description: "Como o sistema monetário padrão foi projetado para se renovar através de crises, transferindo riqueza e se fortalecendo perpetuamente - um padrão histórico que se repete desde o Império Romano",
+    articleCount: 1,
+  },
+  {
+    id: "brics",
+    title: "BRICS e a Nova Ordem Financeira",
+    description: "Como os países emergentes buscam participar e remodelar o sistema financeiro global, criando alternativas à hegemonia exclusiva do dólar",
+    articleCount: 1,
   },
   {
     id: "arquitetos-do-poder",
@@ -60,6 +67,7 @@ const RAW_ARTICLES: Article[] = [
   ...WW2_ARTICLES,
   ...ARQUITETOS_DO_PODER_ARTICLES,
   ...SISTEMA_AUTOPERPETUANTE_ARTICLES,
+  ...BRICS_ARTICLES,
   {
     id: "master-001",
     themeId: "master",
