@@ -2,6 +2,11 @@
 
 ## Tarefas em Andamento (Solicitação Atual do Usuário)
 
+### Melhorias das Sugestões de IA
+- [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")
+- [ ] Adicionar gráficos e tabelas para visualização de dados nos artigos
+- [ ] Adicionar citação de fontes para todos os dados estatísticos mencionados
+
 ### 1. Integrar sistema de bookmarks aos artigos - CONCLUÍDO! ✅
 - [x] Adicionar botão "Ver Destaques" no header do artigo (ícone bookmark)
 - [x] Integrar componente ArticleBookmarks ao app/article/[id].tsx

@@ -149,12 +149,13 @@ export default function ArticleDetailScreen() {
         await cacheArticle({
           id: article.id,
           title: article.title,
-          content: JSON.stringify(article.parts),
-          author: article.author,
+          content: article.content,
+          author: article.articleAuthor || "DGP",
           date: article.date,
-          series: article.series,
-          tags: article.tags || [],
+          series: article.themeId,
+          tags: [],
           cachedAt: new Date().toISOString(),
+          lastAccessedAt: new Date().toISOString(),
         });
       };
       cacheCurrentArticle();
@@ -308,7 +309,7 @@ export default function ArticleDetailScreen() {
             {article.title}
           </ThemedText>
           <ThemedText style={[styles.articleDate, { color: textSecondary }]}>
-            {formatDate(article.date)}
+            Por {article.articleAuthor || "DGP"} • {formatDate(article.date)}
           </ThemedText>
           
            {/* Botão de Áudio */}
