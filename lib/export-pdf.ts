@@ -24,14 +24,26 @@ async function loadArticleComments(articleId: string): Promise<ArticleComment[]>
   }
 }
 
-export async function exportBookmarksToPDF(bookmarks: Bookmark[]): Promise<void> {
+export async function exportBookmarksToPDF(bookmarks: Bookmark[], selectedTags?: string[]): Promise<void> {
   if (bookmarks.length === 0) {
     throw new Error("Nenhum destaque para exportar");
   }
 
+  // Filtrar por tags se especificado
+  let filteredBookmarks = bookmarks;
+  if (selectedTags && selectedTags.length > 0) {
+    filteredBookmarks = bookmarks.filter((bookmark) =>
+      bookmark.tags && bookmark.tags.some((tag) => selectedTags.includes(tag))
+    );
+  }
+
+  if (filteredBookmarks.length === 0) {
+    throw new Error("Nenhum destaque encontrado com as tags selecionadas");
+  }
+
   // Agrupar por artigo
   const grouped: Record<string, Bookmark[]> = {};
-  bookmarks.forEach((bookmark) => {
+  filteredBookmarks.forEach((bookmark) => {
     if (!grouped[bookmark.articleId]) {
       grouped[bookmark.articleId] = [];
     }

@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, StyleSheet, Alert, Text, TextInput, Share } from "react-native";
+import { View, ScrollView, Pressable, StyleSheet, Alert, Text, TextInput, Share, Modal } from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
@@ -39,6 +39,8 @@ export default function BookmarksScreen() {
   const [generatingImage, setGeneratingImage] = useState(false);
   const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
   const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month" | "old">("all");
+  const [showTagSelector, setShowTagSelector] = useState(false);
+  const [selectedExportTags, setSelectedExportTags] = useState<string[]>([]);
   const { trackBookmarkView } = useReviewTracking();
   const { trackShare } = useShareTracking();
 
@@ -141,16 +143,37 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
         return;
       }
 
+      // Mostrar seletor de tags
+      setShowTagSelector(true);
+    } catch (error) {
+      console.error("Error initiating PDF export:", error);
+    }
+  };
+
+  const confirmExportPDF = async () => {
+    try {
+      const tagsToExport = selectedExportTags.length > 0 ? selectedExportTags : undefined;
+      const bookmarksToExport = tagsToExport
+        ? filteredBookmarks.filter((b) => b.tags && b.tags.some((t) => tagsToExport.includes(t)))
+        : filteredBookmarks;
+
+      if (bookmarksToExport.length === 0) {
+        Alert.alert("Nenhum destaque", "Nenhum destaque encontrado com as tags selecionadas.");
+        return;
+      }
+
       Alert.alert(
         "Exportar PDF",
-        `Exportar ${filteredBookmarks.length} ${filteredBookmarks.length === 1 ? "destaque" : "destaques"} como PDF?`,
+        `Exportar ${bookmarksToExport.length} ${bookmarksToExport.length === 1 ? "destaque" : "destaques"} como PDF?`,
         [
           { text: "Cancelar", style: "cancel" },
           {
             text: "Exportar",
             onPress: async () => {
               try {
-                await exportBookmarksToPDF(filteredBookmarks);
+                await exportBookmarksToPDF(bookmarksToExport, tagsToExport);
+                setShowTagSelector(false);
+                setSelectedExportTags([]);
                 Alert.alert("Sucesso", "PDF gerado e pronto para compartilhar!");
               } catch (error) {
                 console.error("Error exporting PDF:", error);
@@ -670,6 +693,112 @@ ${bookmark.note ? `\n💡 *Nota:* ${bookmark.note}` : ""}${tagsText ? `\n🏷️
         )}
       </ScrollView>
 
+      {/* Modal de seleção de tags para exportação */}
+      <Modal
+        visible={showTagSelector}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowTagSelector(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.tagSelectorModal, { backgroundColor: colors.cardBg }]}>
+            <View style={styles.tagSelectorHeader}>
+              <ThemedText type="subtitle">Filtrar por Tags</ThemedText>
+              <Pressable
+                onPress={() => {
+                  setShowTagSelector(false);
+                  setSelectedExportTags([]);
+                }}
+                style={styles.closeButton}
+              >
+                <IconSymbol name="xmark" size={24} color={colors.icon} />
+              </Pressable>
+            </View>
+
+            <ThemedText style={[styles.tagSelectorHint, { color: colors.icon }]}>
+              Selecione as tags para filtrar os destaques a exportar. Deixe vazio para exportar todos.
+            </ThemedText>
+
+            <ScrollView style={styles.tagsList}>
+              <Pressable
+                onPress={() => setSelectedExportTags([])}
+                style={[
+                  styles.tagChip,
+                  {
+                    backgroundColor: selectedExportTags.length === 0 ? colors.tint : colors.border,
+                  },
+                ]}
+              >
+                <ThemedText
+                  style={{
+                    color: selectedExportTags.length === 0 ? "#fff" : colors.text,
+                    fontWeight: selectedExportTags.length === 0 ? "600" : "normal",
+                  }}
+                >
+                  Todas as tags
+                </ThemedText>
+              </Pressable>
+
+              {PREDEFINED_TAGS.map((tag) => {
+                const isSelected = selectedExportTags.includes(tag.id);
+                const count = filteredBookmarks.filter(
+                  (b) => b.tags && b.tags.includes(tag.id)
+                ).length;
+
+                if (count === 0) return null;
+
+                return (
+                  <Pressable
+                    key={tag.id}
+                    onPress={() => {
+                      if (isSelected) {
+                        setSelectedExportTags(selectedExportTags.filter((t) => t !== tag.id));
+                      } else {
+                        setSelectedExportTags([...selectedExportTags, tag.id]);
+                      }
+                    }}
+                    style={[
+                      styles.tagChip,
+                      {
+                        backgroundColor: isSelected ? colors.tint : colors.border,
+                      },
+                    ]}
+                  >
+                    <ThemedText
+                      style={{
+                        color: isSelected ? "#fff" : colors.text,
+                        fontWeight: isSelected ? "600" : "normal",
+                      }}
+                    >
+                      {tag.label} ({count})
+                    </ThemedText>
+                    {isSelected && (
+                      <IconSymbol name="checkmark" size={16} color="#fff" />
+                    )}
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+
+            <View style={styles.tagSelectorFooter}>
+              <ThemedText style={[styles.tagSelectorCount, { color: colors.icon }]}>
+                {selectedExportTags.length === 0
+                  ? `${filteredBookmarks.length} destaques serão exportados`
+                  : `${filteredBookmarks.filter((b) => b.tags && b.tags.some((t) => selectedExportTags.includes(t))).length} destaques serão exportados`}
+              </ThemedText>
+              <Pressable
+                onPress={confirmExportPDF}
+                style={[styles.confirmButton, { backgroundColor: colors.tint }]}
+              >
+                <ThemedText style={{ color: "#fff", fontWeight: "600" }}>
+                  Exportar PDF
+                </ThemedText>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       {/* Gerador de imagem */}
       {generatingImage && selectedBookmark && (
         <QuoteImageGenerator
@@ -886,5 +1015,46 @@ const styles = StyleSheet.create({
   bookmarkActions: {
     flexDirection: "row",
     gap: 8,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  tagSelectorModal: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    maxHeight: "80%",
+  },
+  tagSelectorHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  tagSelectorHint: {
+    fontSize: 14,
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  tagsList: {
+    maxHeight: 300,
+  },
+  tagSelectorFooter: {
+    marginTop: 20,
+    gap: 12,
+  },
+  tagSelectorCount: {
+    fontSize: 14,
+    textAlign: "center",
+  },
+  confirmButton: {
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  closeButton: {
+    padding: 4,
   },
 });

@@ -10,6 +10,7 @@ import { useAchievements } from "@/hooks/use-achievements";
 import { useReadingPatterns } from "@/hooks/use-reading-patterns";
 import { useReadingGoals } from "@/hooks/use-reading-goals";
 import { useReviewTracking, type ReviewEntry } from "@/hooks/use-review-tracking";
+import { useShareTracking } from "@/hooks/use-share-tracking";
 import { HeatmapChart } from "@/components/heatmap-chart";
 import { BADGES } from "@/data/badges";
 import { getAllBookmarks, type Bookmark, PREDEFINED_TAGS } from "@/components/article-bookmarks";
@@ -42,6 +43,7 @@ export default function StatsScreen() {
   const { getHeatmapData, getPeakTime, getTotalActivities } = useReadingPatterns();
   const { goal, history: goalsHistory, getProgress, getDaysRemaining } = useReadingGoals();
   const { reviewCount, history: reviewHistory } = useReviewTracking();
+  const { shareCount } = useShareTracking();
 
   useEffect(() => {
     loadBookmarks();
@@ -317,6 +319,61 @@ export default function StatsScreen() {
                 <ThemedText style={[styles.commentsSubtitle, { color: colors.icon }]}>
                   {totalComments === 1 ? "comentário" : "comentários"} em artigos
                 </ThemedText>
+              </View>
+            )}
+
+            {/* Card de Compartilhamentos */}
+            {shareCount > 0 && (
+              <View style={[styles.shareCard, { backgroundColor: colors.cardBg, borderColor: "#34C759" }]}>
+                <View style={styles.shareHeader}>
+                  <IconSymbol name="square.and.arrow.up.fill" size={28} color="#34C759" />
+                  <ThemedText type="subtitle" style={{ color: "#34C759" }}>
+                    Compartilhamentos
+                  </ThemedText>
+                </View>
+                <ThemedText type="title" style={{ fontSize: 48, color: "#34C759" }}>
+                  {shareCount}
+                </ThemedText>
+                <ThemedText style={[styles.shareSubtitle, { color: colors.icon }]}>
+                  {shareCount === 1 ? "compartilhamento" : "compartilhamentos"} realizados
+                </ThemedText>
+                
+                {/* Progresso dos badges */}
+                <View style={styles.shareProgress}>
+                  <View style={[styles.shareProgressBar, { backgroundColor: colors.border }]}>
+                    <View
+                      style={[
+                        styles.shareProgressFill,
+                        {
+                          width: `${Math.min((shareCount / 10) * 100, 100)}%`,
+                          backgroundColor: "#34C759",
+                        },
+                      ]}
+                    />
+                  </View>
+                  <ThemedText style={[styles.shareProgressText, { color: colors.icon }]}>
+                    {shareCount}/10 para "Influenciador"
+                  </ThemedText>
+                </View>
+                
+                {shareCount >= 10 && (
+                  <View style={styles.shareProgress}>
+                    <View style={[styles.shareProgressBar, { backgroundColor: colors.border }]}>
+                      <View
+                        style={[
+                          styles.shareProgressFill,
+                          {
+                            width: `${Math.min((shareCount / 50) * 100, 100)}%`,
+                            backgroundColor: "#34C759",
+                          },
+                        ]}
+                      />
+                    </View>
+                    <ThemedText style={[styles.shareProgressText, { color: colors.icon }]}>
+                      {shareCount}/50 para "Divulgador"
+                    </ThemedText>
+                  </View>
+                )}
               </View>
             )}
 
@@ -1164,5 +1221,41 @@ const styles = StyleSheet.create({
   reviewHistoryDate: {
     fontSize: 12,
     marginTop: 4,
+  },
+  shareCard: {
+    padding: 24,
+    borderRadius: 12,
+    marginBottom: 24,
+    alignItems: "center",
+    borderWidth: 2,
+  },
+  shareHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 16,
+  },
+  shareSubtitle: {
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "center",
+  },
+  shareProgress: {
+    width: "100%",
+    marginTop: 16,
+  },
+  shareProgressBar: {
+    height: 8,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  shareProgressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+  shareProgressText: {
+    fontSize: 13,
+    marginTop: 8,
+    textAlign: "center",
   },
 });

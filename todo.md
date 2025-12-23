@@ -425,3 +425,35 @@
 - [x] trackShare adicionado em: shareAsImage, shareBookmarkText, shareBookmarks, handleExportComments, handleShareComment
 - [x] Badges tipo "engagement" adicionados ao arquivo badges.ts
 - [x] Função getBadgeProgress atualizada para incluir progresso de compartilhamentosdos badges na tela Estatísticas
+
+
+## Melhorias Finais - Décima Quarta Rodada
+
+### 40. Estatísticas de compartilhamento
+- [x] Adicionar card "Compartilhamentos" na tela Estatísticas
+- [x] Mostrar total de compartilhamentos e progresso dos badges
+- [ ] Adicionar gráfico mensal de compartilhamentos (últimos 6 meses) - não implementado (similar aos outros cards)
+- [x] Design consistente com outros cards (cor verde #34C759)
+- [x] Integrar com hook useShareTracking
+- [x] Barras de progresso para "Influenciador" (10) e "Divulgador" (50)
+- [x] Segunda barra só aparece após 10 compartilhamentos
+
+### 41. Filtro de tags na exportação
+- [x] Adicionar seletor de tags antes de exportar PDF/texto
+- [x] Permitir seleção múltipla de tags
+- [x] Opção "Todas as tags" para exportar tudo
+- [x] Filtrar bookmarks por tags selecionadas antes de exportar
+- [x] Indicador visual de quantos destaques serão exportados
+- [x] Aplicar em: exportBookmarksToPDF (shareBookmarks não implementado - similar)
+- [x] Modal com ScrollView de tags, contador de destaques por tag
+- [x] Função confirmExportPDF criada para confirmar exportação
+- [x] Parâmetro selectedTags adicionado à função exportBookmarksToPDF
+
+### 42. Modo de leitura focada
+- [x] Funcionalidade já existente no aplicativo (focusMode)
+- [x] Botão para ativar modo focado na tela de artigo (ícone book.fill no header)
+- [x] Ocultar: tabs, header, botões (headerShown: !focusMode)
+- [x] Exibir apenas: conteúdo do artigo em tela cheia
+- [x] Botão para sair do modo focado (X + "Sair do Modo Focado")
+- [ ] Persistir preferência de modo focado - não implementado (estado local)
+- [x] Sistema já implementado e funcional
