@@ -4,10 +4,12 @@
 
 ### Bugs Críticos Reportados pelo Usuário
 - [x] Corrigir seletor de tema - modo escuro não funciona (usuário não consegue forçar tema escuro)
-- [x] Corrigir onboarding - tela trava ao clicar "Próximo" para segunda página (adicionados logs para debug)
+- [x] Corrigir onboarding - trava ao clicar "Próximo" para segunda página (adicionados logs para debug)
 - [x] Modo escuro não funciona na versão WEB (computador) - adicionado forçar tema no DOM
 - [x] Tema Automático (Nascer/Pôr do Sol) está ignorando seleção manual - agora desativa automaticamente ao escolher manualmente
 - [x] Conflito entre "Modo Leitura Noturna" e "Aparência" - ajustada opacidade do filtro (8% escuro, 15% claro)
+- [x] Botões Claro/Escuro em conflito - "Claro" funciona mas "Escuro" não (AsyncStorage com dados antigos)
+- [x] Criar botão "Resetar Configurações" para limpar todos os dados salvos e resolver conflitos
 
 ### Melhorias das Sugestões de IA
 - [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")

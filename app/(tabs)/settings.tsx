@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { View, ScrollView, Pressable, StyleSheet, Switch, Alert } from "react-native";
+import { View, ScrollView, Pressable, StyleSheet, Switch, Alert, Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { ThemedText } from "@/components/themed-text";
@@ -1204,6 +1205,64 @@ export default function SettingsScreen() {
               <ThemedText type="defaultSemiBold">~50.000 palavras</ThemedText>
             </View>
           </View>
+
+          {/* Botão Resetar Configurações */}
+          <Pressable
+            onPress={async () => {
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              Alert.alert(
+                "Resetar Configurações",
+                "Isso vai limpar TODAS as configurações salvas (tema, lembretes, cache, etc.) e resolver conflitos. Deseja continuar?",
+                [
+                  {
+                    text: "Cancelar",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Resetar",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        // Limpar TODAS as chaves do AsyncStorage do app
+                        const keys = await AsyncStorage.getAllKeys();
+                        const appKeys = keys.filter(key => key.startsWith("@siga_o_dinheiro"));
+                        await AsyncStorage.multiRemove(appKeys);
+                        
+                        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        Alert.alert(
+                          "Sucesso!",
+                          "Configurações resetadas. Recarregue a página para aplicar as mudanças.",
+                          [
+                            {
+                              text: "OK",
+                              onPress: () => {
+                                if (Platform.OS === "web") {
+                                  window.location.reload();
+                                }
+                              },
+                            },
+                          ]
+                        );
+                      } catch (error) {
+                        console.error("Erro ao resetar configurações:", error);
+                        Alert.alert("Erro", "Não foi possível resetar as configurações.");
+                      }
+                    },
+                  },
+                ]
+              );
+            }}
+            style={({ pressed }) => [
+              styles.reviewTourButton,
+              { backgroundColor: colors.cardBg, borderColor: "#FF3B30", marginBottom: 16 },
+              pressed && styles.pressed,
+            ]}
+          >
+            <IconSymbol name="trash.fill" size={20} color="#FF3B30" />
+            <ThemedText style={{ color: "#FF3B30", fontWeight: "600" }}>
+              Resetar Todas as Configurações
+            </ThemedText>
+          </Pressable>
 
           {/* Botão Rever Tour */}
           <Pressable
