@@ -13,6 +13,8 @@
 - [x] Botões "Resetar Configurações" e "Rever Tour" não funcionam - trocado Alert por window.confirm/alert na web
 - [x] Botões de Aparência (Claro/Escuro/Automático) não funcionam na web - trocado Pressable por TouchableOpacity
 - [x] TouchableOpacity também não funciona na web - criado WebClickable (div onClick na web, TouchableOpacity no mobile)
+- [x] Botões não funcionam nem na web nem no mobile - problema é updatePreference, não o clique
+- [x] Telefone travado em modo escuro, computador travado em modo claro - melhorado updatePreference com logs e forçar estado
 
 ### Melhorias das Sugestões de IA
 - [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")

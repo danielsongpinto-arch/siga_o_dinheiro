@@ -35,18 +35,30 @@ export function useThemePreference() {
   };
 
   const updatePreference = async (newPreference: ThemePreference) => {
+    console.log("[useThemePreference] updatePreference CHAMADO com:", newPreference);
+    console.log("[useThemePreference] Estado atual - preference:", preference, "autoThemeEnabled:", autoThemeEnabled);
+    
     try {
-      await AsyncStorage.setItem(THEME_PREFERENCE_KEY, newPreference);
+      // Forçar atualização de estado ANTES de salvar (para feedback imediato)
       setPreference(newPreference);
+      console.log("[useThemePreference] Estado atualizado para:", newPreference);
+      
+      // Salvar no AsyncStorage
+      await AsyncStorage.setItem(THEME_PREFERENCE_KEY, newPreference);
+      console.log("[useThemePreference] Salvo no AsyncStorage:", newPreference);
       
       // Se o usuário escolher manualmente "light" ou "dark", desativar Tema Automático
-      if (newPreference !== "auto" && autoThemeEnabled) {
+      if (newPreference !== "auto") {
+        console.log("[useThemePreference] Desativando Tema Automático...");
         await AsyncStorage.setItem(AUTO_THEME_ENABLED_KEY, "false");
         setAutoThemeEnabled(false);
-        console.log("[useThemePreference] Desativando Tema Automático porque usuário escolheu manualmente:", newPreference);
+        console.log("[useThemePreference] Tema Automático desativado!");
       }
+      
+      console.log("[useThemePreference] updatePreference CONCLUÍDO com sucesso!");
     } catch (error) {
-      console.error("Error saving theme preference:", error);
+      console.error("[useThemePreference] ERRO ao salvar preferência:", error);
+      // Mesmo com erro, manter o estado atualizado para feedback visual
     }
   };
 
