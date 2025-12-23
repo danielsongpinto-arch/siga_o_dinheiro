@@ -566,24 +566,28 @@ export default function ArticleDetailScreen() {
                 title: "O Ciclo Autoperpetuante",
                 description: "Como o sistema se renova através de 5 fases: Expansão → Euforia → Crise → Transferência → Renovação",
                 image: require("@/assets/images/visualizations/ciclo-autoperpetuante.png"),
+                source: "Baseado em Minsky, Hyman. Stabilizing an Unstable Economy (1986)",
               },
               {
                 id: "timeline-crises",
                 title: "Linha do Tempo das Crises",
                 description: "Histórico de crises financeiras de 1929 a 2026: padrão repetitivo de transferência de riqueza",
                 image: require("@/assets/images/visualizations/linha-tempo-crises.png"),
+                source: "Federal Reserve Economic Data (FRED) & Reinhart-Rogoff Database",
               },
               {
                 id: "multiplicador",
                 title: "Multiplicador Bancário",
                 description: "Como $1 se transforma em $10 através do sistema de reservas fracionárias",
                 image: require("@/assets/images/visualizations/multiplicador-bancario.png"),
+                source: "Federal Reserve Board - Money Stock Measures (2024)",
               },
               {
                 id: "transferencia",
                 title: "Transferência de Riqueza",
                 description: "Tabela detalhada: quanto os 1% ganharam e os 99% perderam em cada crise",
                 image: require("@/assets/images/visualizations/transferencia-riqueza.png"),
+                source: "World Inequality Database (WID) & Piketty, Thomas. Capital in the 21st Century",
               },
             ]}
           />
@@ -598,12 +602,14 @@ export default function ArticleDetailScreen() {
                 title: "Rede Jekyll Island",
                 description: "Novembro 1910: 6 homens controlando 1/4 da riqueza mundial criaram o Federal Reserve",
                 image: require("@/assets/images/visualizations/jekyll-island-network.png"),
+                source: "Griffin, G. Edward. The Creature from Jekyll Island (1994) & Congressional Record",
               },
               {
                 id: "timeline-arquitetos",
                 title: "Linha do Tempo Integrada",
                 description: "1870-2024: Como Rockefeller, Morgan e Carnegie construíram sistemas que persistem hoje",
                 image: require("@/assets/images/visualizations/arquitetos-timeline.png"),
+                source: "Chernow, Ron. Titan (1998) & Strouse, Jean. Morgan (1999) & Nasaw, David. Andrew Carnegie (2006)",
               },
             ]}
           />
@@ -618,30 +624,35 @@ export default function ArticleDetailScreen() {
                 title: "Sistema de Saque Nazista",
                 description: "Fluxograma mostrando como recursos fluíam dos países conquistados para a máquina de guerra alemã",
                 image: require("@/assets/images/wwii-saque-fluxograma.png"),
+                source: "Baseado em dados de Tooze, Adam. The Wages of Destruction (2006)",
               },
               {
                 id: "producao",
                 title: "Produção Militar Comparada",
                 description: "Comparação da produção de tanques, aviões e navios entre Alemanha e Aliados (1939-1945)",
                 image: require("@/assets/images/wwii-producao-comparada.png"),
+                source: "U.S. War Production Board, 1945 & Overy, Richard. Why the Allies Won (1995)",
               },
               {
                 id: "timeline",
                 title: "Linha do Tempo Financeira",
                 description: "Trajetória financeira da Alemanha nazista de 1933 a 1945, mostrando ganhos e perdas",
                 image: require("@/assets/images/wwii-linha-tempo.png"),
+                source: "Tooze, Adam. The Wages of Destruction (2006) & Reichsbank Records",
               },
               {
                 id: "mapa",
                 title: "Mapa do Saque na Europa",
                 description: "Geografia do saque nazista com valores saqueados por país",
                 image: require("@/assets/images/wwii-mapa-europa.png"),
+                source: "Aly, Götz. Hitler's Beneficiaries (2005) & Arquivos do Reichsbank",
               },
               {
                 id: "balanco",
                 title: "Balanço Final",
                 description: "Déficit de 293 bilhões de marcos: gastos militares vs recursos saqueados",
                 image: require("@/assets/images/wwii-balanco-final.png"),
+                source: "Tooze, Adam. The Wages of Destruction (2006) - Capítulo 20",
               },
             ]}
           />

@@ -46,6 +46,22 @@ export default function RootLayout() {
     initManusRuntime();
   }, []);
 
+  // Forçar tema escuro no DOM da web
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      const root = document.documentElement;
+      if (colorScheme === "dark") {
+        root.style.colorScheme = "dark";
+        root.style.backgroundColor = "#000";
+        document.body.style.backgroundColor = "#000";
+      } else {
+        root.style.colorScheme = "light";
+        root.style.backgroundColor = "#fff";
+        document.body.style.backgroundColor = "#fff";
+      }
+    }
+  }, [colorScheme]);
+
   // Listener para notificações de download agendado
   useEffect(() => {
     const subscription = Notifications.addNotificationResponseReceivedListener((response) => {

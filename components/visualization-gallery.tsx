@@ -11,6 +11,7 @@ interface Visualization {
   title: string;
   description: string;
   image: any; // require() result
+  source?: string; // Fonte do gráfico/tabela (ex: "U.S. War Production Board, 1945")
 }
 
 interface VisualizationGalleryProps {
@@ -97,6 +98,11 @@ export function VisualizationGallery({ visualizations }: VisualizationGalleryPro
                   <ThemedText style={styles.modalDescription}>
                     {selectedViz.description}
                   </ThemedText>
+                  {selectedViz.source && (
+                    <ThemedText style={[styles.sourceText, { color: useThemeColor({}, "icon") }]}>
+                      Fonte: {selectedViz.source}
+                    </ThemedText>
+                  )}
                 </>
               )}
             </ScrollView>
@@ -191,5 +197,12 @@ const styles = StyleSheet.create({
   modalDescription: {
     fontSize: 16,
     lineHeight: 24,
+  },
+  sourceText: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontStyle: "italic",
+    marginTop: 12,
+    opacity: 0.7,
   },
 });

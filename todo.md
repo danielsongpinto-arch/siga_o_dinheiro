@@ -5,11 +5,12 @@
 ### Bugs Críticos Reportados pelo Usuário
 - [x] Corrigir seletor de tema - modo escuro não funciona (usuário não consegue forçar tema escuro)
 - [x] Corrigir onboarding - tela trava ao clicar "Próximo" para segunda página (adicionados logs para debug)
+- [x] Modo escuro não funciona na versão WEB (computador) - adicionado forçar tema no DOM
 
 ### Melhorias das Sugestões de IA
 - [x] Atualizar autor de todos os artigos para "DGP" (não "Equipe Siga o Dinheiro")
-- [ ] Adicionar gráficos e tabelas para visualização de dados nos artigos
-- [ ] Adicionar citação de fontes para todos os dados estatísticos mencionados
+- [x] Adicionar "Fonte:" nos gráficos e tabelas copiados (11 visualizações com crédito adicionado)
+- [ ] Discutir sistema BONZI (amanhã, véspera de Natal hoje)
 
 ### 1. Integrar sistema de bookmarks aos artigos - CONCLUÍDO! ✅
 - [x] Adicionar botão "Ver Destaques" no header do artigo (ícone bookmark)
